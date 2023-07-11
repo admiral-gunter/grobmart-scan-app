@@ -30,6 +30,11 @@ dependencies:
   # if you are using latest flutter please update your flutter_svg package to ^0.18.*
   flutter_svg: ^0.22.0 # help us to use SVG in our app
   provider: ^6.0.0 # for State management
+  mobile_scanner: ^3.3.0
+  simple_barcode_scanner: ^0.0.8
+  flutter_animate: ^4.2.0
+  sqflite: ^2.2.8+4
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
