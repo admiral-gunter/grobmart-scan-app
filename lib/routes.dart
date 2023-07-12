@@ -3,8 +3,10 @@ import 'package:shop_app/screens/cart/cart_screen.dart';
 import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shop_app/screens/details/details_screen.dart';
 import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
+import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/screens/list_barcodes/list_barcodes_screen.dart';
+import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
 import 'package:shop_app/screens/login_success/login_success_screen.dart';
 import 'package:shop_app/screens/menu/menu_screen.dart';
 import 'package:shop_app/screens/otp/otp_screen.dart';
@@ -31,5 +33,7 @@ final Map<String, WidgetBuilder> routes = {
   ProfileScreen.routeName: (context) => ProfileScreen(),
   ScannerScreen.routeName: (context) => ScannerScreen(),
   MenuScreen.routeName: (context) => MenuScreen(),
-  ListBarcodesScreen.routeName: (context) => ListBarcodesScreen()
+  ListBarcodesScreen.routeName: (context) => ListBarcodesScreen(),
+  FormTapScreen.routeName: (context) => FormTapScreen(),
+  ListBtSCreen.routeName: (context) => ListBtSCreen()
 };

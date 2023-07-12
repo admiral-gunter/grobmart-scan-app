@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../helper/database_helper.dart';
@@ -12,41 +11,50 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  List _listScan = [];
-  Future<List<Map<String, dynamic>>> fetchData() async {
-    Database db = await DatabaseHelper.instance.database;
-    final e = await db.query("scanned_data");
-    _listScan = e;
-    debugPrint('${e}');
+  List<Map<String, dynamic>> _listScan = [];
 
-    debugPrint('sakadik');
-
-    return e;
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+  Future<void> fetchData() async {
+    final db = await DatabaseHelper.instance.database;
+    final e = await db.query("scanned_data");
+    setState(() {
+      _listScan = e;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    fetchData();
-
     return ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: _listScan.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            child: Column(
-              children: [
-                Center(child: Text('data')),
-                Text('${_listScan[index]['id']}'),
-              ],
-            ),
-          );
-        });
+      padding: const EdgeInsets.all(8.0),
+      itemCount: _listScan.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 80),
+          height: 80,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Code'),
+                  Text('${_listScan[index]['id']}'),
+                ],
+              ),
+              Center(
+                  child: _listScan[index]['created_date'] != null
+                      ? Text('${_listScan[index]['created_date']}')
+                      : null),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
