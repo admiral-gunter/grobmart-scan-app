@@ -48,3 +48,5 @@ OutlineInputBorder outlineInputBorder() {
     borderSide: BorderSide(color: kTextColor),
   );
 }
+
+const kURL_ORIGIN = 'https://grobx.sinarmaju.co.id/api/';

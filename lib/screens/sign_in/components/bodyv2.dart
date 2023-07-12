@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shop_app/shared_preferences/shared_token.dart';
 
 import '../../../components/default_button.dart';
 import '../../../constants.dart';
 import '../../../helper/keyboard.dart';
 import '../../login_success/login_success_screen.dart';
+import '../controller/sign_in_controller.dart';
 
 class BodyV2 extends StatefulWidget {
   const BodyV2({Key? key}) : super(key: key);
@@ -13,6 +17,7 @@ class BodyV2 extends StatefulWidget {
 }
 
 class _BodyV2State extends State<BodyV2> {
+  final _ctl = SignInController();
   final _formKey = GlobalKey<FormState>();
 
   bool _passwordVisible = false;
@@ -54,6 +59,9 @@ class _BodyV2State extends State<BodyV2> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
+                    onChanged: (value) {
+                      _ctl.chgCredential(':username', value);
+                    },
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.person, color: kPrimaryColor),
                       labelText: 'Username',
@@ -66,8 +74,6 @@ class _BodyV2State extends State<BodyV2> {
                       color: Colors.black87,
                       fontSize: 17,
                     ),
-                    // controller: _passwordController,
-
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter username';
@@ -77,6 +83,9 @@ class _BodyV2State extends State<BodyV2> {
                   ),
                   SizedBox(height: 50),
                   TextFormField(
+                    onChanged: (value) {
+                      _ctl.chgCredential(':password', value);
+                    },
                     obscureText: !_passwordVisible,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -104,8 +113,6 @@ class _BodyV2State extends State<BodyV2> {
                       color: Colors.black87,
                       fontSize: 17,
                     ),
-                    // controller: _passwordController,
-
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter Password';
@@ -116,16 +123,28 @@ class _BodyV2State extends State<BodyV2> {
                   SizedBox(height: 50),
                   DefaultButton(
                     text: "Sign In",
-                    press: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
+                    press: () async {
                       if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        // if all are valid then go to success screen
-                        KeyboardUtil.hideKeyboard(context);
-                        Navigator.pushReplacementNamed(
-                            context, LoginSuccessScreen.routeName);
+                        final resp = await _ctl.loging();
+
+                        final val = jsonDecode(resp);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${val['msg']}')),
+                        );
+
+                        if (val['msg'] == 'anda berhasil login') {
+                          final token = val['token'];
+                          SharedToken.tokenSetter(token);
+                          _formKey.currentState!.save();
+                          KeyboardUtil.hideKeyboard(context);
+                          Navigator.pushReplacementNamed(
+                              context, LoginSuccessScreen.routeName);
+                        }
+                        // debugPrint('${val['msg']}');
+                        // debugPrint('${val['content']}');
+                        // debugPrint('${val['token']}');
+                        // final content = val['content'];
                       }
                     },
                   ),
