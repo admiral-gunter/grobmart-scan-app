@@ -27,19 +27,8 @@ List<ParentItem> parentList = [
     "Pembelian",
     [
       ChildItem("Purchase Order", ListBtSCreen.routeName),
-      ChildItem("Child 5"),
     ],
-  ),
-  ParentItem(
-    "Parent 3",
-    [
-      ChildItem("Child 6"),
-      ChildItem("Child 7"),
-      ChildItem("Child 8"),
-      ChildItem("Child 9"),
-    ],
-  ),
-  ParentItem("Parent 4", [], ListBtSCreen.routeName),
+  )
 ];
 
 class Body extends StatefulWidget {
