@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
+import 'package:get/get.dart';
+import 'package:shop_app/controllers/list_bt_controller.dart';
 import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
 
 import '../../../constants.dart';
@@ -209,65 +210,69 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final ListBtController ctl = Get.put(ListBtController());
+    ctl.getListBt();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: ListView.builder(
-              itemCount: dataListBT.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, FormTapScreen.routeName);
-                    },
-                    child: ListTile(
-                      leading: Checkbox(
-                        value: dataListBT[index][16] != "0",
-                        onChanged: (value) {
-                          setState(() {
-                            dataListBT[index][16] = value! ? "1" : "0";
+          child: Obx(
+            () => ListView.builder(
+                itemCount: dataListBT.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, FormTapScreen.routeName);
+                      },
+                      child: ListTile(
+                        leading: Checkbox(
+                          value: dataListBT[index][16] != "0",
+                          onChanged: (value) {
+                            setState(() {
+                              dataListBT[index][16] = value! ? "1" : "0";
 
-                            dataListBT.map((e) {
-                              if (e[16] != "0") {
-                                displayBulkBtn = true;
-                              } else {
-                                displayBulkBtn = false;
-                              }
+                              dataListBT.map((e) {
+                                if (e[16] != "0") {
+                                  displayBulkBtn = true;
+                                } else {
+                                  displayBulkBtn = false;
+                                }
+                              });
                             });
-                          });
-                        },
-                      ),
-                      trailing: Column(
-                        children: [
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Terima',
-                              style: TextStyle(color: kTextColor),
+                          },
+                        ),
+                        trailing: Column(
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'Terima',
+                                style: TextStyle(color: kTextColor),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${dataListBT[index][0]}"),
-                          Text(
-                            "${dataListBT[index][14]}",
-                            style: TextStyle(color: kTextColor, fontSize: 14),
-                          ),
-                          Text("${dataListBT[index][15]}",
-                              style:
-                                  TextStyle(color: kTextColor, fontSize: 14)),
-                        ],
+                          ],
+                        ),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${dataListBT[index][0]}"),
+                            Text(
+                              "${dataListBT[index][14]}",
+                              style: TextStyle(color: kTextColor, fontSize: 14),
+                            ),
+                            Text("${dataListBT[index][15]}",
+                                style:
+                                    TextStyle(color: kTextColor, fontSize: 14)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -3,8 +3,60 @@ import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
 
 import '../../../constants.dart';
 
-class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+class ParentItem {
+  final String title;
+  final List<ChildItem> childList;
+  final String route;
+
+  ParentItem(this.title, this.childList, [this.route = '']);
+}
+
+class ChildItem {
+  final String title;
+  final String route;
+
+  ChildItem(this.title, [this.route = '']);
+}
+
+List<ParentItem> parentList = [
+  ParentItem(
+    "Dashboard",
+    [],
+  ),
+  ParentItem(
+    "Pembelian",
+    [
+      ChildItem("Purchase Order", ListBtSCreen.routeName),
+      ChildItem("Child 5"),
+    ],
+  ),
+  ParentItem(
+    "Parent 3",
+    [
+      ChildItem("Child 6"),
+      ChildItem("Child 7"),
+      ChildItem("Child 8"),
+      ChildItem("Child 9"),
+    ],
+  ),
+  ParentItem("Parent 4", [], ListBtSCreen.routeName),
+];
+
+class Body extends StatefulWidget {
+  Body({Key? key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  List<bool> expansionPanelStates = [];
+
+  @override
+  void initState() {
+    super.initState();
+    expansionPanelStates = List<bool>.filled(parentList.length, false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,28 +97,35 @@ class Body extends StatelessWidget {
       child: SafeArea(
         child: SizedBox(
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, ListBtSCreen.routeName),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.list_alt_outlined,
-                        color: kPrimaryColor,
-                      ),
-                      Text(
-                        'List BT',
-                        style: TextStyle(color: kTextColor),
-                      ),
-                    ],
+          child: ListView.builder(
+            itemCount: parentList.length,
+            itemBuilder: (BuildContext context, int parentIndex) {
+              final parentItem = parentList[parentIndex];
+              if (parentItem.childList.isEmpty) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, parentItem.route);
+                  },
+                  child: ListTile(
+                    title: Text(parentItem.title),
                   ),
-                ),
-              ),
-            ],
+                );
+              } else {
+                return ExpansionTile(
+                  title: Text(parentItem.title),
+                  children: parentItem.childList
+                      .map((childItem) => InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, childItem.route);
+                            },
+                            child: ListTile(
+                              title: Text(childItem.title),
+                            ),
+                          ))
+                      .toList(),
+                );
+              }
+            },
           ),
         ),
       ),

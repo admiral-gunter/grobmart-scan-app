@@ -12,8 +12,16 @@ class ListBtSCreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("List BT"),
-      ),
+          title: Container(
+        alignment: Alignment.centerLeft,
+        color: Colors.white,
+        child: TextField(
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            hintText: 'Search',
+          ),
+        ),
+      )),
       body: Body(),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
     );

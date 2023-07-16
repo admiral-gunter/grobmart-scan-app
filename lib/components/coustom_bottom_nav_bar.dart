@@ -40,25 +40,35 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: SvgPicture.asset(
-                  "assets/icons/Shop Icon.svg",
-                  color: MenuState.home == selectedMenu
-                      ? kPrimaryColor
-                      : inActiveIconColor,
-                ),
-                onPressed: () =>
-                    Navigator.pushNamed(context, MenuScreen.routeName),
-              ),
+                  icon: SvgPicture.asset(
+                    "assets/icons/Shop Icon.svg",
+                    color: MenuState.home == selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
+                  ),
+                  onPressed: () {
+                    String? currentRoute =
+                        ModalRoute.of(context)?.settings.name;
+
+                    if (currentRoute != MenuScreen.routeName) {
+                      Navigator.pushNamed(context, MenuScreen.routeName);
+                    }
+                  }),
               IconButton(
-                icon: SvgPicture.asset(
-                  "assets/icons/User Icon.svg",
-                  color: MenuState.profile == selectedMenu
-                      ? kPrimaryColor
-                      : inActiveIconColor,
-                ),
-                onPressed: () =>
-                    Navigator.pushNamed(context, ProfileScreen.routeName),
-              ),
+                  icon: SvgPicture.asset(
+                    "assets/icons/User Icon.svg",
+                    color: MenuState.profile == selectedMenu
+                        ? kPrimaryColor
+                        : inActiveIconColor,
+                  ),
+                  onPressed: () {
+                    String? currentRoute =
+                        ModalRoute.of(context)?.settings.name;
+
+                    if (currentRoute != ProfileScreen.routeName) {
+                      Navigator.pushNamed(context, ProfileScreen.routeName);
+                    }
+                  }),
             ],
           )),
     );

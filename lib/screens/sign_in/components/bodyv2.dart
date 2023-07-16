@@ -135,6 +135,7 @@ class _BodyV2State extends State<BodyV2> {
 
                         if (val['msg'] == 'anda berhasil login') {
                           final token = val['token'];
+                          SharedToken.companySetter(val['company']);
                           SharedToken.tokenSetter(token);
                           _formKey.currentState!.save();
                           KeyboardUtil.hideKeyboard(context);
