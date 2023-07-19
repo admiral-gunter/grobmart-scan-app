@@ -22,11 +22,18 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final _formKey = GlobalKey<FormState>();
+  final FormTapScreenController ctl = Get.put(FormTapScreenController());
+
+  @override
+  void initState() {
+    super.initState();
+    ctl.getlistLokasi();
+    debugPrint('oke run');
+  }
 
   @override
   Widget build(BuildContext context) {
     // Get.put(ListBtController());
-    final FormTapScreenController ctl = Get.put(FormTapScreenController());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
       child: Form(
@@ -61,7 +68,7 @@ class _BodyState extends State<Body> {
               GetBuilder<FormTapScreenController>(
                 builder: (controller) => DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Select an option',
+                    labelText: 'Lokasi',
                     border: OutlineInputBorder(),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 16, vertical: 12),
