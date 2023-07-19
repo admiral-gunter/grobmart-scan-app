@@ -9,12 +9,12 @@ import '../shared_preferences/shared_token.dart';
 class FormTapScreenController extends GetxController {
   RxList<dynamic> listLokasi = <dynamic>[].obs;
 
-  @override
-  Future onInit() async {
-    print('Widget created!');
-    await getlistLokasi();
-    super.onInit();
-  }
+  // @override
+  // Future onInit() async {
+  //   print('Widget created!');
+  //   await getlistLokasi();
+  //   super.onInit();
+  // }
 
   Future getlistLokasi() async {
     try {
@@ -34,6 +34,15 @@ class FormTapScreenController extends GetxController {
 
       listLokasi.addAll(res);
       update();
+
+      url = Uri.parse(
+          kURL_ORIGIN + 'company/get-by-id/' + companyId + '/' + token + param);
+
+      response = await http.get(url);
+
+      res = jsonDecode(response.body);
+
+      debugPrint('${res['content']['company_code']}');
     } catch (e) {
       print('Error sending POST request: $e');
     }
