@@ -25,4 +25,14 @@ class SharedToken {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('company_id');
   }
+
+  static Future univSetterString(String prop, String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(prop, value);
+  }
+
+  static Future univGetterString(String prop) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(prop);
+  }
 }

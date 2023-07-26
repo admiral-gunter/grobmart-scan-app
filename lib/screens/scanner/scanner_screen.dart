@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:shop_app/helper/database_helper.dart';
+import 'package:shop_app/shared_preferences/shared_token.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../components/coustom_bottom_nav_bar.dart';
+import '../../controllers/form_tap_screen_controller.dart';
 import '../../enums.dart';
 import 'components/body.dart';
 
@@ -21,6 +24,7 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   bool _showMessage = false;
   String? barcodeRawVal = '';
+  int _tipe = 0;
 
   void _showDialog(BuildContext context) {
     showDialog(
@@ -45,6 +49,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
   MobileScannerController cameraController =
       MobileScannerController(detectionSpeed: DetectionSpeed.normal);
 
+  void initState() {
+    // To fix on start error
+    cameraController.stop();
+    super.initState();
+  }
+
+  final FormTapScreenController ctl = Get.put(FormTapScreenController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,31 +117,42 @@ class _ScannerScreenState extends State<ScannerScreen> {
               String formattedDateTime =
                   DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
               for (final barcode in barcodes) {
-                Database db = await DatabaseHelper.instance.database;
-                await db.insert('scanned_data', {
-                  'id': barcode.rawValue,
-                  'creator': 'pesatir',
-                  'created_date': formattedDateTime
-                });
-                await Future.delayed(Duration(milliseconds: 1));
+                if (_tipe == 0) {
+                  setState(() {
+                    _tipe = 1;
+                  });
+                } else {
+                  setState(() {
+                    _tipe = 0;
+                  });
+                }
 
+                // Database db = await DatabaseHelper.instance.database;
+                // await db.insert('scanned_data', {
+                //   'id': barcode.rawValue,
+                //   'creator': await SharedToken.univGetterString('username'),
+                //   'created_date': formattedDateTime
+                // });
+                // await Future.delayed(Duration(milliseconds: 1));
+                final msg = await ctl.scanAct(barcode.rawValue);
                 setState(() {
                   _showMessage = true;
-                  barcodeRawVal = barcode.rawValue;
+                  barcodeRawVal = '${barcode.rawValue} - ${msg}';
                 });
 
+                print('saya');
                 // Delay again before hiding the message
-                await Future.delayed(Duration(seconds: 2));
+                await Future.delayed(Duration(seconds: 5));
 
                 setState(() {
                   _showMessage = false;
                 });
               }
-
-              Database db = await DatabaseHelper.instance.database;
-              final e = await db.query("scanned_data");
-              debugPrint('${e}');
             },
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text(_tipe == 0 ? "SN" : "IDENTIFIER"),
           ),
           Align(
             alignment: Alignment.center,
@@ -146,7 +168,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '$barcodeRawVal',
+                          '${barcodeRawVal}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -162,23 +184,23 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             ],
                           ),
                         ).animate().fade(duration: 500.ms),
-                        Text(
-                          'Kode Diterima',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: <Shadow>[
-                              Shadow(
-                                blurRadius: 3.0,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              Shadow(
-                                blurRadius: 8.0,
-                                color: Color.fromARGB(125, 0, 0, 255),
-                              ),
-                            ],
-                          ),
-                        ).animate().fade(duration: 500.ms),
+                        // Text(
+                        //   'Kode Diterima',
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.white,
+                        //     shadows: <Shadow>[
+                        //       Shadow(
+                        //         blurRadius: 3.0,
+                        //         color: Color.fromARGB(255, 0, 0, 0),
+                        //       ),
+                        //       Shadow(
+                        //         blurRadius: 8.0,
+                        //         color: Color.fromARGB(125, 0, 0, 255),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ).animate().fade(duration: 500.ms),
                       ],
                     ),
                   )

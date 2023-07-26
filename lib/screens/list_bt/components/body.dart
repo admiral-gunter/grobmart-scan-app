@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shop_app/controllers/form_tap_screen_controller.dart';
 import 'package:shop_app/controllers/list_bt_controller.dart';
 import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
 
@@ -14,10 +15,16 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool displayBulkBtn = false;
+  final ListBtController ctl = Get.put(ListBtController());
+  // final FormTapScreenController ctl2 = Get.put(FormTapScreenController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ListBtController ctl = Get.put(ListBtController());
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,6 +38,8 @@ class _BodyState extends State<Body> {
                     padding: EdgeInsets.symmetric(vertical: 8.0),
                     child: InkWell(
                       onTap: () {
+                        // print('${ctl.listBt[index]}');
+                        // ctl2.listPo.add(ctl.listBt[index][0]);
                         Navigator.pushNamed(context, FormTapScreen.routeName);
                       },
                       child: ListTile(
@@ -51,14 +60,12 @@ class _BodyState extends State<Body> {
                           },
                         ),
                         trailing: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Terima',
-                                style: TextStyle(color: kTextColor),
-                              ),
-                            ),
+                            Text('${ctl.listBt[index][4]}',
+                                style: TextStyle(fontSize: 14)),
+                            Text('${ctl.listBt[index][5]}',
+                                style: TextStyle(fontSize: 14))
                           ],
                         ),
                         title: Column(

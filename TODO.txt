@@ -1,3 +1,52 @@
 [] Menu Change TO list
 [] Seach Field BT
 [] Integrate API BT
+
+
+
+KETIKA HIT INPUT PANGGIL API INI 
+
+http://localhost/grobx2023/api/inventory-receipt/save-live-bulk/3/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTaW1hIiwiYXVkIjoiU2ltYSIsImlhdCI6MTY4OTg1OTEzNSwidXNlcm5hbWUiOiJTaW1hIn0.1ItZRhu8acmv5f1AgMueEBlNn49gYVyAnbsFtNWQ-Ng
+
+PAYLOAD:
+dataPo[tanggal]: 2023-07-20
+dataPo[kurir]: 
+dataPo[penerima]: Sima
+dataPo[note]: 
+dataPo[bt_group]: BTSM20230720
+dataPo[creator]: Sima
+dataPo[company_id]: 3
+dataPo[inventory_location_id]: 1
+detail_inv[serial_number]: AGH80797ghgasd
+detail_inv[identifier]: 8994740125999
+detail_inv[product_id]: 2555
+detail_inv[po]: PO-SM-2023-05-20-0495
+detail_inv[tipe]: beli
+detail_inv[btm]: 
+detail_inv[detail_btm]: 
+
+
+
+api/inventory-receipt/get-by-group/3/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTaW1hIiwiYXVkIjoiU2ltYSIsImlhdCI6MTY4OTc2MjU5OSwidXNlcm5hbWUiOiJTaW1hIn0.cjA0naE2j4ff5O3BQVgTtZdPe6v9SuRBzRxMdNS6QUY
+
+
+KETIKA HIT INPUT PANGGIL API INI 
+
+http://localhost/grobx2023/api/inventory-receipt/save-live-bulk/3/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTaW1hIiwiYXVkIjoiU2ltYSIsImlhdCI6MTY4OTg1OTEzNSwidXNlcm5hbWUiOiJTaW1hIn0.1ItZRhu8acmv5f1AgMueEBlNn49gYVyAnbsFtNWQ-Ng
+
+PAYLOAD:
+dataPo[tanggal]: 2023-07-20
+dataPo[kurir]: 
+dataPo[penerima]: Sima
+dataPo[note]: 
+dataPo[bt_group]: BTSM20230720
+dataPo[creator]: Sima
+dataPo[company_id]: 3
+dataPo[inventory_location_id]: 1
+detail_inv[serial_number]: AGH80797ghgasd
+detail_inv[identifier]: 8994740125999
+detail_inv[product_id]: 2555
+detail_inv[po]: PO-SM-2023-05-20-0495
+detail_inv[tipe]: beli
+detail_inv[btm]: 
+detail_inv[detail_btm]: 
