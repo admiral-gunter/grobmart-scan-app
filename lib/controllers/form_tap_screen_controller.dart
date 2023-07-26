@@ -12,8 +12,7 @@ class FormTapScreenController extends GetxController {
   RxList<dynamic> listLokasi = <dynamic>[].obs;
   RxList<String> listPo = <String>[].obs;
   RxList<dynamic> dataPurchaseOrderDetail = <dynamic>[].obs;
-  var dataPo = {}.obs;
-  var detail_inv = {}.obs;
+
   var lokasiSelect = 0.obs;
   // @override
   // Future onInit() async {
@@ -58,6 +57,8 @@ class FormTapScreenController extends GetxController {
       print('Error sending POST request: $e');
     }
   }
+
+  String queryStringPo = '';
 
   Future<void> myFunction() async {
     var listbChecked = Get.find<ListBtController>()
@@ -146,12 +147,18 @@ class FormTapScreenController extends GetxController {
     // print('${pores}');
     // return;
     final response = await http.post(Uri.parse('${url4}${pores}'));
+    var dataPo = {};
     // print('${response.body}');
     dataPo['bt_group'] = btgroup;
     dataPo['tanggal'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
     dataPo['penerima'] = await SharedToken.univGetterString('username');
     dataPo['company_id'] = await SharedToken.companyGetter();
     dataPo['inventory_location_id'] = lokasiSelect.value;
+
+    String queryString = createQueryString(dataPo: dataPo);
+    // print(queryString);
+
+    queryStringPo = queryString;
 
     var re2 = jsonDecode(response.body);
     dataPurchaseOrderDetail.addAll(re2['content']);
@@ -166,24 +173,25 @@ class FormTapScreenController extends GetxController {
         body: {});
   }
 
-  String createQueryString(dynamic dataPo, dynamic detailInv) {
+  String createQueryString({dynamic? dataPo, dynamic? detailInv}) {
     List<String> queryParameters = [];
 
-    dataPo.forEach((key, value) {
+    dataPo?.forEach((key, value) {
       String param =
-          "dataPo[${Uri.encodeQueryComponent(key)}]=${Uri.encodeQueryComponent(value)}";
+          "dataPo[${Uri.encodeQueryComponent(key)}]=${Uri.encodeQueryComponent(value.toString())}";
       queryParameters.add(param);
     });
 
-    detailInv.forEach((key, value) {
+    detailInv?.forEach((key, value) {
       String param =
-          "detail_inv[${Uri.encodeQueryComponent(key)}]=${Uri.encodeQueryComponent(value)}";
+          "detail_inv[${Uri.encodeQueryComponent(key)}]=${Uri.encodeQueryComponent(value.toString())}";
       queryParameters.add(param);
     });
 
     return queryParameters.join('&');
   }
 
+  Map<String, dynamic> detail_inv = {};
   Future<String> scanAct(dynamic prop) async {
     // dataPurchaseOrderDetail.map((element) => );
     // Find the object with the given product_identifier without considering the model
@@ -191,6 +199,10 @@ class FormTapScreenController extends GetxController {
       (item) => item['product_identifier'] == prop,
       orElse: () => null, // Return null if no matching item is found
     );
+
+    String queryStringInv = createQueryString(detailInv: detail_inv);
+    print(queryStringInv);
+    print(queryStringPo);
 
 // Check if the result is not null, i.e., a matching item was found
     if (result != null) {
@@ -205,13 +217,17 @@ class FormTapScreenController extends GetxController {
         detail_inv['btm'] = null;
         detail_inv['detail_btm'] = null;
 
-        // final companyId = await SharedToken.companyGetter();
-        // final token = await SharedToken.tokenGetter();
+        final companyId = await SharedToken.companyGetter();
+        final token = await SharedToken.tokenGetter();
 
-        String queryString = Uri(queryParameters: dataPo as dynamic).query;
+        // String queryString = Uri(queryParameters: detail_inv).query;
 
-        print(queryString);
-        print('${dataPo} here');
+        final url =
+            '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}?${queryStringPo}${detail_inv}';
+        print(' here');
+
+        //CLEAN DATA
+
         // final url =
         //     '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}';
       }
@@ -220,7 +236,7 @@ class FormTapScreenController extends GetxController {
       print('No item found with product_identifier: $prop');
       detail_inv['serial_number'] = prop;
     }
-    print('A ${detail_inv}');
+    // print('A ${detail_inv}');
     return 'Kode Diterima';
   }
 }

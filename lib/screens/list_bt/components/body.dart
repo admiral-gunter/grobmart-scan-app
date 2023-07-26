@@ -30,6 +30,7 @@ class _BodyState extends State<Body> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
+          flex: 1,
           child: Obx(
             () => ListView.builder(
                 itemCount: ctl.listBt.length,

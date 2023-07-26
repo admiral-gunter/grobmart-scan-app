@@ -160,35 +160,44 @@ class _BodyState extends State<Body> {
                     ? Center(
                         child: CircularProgressIndicator(),
                       )
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            for (var item in ctl.dataPurchaseOrderDetail)
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text('${item['purchase_order_id']}')
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          '${item['product_identifier']} - ${item['digit_penanda'] ?? ''} - ${item['digit_penanda2'] ?? ''}'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          '${item['product_name']}   ${item['qty_receive']} / ${item['qty_total']}'),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  )
-                                ],
-                              )
-                          ],
+                    : Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (var item in ctl.dataPurchaseOrderDetail)
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('${item['purchase_order_id']}')
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                            '${item['product_identifier']} - ${item['digit_penanda'] ?? ''} - ${item['digit_penanda2'] ?? ''}'),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text('${item['product_name']}'),
+                                            Text(
+                                                '${item['qty_receive']} / ${item['qty_total']}')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    )
+                                  ],
+                                )
+                            ],
+                          ),
                         ),
                       ),
               ),
