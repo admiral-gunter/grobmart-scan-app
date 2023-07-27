@@ -24,6 +24,7 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
   bool _showMessage = false;
   String? barcodeRawVal = '';
+  String? mesage = '';
   int _tipe = 0;
 
   void _showDialog(BuildContext context) {
@@ -137,7 +138,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 final msg = await ctl.scanAct(barcode.rawValue);
                 setState(() {
                   _showMessage = true;
-                  barcodeRawVal = '${barcode.rawValue} - ${msg}';
+                  barcodeRawVal = '${barcode.rawValue}';
+                  mesage = msg;
                 });
 
                 print('saya');
@@ -152,7 +154,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
           ),
           Align(
             alignment: Alignment.topCenter,
-            child: Text(_tipe == 0 ? "SN" : "IDENTIFIER"),
+            child: Text("Scan SN dan Identifier"),
           ),
           Align(
             alignment: Alignment.center,
@@ -184,23 +186,23 @@ class _ScannerScreenState extends State<ScannerScreen> {
                             ],
                           ),
                         ).animate().fade(duration: 500.ms),
-                        // Text(
-                        //   'Kode Diterima',
-                        //   style: TextStyle(
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Colors.white,
-                        //     shadows: <Shadow>[
-                        //       Shadow(
-                        //         blurRadius: 3.0,
-                        //         color: Color.fromARGB(255, 0, 0, 0),
-                        //       ),
-                        //       Shadow(
-                        //         blurRadius: 8.0,
-                        //         color: Color.fromARGB(125, 0, 0, 255),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ).animate().fade(duration: 500.ms),
+                        Text(
+                          '${mesage}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: <Shadow>[
+                              Shadow(
+                                blurRadius: 3.0,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                              Shadow(
+                                blurRadius: 8.0,
+                                color: Color.fromARGB(125, 0, 0, 255),
+                              ),
+                            ],
+                          ),
+                        ).animate().fade(duration: 500.ms),
                       ],
                     ),
                   )

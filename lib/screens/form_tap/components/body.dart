@@ -48,27 +48,6 @@ class _BodyState extends State<Body> {
         key: _formKey,
         child: ListView(
           children: [
-            // TextFormField(
-            //   decoration: InputDecoration(
-            //     labelText: 'Penerima',
-            //     labelStyle: TextStyle(
-            //       color: Colors.black87,
-            //       fontSize: 17,
-            //     ),
-            //   ),
-            //   style: TextStyle(
-            //     color: Colors.black87,
-            //     fontSize: 17,
-            //   ),
-            //   //  controller: _passwordController,
-
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Please enter some text';
-            //     }
-            //     return null;
-            //   },
-            // ),
             FutureBuilder<String>(
               future: _getUsername(),
               builder: (context, snapshot) {
@@ -160,44 +139,42 @@ class _BodyState extends State<Body> {
                     ? Center(
                         child: CircularProgressIndicator(),
                       )
-                    : Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              for (var item in ctl.dataPurchaseOrderDetail)
-                                Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text('${item['purchase_order_id']}')
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                            '${item['product_identifier']} - ${item['digit_penanda'] ?? ''} - ${item['digit_penanda2'] ?? ''}'),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text('${item['product_name']}'),
-                                            Text(
-                                                '${item['qty_receive']} / ${item['qty_total']}')
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    )
-                                  ],
-                                )
-                            ],
-                          ),
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            for (var item in ctl.dataPurchaseOrderDetail)
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text('${item['purchase_order_id']}')
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          '${item['product_identifier']} - ${item['digit_penanda'] ?? ''} - ${item['digit_penanda2'] ?? ''}'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${item['product_name']}'),
+                                          Text(
+                                              '${item['qty_receive']} / ${item['qty_total']}')
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  )
+                                ],
+                              )
+                          ],
                         ),
                       ),
               ),

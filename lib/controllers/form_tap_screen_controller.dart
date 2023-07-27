@@ -207,9 +207,14 @@ class FormTapScreenController extends GetxController {
 // Check if the result is not null, i.e., a matching item was found
     if (result != null) {
       if (detail_inv['serial_number'] != null) {
-        // if (result['qty_total'] == result['qty_receive']) {
-        //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
-        // }
+        if (result['qty_total'] == result['qty_receive']) {
+          return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+        }
+
+        if (!detail_inv['serial_number'].contains(result['digit_penanda'])) {
+          return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+        }
+
         detail_inv['identifier'] = prop;
         detail_inv['product_id'] = result['product_id'];
         detail_inv['po'] = result['purchase_order_id'];
@@ -223,9 +228,23 @@ class FormTapScreenController extends GetxController {
         // String queryString = Uri(queryParameters: detail_inv).query;
 
         final url =
-            '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}?${queryStringPo}${detail_inv}';
-        print(' here');
+            '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
+        print('${url} here');
 
+        var response = await http.post(Uri.parse(url));
+
+        var res = jsonDecode(response.body);
+
+        print(res['msg']);
+        print(res['content']);
+        print(res['success']);
+        print(res['token_status']);
+
+        print('ehe');
+        myFunction();
+        return res['msg'];
+
+        // return 'Data SU'
         //CLEAN DATA
 
         // final url =
