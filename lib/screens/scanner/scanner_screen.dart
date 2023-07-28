@@ -169,23 +169,25 @@ class _ScannerScreenState extends State<ScannerScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          '${barcodeRawVal}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: <Shadow>[
-                              Shadow(
-                                blurRadius: 3.0,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              Shadow(
-                                blurRadius: 8.0,
-                                color: Color.fromARGB(125, 0, 0, 255),
-                              ),
-                            ],
-                          ),
-                        ).animate().fade(duration: 500.ms),
+                        Obx(
+                          () => Text(
+                            'BARCODE : ${barcodeRawVal} (${ctl.tipe})',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: <Shadow>[
+                                Shadow(
+                                  blurRadius: 3.0,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                                Shadow(
+                                  blurRadius: 8.0,
+                                  color: Color.fromARGB(125, 0, 0, 255),
+                                ),
+                              ],
+                            ),
+                          ).animate().fade(duration: 500.ms),
+                        ),
                         Text(
                           '${mesage}',
                           style: TextStyle(

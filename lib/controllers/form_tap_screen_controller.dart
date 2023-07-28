@@ -191,6 +191,8 @@ class FormTapScreenController extends GetxController {
     return queryParameters.join('&');
   }
 
+  RxString tipe = 'SN'.obs;
+
   Map<String, dynamic> detail_inv = {};
   Future<String> scanAct(dynamic prop) async {
     // dataPurchaseOrderDetail.map((element) => );
@@ -211,6 +213,8 @@ class FormTapScreenController extends GetxController {
           return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
         }
 
+        tipe.value = 'Identifier';
+        update();
         if (!detail_inv['serial_number'].contains(result['digit_penanda'])) {
           return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
         }
@@ -227,22 +231,48 @@ class FormTapScreenController extends GetxController {
 
         // String queryString = Uri(queryParameters: detail_inv).query;
 
+        // final url =
+        //     '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
+        // print('${url} here');
+
+        // var response = await http.post(Uri.parse(url));
+
+        // var res = jsonDecode(response.body);
+// Your existing code
         final url =
             '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
         print('${url} here');
 
-        var response = await http.post(Uri.parse(url));
+        try {
+          var response = await http.post(Uri.parse(url));
 
-        var res = jsonDecode(response.body);
+          if (response.statusCode == 200) {
+            // Successful response
+            var res = jsonDecode(response.body);
+            print(res['msg']);
+            print(res['content']);
+            print(res['success']);
+            print(res['token_status']);
 
-        print(res['msg']);
-        print(res['content']);
-        print(res['success']);
-        print(res['token_status']);
+            print('ehe');
+            myFunction();
+            return res['msg'];
+            // Do something with the 'res' data
+          } else {
+            // Handle unsuccessful response (e.g., 404, 500, etc.)
+            print('Request failed with status: ${response.statusCode}');
+            print('Response body: ${response.body}');
 
-        print('ehe');
-        myFunction();
-        return res['msg'];
+            return 'Request failed with status: ${response.statusCode}';
+            // return 'Response body: ${response.body}';
+            // Add further error handling or notify the user accordingly
+          }
+        } catch (e) {
+          // Handle exceptions that might occur during the request
+          print('Error during HTTP request: $e');
+          return 'Error during HTTP request: $e';
+          // Add further error handling or notify the user accordingly
+        }
 
         // return 'Data SU'
         //CLEAN DATA
@@ -255,6 +285,8 @@ class FormTapScreenController extends GetxController {
       print('No item found with product_identifier: $prop');
       detail_inv['serial_number'] = prop;
     }
+    tipe.value = 'SN';
+    update();
     // print('A ${detail_inv}');
     return 'Kode Diterima';
   }
