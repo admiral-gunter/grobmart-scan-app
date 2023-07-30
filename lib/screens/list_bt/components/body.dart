@@ -41,7 +41,7 @@ class _BodyState extends State<Body> {
                       onTap: () {
                         // print('${ctl.listBt[index]}');
                         // ctl2.listPo.add(ctl.listBt[index][0]);
-                        Navigator.pushNamed(context, FormTapScreen.routeName);
+                        // Navigator.pushNamed(context, FormTapScreen.routeName);
                       },
                       child: ListTile(
                         leading: Checkbox(
@@ -63,10 +63,37 @@ class _BodyState extends State<Body> {
                         trailing: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text('${ctl.listBt[index][4]}',
-                                style: TextStyle(fontSize: 14)),
-                            Text('${ctl.listBt[index][5]}',
-                                style: TextStyle(fontSize: 14))
+                            ctl.listBt[index][4] == 'enable'
+                                ? Text('Enable',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.green))
+                                : ctl.listBt[index][4] == 'disable'
+                                    ? Text('Disable',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.amber))
+                                    : Text('Incomplete',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.red)),
+                            //                    if (data['5'] == 'completed') {
+                            //   return '<div style="text-align: center"><label class="label label-success">Completed</label></div>';
+                            // }
+                            // else if(data['5'] == 'close'){
+                            //   return '<div style="text-align: center"><label class="label label-danger">Closed</label></div>';
+                            // }
+                            // else {
+                            //   return '<div style="text-align: center"><label class="label label-warning">Incomplete</label></div>';
+                            // }
+                            ctl.listBt[index][5] == 'completed'
+                                ? Text('Completed',
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.green))
+                                : ctl.listBt[index][5] == 'close'
+                                    ? Text('Closed',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.red))
+                                    : Text('Incomplete',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Colors.amber))
                           ],
                         ),
                         title: Column(

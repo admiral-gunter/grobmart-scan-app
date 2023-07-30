@@ -142,7 +142,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   mesage = msg;
                 });
 
-                print('saya');
                 // Delay again before hiding the message
                 await Future.delayed(Duration(seconds: 5));
 

@@ -12,8 +12,9 @@ class FormTapScreenController extends GetxController {
   RxList<dynamic> listLokasi = <dynamic>[].obs;
   RxList<String> listPo = <String>[].obs;
   RxList<dynamic> dataPurchaseOrderDetail = <dynamic>[].obs;
+  RxString notes = ''.obs;
 
-  var lokasiSelect = 0.obs;
+  RxInt lokasiSelect = 0.obs;
   // @override
   // Future onInit() async {
   //   print('Widget created!');
@@ -24,6 +25,11 @@ class FormTapScreenController extends GetxController {
   void chgLokasi(dynamic prop) {
     lokasiSelect.value = prop;
     update();
+  }
+
+  void setNotes(String prop) {
+    notes.value = prop;
+    // update();
   }
 
   String convertToQueryString(List<String> poList) {
@@ -153,7 +159,8 @@ class FormTapScreenController extends GetxController {
     dataPo['tanggal'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
     dataPo['penerima'] = await SharedToken.univGetterString('username');
     dataPo['company_id'] = await SharedToken.companyGetter();
-    dataPo['inventory_location_id'] = lokasiSelect.value;
+    dataPo['inventory_location_id'] =
+        await SharedToken.univGetterString('lokasi');
 
     String queryString = createQueryString(dataPo: dataPo);
     // print(queryString);
@@ -194,8 +201,15 @@ class FormTapScreenController extends GetxController {
   RxString tipe = 'SN'.obs;
 
   Map<String, dynamic> detail_inv = {};
+  RxString noSN = ''.obs;
   Future<String> scanAct(dynamic prop) async {
-    // dataPurchaseOrderDetail.map((element) => );
+    print(lokasiSelect.value);
+    if (noSN.value == '' && prop != noSN.value) {
+      print('${noSN.value} WOI');
+      noSN.value = prop;
+    }
+    return noSN.value;
+
     // Find the object with the given product_identifier without considering the model
     Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
       (item) => item['product_identifier'] == prop,
@@ -209,12 +223,16 @@ class FormTapScreenController extends GetxController {
 // Check if the result is not null, i.e., a matching item was found
     if (result != null) {
       if (detail_inv['serial_number'] != null) {
-        if (result['qty_total'] == result['qty_receive']) {
-          return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
-        }
+        // noSN.value = prop;
+        // update();
+        // detail_inv['serial_number'] = noSN.value;
+
+        // if (result['qty_total'] == result['qty_receive']) {
+        //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+        // }
 
         tipe.value = 'Identifier';
-        update();
+        // update();
         if (!detail_inv['serial_number'].contains(result['digit_penanda'])) {
           return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
         }
@@ -256,6 +274,7 @@ class FormTapScreenController extends GetxController {
 
             print('ehe');
             myFunction();
+            noSN.value = '';
             return res['msg'];
             // Do something with the 'res' data
           } else {
@@ -280,13 +299,17 @@ class FormTapScreenController extends GetxController {
         // final url =
         //     '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}';
       }
-    } else {
-      // Handle the case when no matching item is found
-      print('No item found with product_identifier: $prop');
-      detail_inv['serial_number'] = prop;
     }
+    // else if (noSN.value == '' && result == null) {
+    //   // Handle the case when no matching item is found
+    //   print('${result} KO');
+    //   print('No item found with product_identifier: $prop');
+    //   noSN.value = prop;
+    //   // update();
+    //   detail_inv['serial_number'] = prop;
+    // }
     tipe.value = 'SN';
-    update();
+    // update();
     // print('A ${detail_inv}');
     return 'Kode Diterima';
   }

@@ -124,6 +124,7 @@ class _BodyV2State extends State<BodyV2> {
                   DefaultButton(
                     text: "Sign In",
                     press: () async {
+                      await SharedToken.tokenRemover();
                       if (_formKey.currentState!.validate()) {
                         final resp = await _ctl.loging();
 
@@ -135,10 +136,10 @@ class _BodyV2State extends State<BodyV2> {
 
                         if (val['msg'] == 'anda berhasil login') {
                           final token = val['token'];
-                          SharedToken.univSetterString(
+                          await SharedToken.univSetterString(
                               'username', val['username']);
-                          SharedToken.companySetter(val['company']);
-                          SharedToken.tokenSetter(token);
+                          await SharedToken.companySetter(val['company']);
+                          await SharedToken.tokenSetter(token);
                           _formKey.currentState!.save();
                           KeyboardUtil.hideKeyboard(context);
                           Navigator.pushReplacementNamed(

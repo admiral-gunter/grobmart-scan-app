@@ -94,8 +94,15 @@ class _BodyState extends State<Body> {
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                onChanged: (newValue) {
-                  ctl.chgLokasi(newValue);
+                onChanged: (newValue) async {
+                  // print('a');
+                  // ctl.chgLokasi(newValue);
+                  // print(ctl.lokasiSelect.value);
+                  await SharedToken.univSetterString('lokasi', newValue!);
+
+                  final e = await SharedToken.univGetterString('lokasi');
+
+                  print(e);
                 },
                 items: controller.listLokasi.map((item) {
                   final objectLokasi =
@@ -114,6 +121,12 @@ class _BodyState extends State<Body> {
               height: 30,
             ),
             TextFormField(
+              onChanged: (value) async {
+                await SharedToken.univSetterString('notes', value);
+                final e = await SharedToken.univGetterString('notes');
+
+                print(e);
+              },
               maxLines: 3,
               decoration: InputDecoration(
                 hintMaxLines: 5,
