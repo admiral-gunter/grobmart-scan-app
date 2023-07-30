@@ -8,6 +8,7 @@ import 'package:shop_app/helper/database_helper.dart';
 import 'package:shop_app/shared_preferences/shared_token.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../components/coustom_bottom_nav_bar.dart';
+import '../../constants.dart';
 import '../../controllers/form_tap_screen_controller.dart';
 import '../../enums.dart';
 import 'components/body.dart';
@@ -153,7 +154,27 @@ class _ScannerScreenState extends State<ScannerScreen> {
           ),
           Align(
             alignment: Alignment.topCenter,
-            child: Text("Scan SN dan Identifier"),
+            child: Column(
+              children: [
+                Text("Scan SN dan Identifier"),
+                Obx(() => Text("${ctl.lastStatus.value}")),
+                OutlinedButton(
+                  onPressed: () {
+                    // Add your button click logic here.
+                    ctl.noSN.value = '';
+                    ctl.lastStatus.value = '';
+                  },
+                  child: Text('RESET SN DAN IDENTIFIER',
+                      style: TextStyle(color: kPrimaryColor)),
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    side: BorderSide(width: 1, color: kPrimaryColor),
+                  ),
+                ),
+              ],
+            ),
           ),
           Align(
             alignment: Alignment.center,

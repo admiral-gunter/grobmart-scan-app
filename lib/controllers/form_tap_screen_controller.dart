@@ -156,6 +156,7 @@ class FormTapScreenController extends GetxController {
     var dataPo = {};
     // print('${response.body}');
     dataPo['bt_group'] = btgroup;
+    dataPo['note'] = await SharedToken.univGetterString('notes');
     dataPo['tanggal'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
     dataPo['penerima'] = await SharedToken.univGetterString('username');
     dataPo['company_id'] = await SharedToken.companyGetter();
@@ -202,104 +203,107 @@ class FormTapScreenController extends GetxController {
 
   Map<String, dynamic> detail_inv = {};
   RxString noSN = ''.obs;
+  RxString lastStatus = ''.obs;
   Future<String> scanAct(dynamic prop) async {
-    print(lokasiSelect.value);
     if (noSN.value == '' && prop != noSN.value) {
       print('${noSN.value} WOI');
       noSN.value = prop;
+      detail_inv['serial_number'] = noSN.value;
+    } else {
+      // Find the object with the given product_identifier without considering the model
+      Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
+        (item) => item['product_identifier'] == prop,
+        orElse: () => null, // Return null if no matching item is found
+      );
+
+// Check if the result is not null, i.e., a matching item was found
+      if (result != null) {
+        if (detail_inv['serial_number'] != null) {
+          // noSN.value = prop;
+          // update();
+          // detail_inv['serial_number'] = noSN.value;
+
+          // if (result['qty_total'] == result['qty_receive']) {
+          //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          // }
+
+          tipe.value = 'Identifier';
+          // update();
+          if (!detail_inv['serial_number'].contains(result['digit_penanda'])) {
+            return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+          }
+
+          detail_inv['identifier'] = prop;
+          detail_inv['product_id'] = result['product_id'];
+          detail_inv['po'] = result['purchase_order_id'];
+          detail_inv['tipe'] = result['tipe'];
+          detail_inv['btm'] = null;
+          detail_inv['detail_btm'] = null;
+
+          final companyId = await SharedToken.companyGetter();
+          final token = await SharedToken.tokenGetter();
+
+          String queryStringInv = createQueryString(detailInv: detail_inv);
+
+          // String queryString = Uri(queryParameters: detail_inv).query;
+
+          // final url =
+          //     '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
+          // print('${url} here');
+
+          // var response = await http.post(Uri.parse(url));
+
+          // var res = jsonDecode(response.body);
+// Your existing code
+          final url =
+              '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${queryStringInv}';
+          print('${url} here');
+
+          try {
+            var response = await http.post(Uri.parse(url));
+
+            if (response.statusCode == 200) {
+              // Successful response
+              var res = jsonDecode(response.body);
+              print(res['msg']);
+              print(res['content']);
+              print(res['success']);
+              print(res['token_status']);
+
+              print('ehe');
+              myFunction();
+              noSN.value = '';
+              lastStatus.value = res['msg'];
+              tipe.value = 'SN';
+
+              return res['msg'];
+              // Do something with the 'res' data
+            } else {
+              // Handle unsuccessful response (e.g., 404, 500, etc.)
+              print('Request failed with status: ${response.statusCode}');
+              print('Response body: ${response.body}');
+
+              return 'Request failed with status: ${response.statusCode}';
+              // return 'Response body: ${response.body}';
+              // Add further error handling or notify the user accordingly
+            }
+          } catch (e) {
+            // Handle exceptions that might occur during the request
+            print('Error during HTTP request: $e');
+            return 'Error during HTTP request: $e';
+            // Add further error handling or notify the user accordingly
+          }
+
+          // return 'Data SU'
+          //CLEAN DATA
+
+          // final url =
+          //     '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}';
+        }
+      }
     }
     return noSN.value;
 
-    // Find the object with the given product_identifier without considering the model
-    Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
-      (item) => item['product_identifier'] == prop,
-      orElse: () => null, // Return null if no matching item is found
-    );
-
-    String queryStringInv = createQueryString(detailInv: detail_inv);
-    print(queryStringInv);
-    print(queryStringPo);
-
-// Check if the result is not null, i.e., a matching item was found
-    if (result != null) {
-      if (detail_inv['serial_number'] != null) {
-        // noSN.value = prop;
-        // update();
-        // detail_inv['serial_number'] = noSN.value;
-
-        // if (result['qty_total'] == result['qty_receive']) {
-        //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
-        // }
-
-        tipe.value = 'Identifier';
-        // update();
-        if (!detail_inv['serial_number'].contains(result['digit_penanda'])) {
-          return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
-        }
-
-        detail_inv['identifier'] = prop;
-        detail_inv['product_id'] = result['product_id'];
-        detail_inv['po'] = result['purchase_order_id'];
-        detail_inv['tipe'] = result['tipe'];
-        detail_inv['btm'] = null;
-        detail_inv['detail_btm'] = null;
-
-        final companyId = await SharedToken.companyGetter();
-        final token = await SharedToken.tokenGetter();
-
-        // String queryString = Uri(queryParameters: detail_inv).query;
-
-        // final url =
-        //     '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
-        // print('${url} here');
-
-        // var response = await http.post(Uri.parse(url));
-
-        // var res = jsonDecode(response.body);
-// Your existing code
-        final url =
-            '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
-        print('${url} here');
-
-        try {
-          var response = await http.post(Uri.parse(url));
-
-          if (response.statusCode == 200) {
-            // Successful response
-            var res = jsonDecode(response.body);
-            print(res['msg']);
-            print(res['content']);
-            print(res['success']);
-            print(res['token_status']);
-
-            print('ehe');
-            myFunction();
-            noSN.value = '';
-            return res['msg'];
-            // Do something with the 'res' data
-          } else {
-            // Handle unsuccessful response (e.g., 404, 500, etc.)
-            print('Request failed with status: ${response.statusCode}');
-            print('Response body: ${response.body}');
-
-            return 'Request failed with status: ${response.statusCode}';
-            // return 'Response body: ${response.body}';
-            // Add further error handling or notify the user accordingly
-          }
-        } catch (e) {
-          // Handle exceptions that might occur during the request
-          print('Error during HTTP request: $e');
-          return 'Error during HTTP request: $e';
-          // Add further error handling or notify the user accordingly
-        }
-
-        // return 'Data SU'
-        //CLEAN DATA
-
-        // final url =
-        //     '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}';
-      }
-    }
     // else if (noSN.value == '' && result == null) {
     //   // Handle the case when no matching item is found
     //   print('${result} KO');
@@ -308,7 +312,6 @@ class FormTapScreenController extends GetxController {
     //   // update();
     //   detail_inv['serial_number'] = prop;
     // }
-    tipe.value = 'SN';
     // update();
     // print('A ${detail_inv}');
     return 'Kode Diterima';
