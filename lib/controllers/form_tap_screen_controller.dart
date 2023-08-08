@@ -156,6 +156,7 @@ class FormTapScreenController extends GetxController {
     var dataPo = {};
     // print('${response.body}');
     dataPo['bt_group'] = btgroup;
+    dataPo['creator'] = await SharedToken.univGetterString('username');
     dataPo['note'] = await SharedToken.univGetterString('notes');
     dataPo['tanggal'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
     dataPo['penerima'] = await SharedToken.univGetterString('username');
@@ -205,27 +206,23 @@ class FormTapScreenController extends GetxController {
   RxString noSN = ''.obs;
   RxString lastStatus = ''.obs;
   Future<String> scanAct(dynamic prop) async {
+    Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
+      (item) => item['product_identifier'] == prop,
+      orElse: () => null, // Return null if no matching item is found
+    );
     if (noSN.value == '' && prop != noSN.value) {
       print('${noSN.value} WOI');
       noSN.value = prop;
       detail_inv['serial_number'] = noSN.value;
     } else {
       // Find the object with the given product_identifier without considering the model
-      Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
-        (item) => item['product_identifier'] == prop,
-        orElse: () => null, // Return null if no matching item is found
-      );
 
 // Check if the result is not null, i.e., a matching item was found
       if (result != null) {
         if (detail_inv['serial_number'] != null) {
-          // noSN.value = prop;
-          // update();
-          // detail_inv['serial_number'] = noSN.value;
-
-          // if (result['qty_total'] == result['qty_receive']) {
-          //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
-          // }
+          if (result['qty_total'] == result['qty_receive']) {
+            return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          }
 
           tipe.value = 'Identifier';
           // update();
@@ -245,16 +242,6 @@ class FormTapScreenController extends GetxController {
 
           String queryStringInv = createQueryString(detailInv: detail_inv);
 
-          // String queryString = Uri(queryParameters: detail_inv).query;
-
-          // final url =
-          //     '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${detail_inv}';
-          // print('${url} here');
-
-          // var response = await http.post(Uri.parse(url));
-
-          // var res = jsonDecode(response.body);
-// Your existing code
           final url =
               '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${queryStringInv}';
           print('${url} here');
@@ -270,11 +257,11 @@ class FormTapScreenController extends GetxController {
               print(res['success']);
               print(res['token_status']);
 
-              print('ehe');
-              myFunction();
-              noSN.value = '';
               lastStatus.value = res['msg'];
               tipe.value = 'SN';
+              print('ehe');
+              myFunction();
+              // noSN.value = '';
 
               return res['msg'];
               // Do something with the 'res' data
@@ -293,12 +280,6 @@ class FormTapScreenController extends GetxController {
             return 'Error during HTTP request: $e';
             // Add further error handling or notify the user accordingly
           }
-
-          // return 'Data SU'
-          //CLEAN DATA
-
-          // final url =
-          //     '${kURL_ORIGIN}/inventory-receipt/save-live-bulkDEMO/${companyId}/${token}';
         }
       }
     }
@@ -314,6 +295,6 @@ class FormTapScreenController extends GetxController {
     // }
     // update();
     // print('A ${detail_inv}');
-    return 'Kode Diterima';
+    // return 'Kode Diterima';
   }
 }

@@ -50,3 +50,12 @@ detail_inv[po]: PO-SM-2023-05-20-0495
 detail_inv[tipe]: beli
 detail_inv[btm]: 
 detail_inv[detail_btm]: 
+
+
+
+SEMI OFFLINE:
+- SCAN data simpen klo gak ada internet
+
+
+STEP 3 FULL OFFILE: 
+- ask selama ini tim klo offline simpen data dimana?

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -56,6 +58,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
     cameraController.stop();
     super.initState();
   }
+
+  bool _tr = true;
 
   final FormTapScreenController ctl = Get.put(FormTapScreenController());
   @override
@@ -157,12 +161,21 @@ class _ScannerScreenState extends State<ScannerScreen> {
             child: Column(
               children: [
                 Text("Scan SN dan Identifier"),
-                Obx(() => Text("${ctl.lastStatus.value}")),
+                Obx(() => Column(
+                      children: [
+                        Text("${ctl.lastStatus.value}"),
+                        Text('SN : ${ctl.detail_inv['serial_number'] ?? ''}'),
+                        Text(
+                            'Identifier : ${ctl.detail_inv['identifier'] ?? ''}'),
+                      ],
+                    )),
                 OutlinedButton(
                   onPressed: () {
                     // Add your button click logic here.
                     ctl.noSN.value = '';
                     ctl.lastStatus.value = '';
+                    ctl.detail_inv['identifier'] = null;
+                    ctl.detail_inv['serial_number'] = null;
                   },
                   child: Text('RESET SN DAN IDENTIFIER',
                       style: TextStyle(color: kPrimaryColor)),
@@ -230,6 +243,60 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   )
                 : null,
           ),
+          Obx(
+            () => Align(
+              alignment: Alignment.center,
+              child: ctl.lastStatus.value != ''
+                  ? Container(
+                      width: 400,
+                      height: 150,
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            '${ctl.lastStatus.value}',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 10.0),
+                          // ElevatedButton(
+                          //   onPressed: () {
+                          //     ctl.noSN.value = '';
+                          //     ctl.lastStatus.value = '';
+                          //   },
+                          //   child: Text('Close'),
+                          // ),
+                          OutlinedButton(
+                            onPressed: () {
+                              // Add your button click logic here.
+                              ctl.noSN.value = '';
+                              ctl.lastStatus.value = '';
+                              ctl.detail_inv['identifier'] = null;
+                              ctl.detail_inv['serial_number'] = null;
+                            },
+                            child: Text('Close',
+                                style: TextStyle(color: kPrimaryColor)),
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                              side: BorderSide(width: 1, color: kPrimaryColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : null,
+            ),
+          )
         ],
       ),
     );
