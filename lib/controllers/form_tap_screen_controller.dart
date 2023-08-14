@@ -8,6 +8,8 @@ import 'package:shop_app/controllers/list_bt_controller.dart';
 import '../constants.dart';
 import '../shared_preferences/shared_token.dart';
 
+import 'dart:io';
+
 class FormTapScreenController extends GetxController {
   RxList<dynamic> listLokasi = <dynamic>[].obs;
   RxList<String> listPo = <String>[].obs;
@@ -210,14 +212,13 @@ class FormTapScreenController extends GetxController {
       (item) => item['product_identifier'] == prop,
       orElse: () => null, // Return null if no matching item is found
     );
+    print(result);
+    return 'null';
     if (noSN.value == '' && prop != noSN.value) {
       print('${noSN.value} WOI');
       noSN.value = prop;
       detail_inv['serial_number'] = noSN.value;
     } else {
-      // Find the object with the given product_identifier without considering the model
-
-// Check if the result is not null, i.e., a matching item was found
       if (result != null) {
         if (detail_inv['serial_number'] != null) {
           if (result['qty_total'] == result['qty_receive']) {
@@ -245,6 +246,17 @@ class FormTapScreenController extends GetxController {
           final url =
               '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${queryStringInv}';
           print('${url} here');
+
+          try {
+            final result = await InternetAddress.lookup('example.com');
+            if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+              // var dataPO = {
+              //   'serial_number':
+              // };
+            }
+          } on SocketException catch (_) {
+            print('not connected');
+          }
 
           try {
             var response = await http.post(Uri.parse(url));
@@ -284,17 +296,5 @@ class FormTapScreenController extends GetxController {
       }
     }
     return noSN.value;
-
-    // else if (noSN.value == '' && result == null) {
-    //   // Handle the case when no matching item is found
-    //   print('${result} KO');
-    //   print('No item found with product_identifier: $prop');
-    //   noSN.value = prop;
-    //   // update();
-    //   detail_inv['serial_number'] = prop;
-    // }
-    // update();
-    // print('A ${detail_inv}');
-    // return 'Kode Diterima';
   }
 }

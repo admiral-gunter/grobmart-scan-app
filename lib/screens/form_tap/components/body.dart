@@ -209,40 +209,6 @@ class _BodyState extends State<Body> {
                     side: BorderSide(width: 1, color: kPrimaryColor),
                   ),
                 ),
-                // TextButton(
-                //   onPressed: () {
-                //     Navigator.pushNamed(context, ScannerScreen.routeName);
-                //   },
-                //   child: Text('Scan SN dan Identifier',
-                //       style: TextStyle(color: kPrimaryColor)),
-                // ),
-                // TextButton(
-                //   onPressed: () {
-                //     if (_formKey.currentState!.validate()) {
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         const SnackBar(content: Text('Processing Data')),
-                //       );
-                //     }
-                //   },
-                //   child: const Text('Submit',
-                //       style: TextStyle(color: kPrimaryColor)),
-                // ),
-                OutlinedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                    }
-                  },
-                  child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    side: BorderSide(width: 1, color: kPrimaryColor),
-                  ),
-                ),
               ],
             ),
           ],

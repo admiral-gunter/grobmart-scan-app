@@ -50,4 +50,4 @@ OutlineInputBorder outlineInputBorder() {
 }
 
 // const kURL_ORIGIN = 'https://grobx.sinarmaju.co.id/api/';
-const kURL_ORIGIN = 'https://ea81dfce04a062.lhr.life/api/';
+const kURL_ORIGIN = 'http://192.168.234.236/grobx2023/api/';
