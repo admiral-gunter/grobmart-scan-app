@@ -5,6 +5,7 @@ import 'package:shop_app/controllers/list_bt_controller.dart';
 import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
 
 import '../../../constants.dart';
+import '../../sign_in/sign_in_screen.dart';
 
 class Body extends StatefulWidget {
   Body({Key? key}) : super(key: key);
@@ -21,6 +22,15 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final e = await ctl.getListBt();
+    if (e == 'TOKEN_EMPTY') {
+      Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+    }
+    print(e);
   }
 
   @override

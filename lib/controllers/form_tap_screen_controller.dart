@@ -69,6 +69,7 @@ class FormTapScreenController extends GetxController {
   String queryStringPo = '';
 
   Future<void> myFunction() async {
+    dataPurchaseOrderDetail.clear();
     var listbChecked = Get.find<ListBtController>()
         .listBt
         .where((item) => item[16] == "1")
@@ -77,7 +78,6 @@ class FormTapScreenController extends GetxController {
     po = listbChecked.map((item) => item[0]).cast<String>().toList();
     // print('${po} EIN PO');
 
-    dataPurchaseOrderDetail.clear();
     // Web API endpoint URLs
     final apiHost = kURL_ORIGIN; // Replace with your actual API host URL
     final company =
@@ -208,17 +208,75 @@ class FormTapScreenController extends GetxController {
   RxString noSN = ''.obs;
   RxString lastStatus = ''.obs;
   Future<String> scanAct(dynamic prop) async {
-    Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
-      (item) => item['product_identifier'] == prop,
-      orElse: () => null, // Return null if no matching item is found
-    );
-    print(result);
-    return 'null';
     if (noSN.value == '' && prop != noSN.value) {
       print('${noSN.value} WOI');
       noSN.value = prop;
-      detail_inv['serial_number'] = noSN.value;
+      detail_inv['serial_number'] = prop;
     } else {
+      // List<dynamic> items = dataPurchaseOrderDetail
+      //     .where((item) => item['product_identifier'] == prop)
+      //     .toList();
+
+      // bool hasDuplicates = items.length != items.toSet().length;
+
+      // bool hasMissingDigitPenanda =
+      //     items.any((item) => item['digit_penanda'] == null);
+
+      // if (hasDuplicates) {
+      //   print('Duplicate items found.');
+      //   if (hasMissingDigitPenanda) {
+      //     print('Some items have missing digit_penanda.');
+
+      //     return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
+      //   }
+      // }
+
+      List<dynamic> matchingItems = dataPurchaseOrderDetail
+          .where((item) => item['product_identifier'] == prop)
+          .toList();
+
+      if (matchingItems.length > 1) {
+        bool hasMissingDigitPenanda =
+            matchingItems.any((item) => item['digit_penanda'] == null);
+        if (hasMissingDigitPenanda) {
+          return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
+        }
+      }
+
+      List<dynamic> digitPenandaArray = [];
+      bool penanda = false;
+
+      for (var result in matchingItems) {
+        if (result['digit_penanda'] != null && result['digit_penanda'] != '') {
+          penanda = true;
+          if (detail_inv['serial_number'].contains(result['digit_penanda'])) {
+            digitPenandaArray.add(result);
+          }
+        } else {
+          digitPenandaArray.add(result);
+        }
+      }
+
+      if (digitPenandaArray.length == 0 && penanda) {
+        return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+      } else {
+        digitPenandaArray.add(matchingItems[0]);
+      }
+
+      // if (digitPenandaArray.length == 0) {
+      //   print(digitPenandaArray);
+      //   return 'Salah Nomor Product Identifier';
+      // }
+
+      // Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
+      //   (item) => item['product_identifier'] == prop,
+      //   orElse: () => null, // Return null if no matching item is found
+      // );
+      // var result = null;
+      // print(result);
+      // return 'null';
+      Map<String, dynamic>? result = digitPenandaArray[0];
+
       if (result != null) {
         if (detail_inv['serial_number'] != null) {
           if (result['qty_total'] == result['qty_receive']) {
@@ -231,6 +289,7 @@ class FormTapScreenController extends GetxController {
             return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
           }
 
+          // detail_inv['serial_number'] = noSN.value;
           detail_inv['identifier'] = prop;
           detail_inv['product_id'] = result['product_id'];
           detail_inv['po'] = result['purchase_order_id'];
@@ -244,7 +303,7 @@ class FormTapScreenController extends GetxController {
           String queryStringInv = createQueryString(detailInv: detail_inv);
 
           final url =
-              '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}${queryStringInv}';
+              '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}&${queryStringInv}';
           print('${url} here');
 
           try {
@@ -269,9 +328,11 @@ class FormTapScreenController extends GetxController {
               print(res['success']);
               print(res['token_status']);
 
+              // lastStatus.value = detail_inv['serial_number'];
               lastStatus.value = res['msg'];
               tipe.value = 'SN';
               print('ehe');
+              detail_inv = {};
               myFunction();
               // noSN.value = '';
 

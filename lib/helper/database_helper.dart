@@ -26,7 +26,6 @@ class DatabaseHelper {
   Future<void> _createDatabase(Database db, int version) async {
     await db.execute(
         'CREATE TABLE scanned_data (sn TEXT PRIMARY KEY UNIQUE, identifier TEXT,creator TEXT, created_date TIMESTAMP, product_id TEXT, tipe TEXT, detail_btm)');
-    // Additional table creation or initialization goes here
   }
 
   // Future<void> _insertData(Database db,) async {

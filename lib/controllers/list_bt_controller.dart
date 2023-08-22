@@ -14,8 +14,8 @@ class ListBtController extends GetxController {
 
   @override
   Future onInit() async {
-    await getListBt();
-    super.onInit();
+    // await getListBt();
+    // super.onInit();
   }
 
   @override
@@ -47,6 +47,9 @@ class ListBtController extends GetxController {
       listBt.addAll(res['data']);
       update();
     } catch (e) {
+      await SharedToken.tokenRemover();
+
+      return 'TOKEN_EMPTY';
       print('Error sending POST request: $e');
     }
   }
