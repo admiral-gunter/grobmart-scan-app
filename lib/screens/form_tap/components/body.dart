@@ -155,7 +155,8 @@ class _BodyState extends State<Body> {
                     : SingleChildScrollView(
                         child: Column(
                           children: [
-                            for (var item in ctl.dataPurchaseOrderDetail)
+                            for (var item
+                                in ctl.dataPurchaseOrderDetail.toSet().toList())
                               Column(
                                 children: [
                                   Row(

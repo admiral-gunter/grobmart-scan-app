@@ -13,7 +13,7 @@ import 'dart:io';
 class FormTapScreenController extends GetxController {
   RxList<dynamic> listLokasi = <dynamic>[].obs;
   RxList<String> listPo = <String>[].obs;
-  RxList<dynamic> dataPurchaseOrderDetail = <dynamic>[].obs;
+  List<dynamic> dataPurchaseOrderDetail = [].obs;
   RxString notes = ''.obs;
 
   RxInt lokasiSelect = 0.obs;
@@ -208,10 +208,10 @@ class FormTapScreenController extends GetxController {
   RxString noSN = ''.obs;
   RxString lastStatus = ''.obs;
   Future<String> scanAct(dynamic prop) async {
-    if (noSN.value == '' && prop != noSN.value) {
-      print('${noSN.value} WOI');
+    if (noSN.value == '') {
       noSN.value = prop;
       detail_inv['serial_number'] = prop;
+      print('${noSN.value} WOI');
     } else {
       // List<dynamic> items = dataPurchaseOrderDetail
       //     .where((item) => item['product_identifier'] == prop)
@@ -253,21 +253,19 @@ class FormTapScreenController extends GetxController {
             digitPenandaArray.add(result);
           }
         } else {
+          penanda = false;
           digitPenandaArray.add(result);
         }
       }
 
       if (digitPenandaArray.length == 0 && penanda) {
         return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
-      } else {
-        digitPenandaArray.add(matchingItems[0]);
       }
 
-      // if (digitPenandaArray.length == 0) {
-      //   print(digitPenandaArray);
-      //   return 'Salah Nomor Product Identifier';
-      // }
-
+      if (digitPenandaArray.length == 0) {
+        return 'Salah Nomor Product Identifier';
+      }
+      print('${jsonEncode(digitPenandaArray)}');
       // Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
       //   (item) => item['product_identifier'] == prop,
       //   orElse: () => null, // Return null if no matching item is found
@@ -279,15 +277,39 @@ class FormTapScreenController extends GetxController {
 
       if (result != null) {
         if (detail_inv['serial_number'] != null) {
+          print('hier i am');
           if (result['qty_total'] == result['qty_receive']) {
             return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
           }
+          var qtyTot = int.parse(result['qty_total']);
+          var qtyRec = int.parse(result['qty_receive']);
+          // return '${qtyTot} und ${qtyRec}';
+          if (qtyRec > qtyTot) {
+            return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          }
+          print('dimana');
+
+          // if (qtyReceive > qtyTotal) {
+          //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          // }
 
           tipe.value = 'Identifier';
           // update();
-          if (!detail_inv['serial_number'].contains(result['digit_penanda'])) {
-            return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+          String digitPenandaAsString = result['digit_penanda'].toString();
+          print(digitPenandaAsString);
+          // return digitPenandaAsString;
+          if (digitPenandaAsString.isNotEmpty &&
+              digitPenandaAsString != 'null') {
+            print('sayang ${digitPenandaAsString}');
+
+            String serialNum = detail_inv['serial_number'].toString();
+
+            if (!serialNum.contains(digitPenandaAsString)) {
+              print('kamu');
+              return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+            }
           }
+          print('saya');
 
           // detail_inv['serial_number'] = noSN.value;
           detail_inv['identifier'] = prop;
@@ -334,7 +356,7 @@ class FormTapScreenController extends GetxController {
               print('ehe');
               detail_inv = {};
               myFunction();
-              // noSN.value = '';
+              noSN.value = '';
 
               return res['msg'];
               // Do something with the 'res' data

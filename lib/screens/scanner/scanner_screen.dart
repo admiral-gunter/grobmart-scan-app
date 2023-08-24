@@ -243,6 +243,16 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   )
                 : null,
           ),
+          Obx(() {
+            if (ctl.lastStatus.value != '') {
+              // Conditionally navigate back when shouldPop becomes true
+              Future.delayed(Duration.zero, () {
+                // Navigator.pop(context);
+                cameraController.stop();
+              });
+            }
+            return Text('');
+          }),
           Obx(
             () => Align(
               alignment: Alignment.center,
@@ -281,6 +291,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                               ctl.lastStatus.value = '';
                               ctl.detail_inv['identifier'] = null;
                               ctl.detail_inv['serial_number'] = null;
+                              Navigator.pop(context);
                             },
                             child: Text('Close',
                                 style: TextStyle(color: kPrimaryColor)),
