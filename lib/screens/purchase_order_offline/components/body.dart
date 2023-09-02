@@ -1,12 +1,40 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../../helper/database_helper.dart';
 import '../../scanner/scanner_screen.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   Body({Key? key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   var noOG =
       'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}}';
+
+  // var _lokasi = null;
+
+  // Future<dynamic> fetchOptions() async {
+  //   var listLokasi = await DatabaseHelper.instance.getAllInventoryLocations();
+  //   print(listLokasi);
+  //   _lokasi = listLokasi;
+  //   return listLokasi;
+  // }
+
+  Future<List<Map<String, dynamic>>> fetchData() async {
+    return await DatabaseHelper.instance.getInventoryLocations();
+  }
+
+  void initState() {
+    super.initState();
+    // fetchOptions().then((value) => _lokasi = value);
+    // print(_lokasi);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +43,43 @@ class Body extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: fetchData(), // Call your asynchronous function here
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // While waiting for the future to complete
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  // If there was an error while fetching data
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  // When the future is complete, you can access the data
+                  final data = snapshot.data;
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Lokasi',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                        ),
+                        onChanged: (newValue) async {},
+                        items: data!.map((Map<String, dynamic> item) {
+                          return DropdownMenuItem<String>(
+                            value: item['id'].toString(),
+                            child: Text(item['text']),
+                          );
+                        }).toList(),
+                      ),
+                      SizedBox(height: 20.0),
+                    ],
+                  );
+                }
+              },
+            ),
             Container(
               child: TextFormField(
                 // initialValue: initialValue,

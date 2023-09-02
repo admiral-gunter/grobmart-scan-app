@@ -95,14 +95,7 @@ class _BodyState extends State<Body> {
                       EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 onChanged: (newValue) async {
-                  // print('a');
-                  // ctl.chgLokasi(newValue);
-                  // print(ctl.lokasiSelect.value);
                   await SharedToken.univSetterString('lokasi', newValue!);
-
-                  // await SharedToken.univGetterString('lokasi');
-
-                  // print(e);
                 },
                 items: controller.listLokasi.map((item) {
                   final objectLokasi =
