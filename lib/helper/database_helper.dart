@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
+// import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
@@ -26,9 +28,28 @@ class DatabaseHelper {
   Future<void> _createDatabase(Database db, int version) async {
     await db.execute(
         'CREATE TABLE scanned_data (sn TEXT PRIMARY KEY UNIQUE, identifier TEXT,creator TEXT, created_date TIMESTAMP, product_id TEXT, tipe TEXT, detail_btm)');
+    //db untuk lokasi;
+    await db.execute(
+        '''CREATE TABLE inventory_location (id INTEGER PRIMARY KEY UNIQUE, text TEXT)''');
+    //db untuk user;
+    // await db.execute('');
   }
 
-  // Future<void> _insertData(Database db,) async {
-  //   await db.execute(sql)
-  // }
+  Future<void> insertDatainventoryLocation(List<dynamic> data) async {
+    final db = await instance.database;
+    for (final item in data) {
+      await db.insert('inventory_location', item,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getData() async {
+    final db = await instance.database;
+    return await db.query('inventory_location');
+  }
+
+  Future<List<Map<String, dynamic>>> getAllInventoryLocations() async {
+    final db = await instance.database;
+    return await db.query('inventory_location');
+  }
 }

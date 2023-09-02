@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
 
 import '../../../constants.dart';
+import '../../purchase_order_offline/purchase_order_offline_screen.dart';
 
 class ParentItem {
   final String title;
@@ -27,6 +28,8 @@ List<ParentItem> parentList = [
     "Pembelian",
     [
       ChildItem("Purchase Order", ListBtSCreen.routeName),
+      ChildItem(
+          "Purchase Order (Offline)", PurchaseOrderOfflineScreen.routeName),
     ],
   )
 ];

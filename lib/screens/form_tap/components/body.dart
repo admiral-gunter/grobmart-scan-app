@@ -100,9 +100,9 @@ class _BodyState extends State<Body> {
                   // print(ctl.lokasiSelect.value);
                   await SharedToken.univSetterString('lokasi', newValue!);
 
-                  final e = await SharedToken.univGetterString('lokasi');
+                  // await SharedToken.univGetterString('lokasi');
 
-                  print(e);
+                  // print(e);
                 },
                 items: controller.listLokasi.map((item) {
                   final objectLokasi =
@@ -155,8 +155,7 @@ class _BodyState extends State<Body> {
                     : SingleChildScrollView(
                         child: Column(
                           children: [
-                            for (var item
-                                in ctl.dataPurchaseOrderDetail.toSet().toList())
+                            for (var item in ctl.dataPurchaseOrderDetail)
                               Column(
                                 children: [
                                   Row(
