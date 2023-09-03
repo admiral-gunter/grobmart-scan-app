@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/purchase_order_offline/components/dropdown_search.dart';
 
 import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
@@ -30,8 +31,21 @@ class _BodyState extends State<Body> {
     return await DatabaseHelper.instance.getInventoryLocations();
   }
 
+  // Future<List<Map<String, dynamic>>> fetchCustomers() async {
+  //   try {
+  //     final i = await DatabaseHelper.instance.getCustomers();
+  //     print('sakadik');
+  //     print(i);
+  //     return i; // Return the fetched data
+  //   } catch (e) {
+  //     print('Error fetching customers: $e');
+  //     return []; // Return an empty list or handle the error accordingly
+  //   }
+  // }
+
   void initState() {
     super.initState();
+    // fetchCustomers();
     // fetchOptions().then((value) => _lokasi = value);
     // print(_lokasi);
   }
@@ -43,6 +57,7 @@ class _BodyState extends State<Body> {
         child: ListView(
           padding: const EdgeInsets.all(8),
           children: <Widget>[
+            DropdownSearchWidget(),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: fetchData(), // Call your asynchronous function here
               builder: (context, snapshot) {

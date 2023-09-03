@@ -102,6 +102,10 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getCustomers() async {
     final db = await instance.database;
-    return await db.query('customers');
+    List<Map<String, dynamic>> result = await db.rawQuery(
+      '''SELECT id, firstname || ' ' || lastname || ' - ' || phone AS name FROM customers''',
+    );
+
+    return result;
   }
 }
