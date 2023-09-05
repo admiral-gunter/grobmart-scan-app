@@ -81,9 +81,6 @@ class _MenuScreenState extends State<MenuScreen> {
     SizeConfig().init(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Menu"),
-      ),
       body: Body(),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
     );

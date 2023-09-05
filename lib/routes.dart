@@ -16,6 +16,7 @@ import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/screens/splash/splash_screen.dart';
 
 import 'screens/purchase_order_offline/purchase_order_offline_screen.dart';
+import 'screens/scanner_offline/scanner_offline_screen.dart';
 import 'screens/sign_up/sign_up_screen.dart';
 
 // We use name route
@@ -38,5 +39,6 @@ final Map<String, WidgetBuilder> routes = {
   FormTapScreen.routeName: (context) => FormTapScreen(),
   ListBtSCreen.routeName: (context) => ListBtSCreen(),
   PurchaseOrderOfflineScreen.routeName: (context) =>
-      PurchaseOrderOfflineScreen()
+      PurchaseOrderOfflineScreen(),
+  ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen()
 };

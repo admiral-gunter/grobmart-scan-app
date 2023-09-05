@@ -71,6 +71,20 @@ class DatabaseHelper {
         address_show TEXT
       );
     ''');
+
+    await db.execute('''CREATE TABLE inventory_validasi_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sn TEXT,
+        identifier TEXT,
+        location_id INT,
+        customer_id INT,
+        creator TEXT,
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL
+    )
+
+    ''');
   }
 
   Future<void> insertDatainventoryLocation(List<dynamic> data) async {
@@ -78,6 +92,26 @@ class DatabaseHelper {
     for (final item in data) {
       await db.insert('inventory_location', item,
           conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+  }
+
+  Future<Map<String, dynamic>> insertInventoryValidasiHistory(
+      Map<String, dynamic> data) async {
+    final db = await instance.database;
+    try {
+      if (data.isEmpty) {
+        return {'result': false, 'message': 'Please Fill all avaiable field.'};
+      }
+      if (!data['sn'] ||
+          !data['identifier'] ||
+          !data['location_id'] ||
+          !data['customer_id']) {
+        return {'result': false, 'message': 'Please Fill all avaiable field.'};
+      }
+      await db.insert('inventory_validasi_history', data);
+      return {'result': true, 'message': 'Data inserted successfully.'};
+    } catch (e) {
+      return {'result': false, 'message': 'Failed to insert data: $e'};
     }
   }
 
@@ -103,7 +137,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getCustomers() async {
     final db = await instance.database;
     List<Map<String, dynamic>> result = await db.rawQuery(
-      '''SELECT id, firstname || ' ' || lastname || ' - ' || phone AS name FROM customers''',
+      '''SELECT id, firstname || ' ' || lastname || ' ( ' || shop_name || ' ) ' || ' ' || phone AS name FROM customers''',
     );
 
     return result;

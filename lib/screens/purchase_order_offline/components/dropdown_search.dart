@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get/get.dart';
 
 import '../../../helper/database_helper.dart';
+import '../../scanner_offline/controller/scanner_offline_controller.dart';
 
 class DropdownSearchWidget extends StatefulWidget {
   @override
@@ -23,6 +25,8 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
     });
   }
 
+  ScannerOfflineController ctl = Get.put(ScannerOfflineController());
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,13 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedCustomerId = ctl.credentialBasic['customer'];
+    final defaultCustomer = customers.firstWhere(
+      (customer) => customer['id'] == selectedCustomerId,
+      orElse: () => {'name': '', 'id': 0},
+    );
+    _selectedCustomer = defaultCustomer;
+    _controller.text = defaultCustomer['name'];
     return customers.isEmpty // Check if the data is still loading
         ? CircularProgressIndicator() // Show a loading indicator while data is being fetched
         : TypeAheadField<dynamic>(
@@ -53,7 +64,7 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
                 return customer['name']
                     .toLowerCase()
                     .contains(query.toLowerCase());
-              });
+              }).toList();
             },
             itemBuilder: (BuildContext context, dynamic customer) {
               return ListTile(
@@ -62,6 +73,7 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
             },
             onSuggestionSelected: (dynamic customer) {
               setState(() {
+                ctl.updateCredentialBasic('customer', customer['id']);
                 _selectedCustomer = customer;
                 _controller.text = customer['name'];
               });
