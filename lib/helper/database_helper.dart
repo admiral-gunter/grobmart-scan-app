@@ -115,6 +115,11 @@ class DatabaseHelper {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getDataInvHistory() async {
+    final db = await instance.database;
+    return await db.query('inventory_validasi_history');
+  }
+
   Future<void> insertDataCustomer(List<dynamic> data) async {
     final db = await instance.database;
     for (final item in data) {

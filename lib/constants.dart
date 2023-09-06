@@ -50,5 +50,5 @@ OutlineInputBorder outlineInputBorder() {
 }
 
 // const kURL_ORIGIN = 'https://grobx.sinarmaju.co.id/api/';
-// const kURL_ORIGIN = 'http://192.168.94.236/grobx2023/api/';
-const kURL_ORIGIN = 'https://devgrobx.sinarmaju.co.id/api/';
+const kURL_ORIGIN = 'http://192.168.68.109/grobx2023/api/';
+// const kURL_ORIGIN = 'https://devgrobx.sinarmaju.co.id/api/';
