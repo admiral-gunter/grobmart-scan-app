@@ -94,15 +94,15 @@ class _MenuScreenState extends State<MenuScreen> {
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Request successful'),
+            content: Text('Request Sync Data successful'),
           ),
         );
         print('Response data: ${response.body}');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content:
-                Text('Request failed with status code: ${response.statusCode}'),
+            content: Text(
+                'Request Sync Data failed with status code: ${response.statusCode}'),
           ),
         );
         print('Response data: ${response.body}');
@@ -110,7 +110,7 @@ class _MenuScreenState extends State<MenuScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Request error: $e'),
+          content: Text('Request Sync Data error: $e'),
         ),
       );
       print('Request error: $e');

@@ -48,6 +48,12 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
             textFieldConfiguration: TextFieldConfiguration(
               controller: _controller,
               decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear, color: Colors.grey),
+                  onPressed: () {
+                    _controller.clear();
+                  },
+                ),
                 labelText: 'Customer',
                 labelStyle: TextStyle(
                   color: Colors.black87,

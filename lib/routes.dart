@@ -12,6 +12,7 @@ import 'package:shop_app/screens/menu/menu_screen.dart';
 import 'package:shop_app/screens/otp/otp_screen.dart';
 import 'package:shop_app/screens/profile/profile_screen.dart';
 import 'package:shop_app/screens/scanner/scanner_screen.dart';
+import 'package:shop_app/screens/service_offline/service_offline_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/screens/splash/splash_screen.dart';
 
@@ -40,5 +41,6 @@ final Map<String, WidgetBuilder> routes = {
   ListBtSCreen.routeName: (context) => ListBtSCreen(),
   PurchaseOrderOfflineScreen.routeName: (context) =>
       PurchaseOrderOfflineScreen(),
-  ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen()
+  ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen(),
+  ServiceOfflineScreen.routeName: (context) => ServiceOfflineScreen()
 };

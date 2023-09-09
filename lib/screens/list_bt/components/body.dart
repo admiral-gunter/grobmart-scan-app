@@ -130,7 +130,7 @@ class _BodyState extends State<Body> {
           children: [
             Row(
               children: [
-                TextButton(
+                OutlinedButton(
                   onPressed: () async {
                     await ctl.chgPage('prev');
                   },
@@ -139,7 +139,7 @@ class _BodyState extends State<Body> {
                     style: TextStyle(color: kTextColor),
                   ),
                 ),
-                TextButton(
+                OutlinedButton(
                   onPressed: () async {
                     await ctl.chgPage('next');
                   },
@@ -150,12 +150,19 @@ class _BodyState extends State<Body> {
                 ),
               ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, FormTapScreen.routeName);
-              },
+            OutlinedButton(
+              onPressed: () {},
               child: Text('BT Bulk', style: TextStyle(color: kTextColor)),
-            )
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: kPrimaryColor),
+              ),
+            ),
+            // OutlinedButton(
+            //   onPressed: () {
+            //     Navigator.pushNamed(context, FormTapScreen.routeName);
+            //   },
+            //   child: Text('BT Bulk', style: TextStyle(color: kTextColor)),
+            // )
           ],
         )
       ],

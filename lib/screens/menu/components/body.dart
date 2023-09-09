@@ -28,8 +28,14 @@ List<ParentItem> parentList = [
     "Pembelian",
     [
       ChildItem("Purchase Order", ListBtSCreen.routeName),
-      ChildItem(
-          "Purchase Order (Offline)", PurchaseOrderOfflineScreen.routeName),
+    ],
+  ),
+  ParentItem(
+    "Fitur Offline",
+    [
+      ChildItem("Purchase Order", PurchaseOrderOfflineScreen.routeName),
+      ChildItem("Pindah Gudang", PurchaseOrderOfflineScreen.routeName),
+      ChildItem("Service", PurchaseOrderOfflineScreen.routeName),
     ],
   )
 ];

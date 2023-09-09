@@ -74,6 +74,7 @@ class DatabaseHelper {
 
     await db.execute('''CREATE TABLE inventory_validasi_history (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT,
         sn TEXT,
         identifier TEXT,
         location_id INT,

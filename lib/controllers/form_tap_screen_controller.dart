@@ -154,7 +154,7 @@ class FormTapScreenController extends GetxController {
     final url4 = '${apiHost}purchase-order-detail/get-by-po-id-bulk/$token?';
     // print('${pores}');
     // return;
-    final response = await http.post(Uri.parse('${url4}${pores}'));
+    final response = await http.post(Uri.parse('${url4}?id=${po[0]}'));
     var dataPo = {};
     // print('${response.body}');
     dataPo['bt_group'] = btgroup;
