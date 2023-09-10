@@ -154,7 +154,7 @@ class FormTapScreenController extends GetxController {
     final url4 = '${apiHost}purchase-order-detail/get-by-po-id-bulk/$token?';
     // print('${pores}');
     // return;
-    final response = await http.post(Uri.parse('${url4}?id=${po[0]}'));
+    final response = await http.post(Uri.parse('${url4}${pores}'));
     var dataPo = {};
     // print('${response.body}');
     dataPo['bt_group'] = btgroup;
@@ -168,7 +168,7 @@ class FormTapScreenController extends GetxController {
 
     String queryString = createQueryString(dataPo: dataPo);
     // print(queryString);
-
+    print('${url4}${pores}');
     queryStringPo = queryString;
 
     var re2 = jsonDecode(response.body);

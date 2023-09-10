@@ -10,11 +10,13 @@ import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
 import 'package:shop_app/screens/login_success/login_success_screen.dart';
 import 'package:shop_app/screens/menu/menu_screen.dart';
 import 'package:shop_app/screens/otp/otp_screen.dart';
+import 'package:shop_app/screens/pindah_gudang_offline/pindah_gudang_offline_screen.dart';
 import 'package:shop_app/screens/profile/profile_screen.dart';
 import 'package:shop_app/screens/scanner/scanner_screen.dart';
 import 'package:shop_app/screens/service_offline/service_offline_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/screens/splash/splash_screen.dart';
+import 'package:shop_app/screens/universal_scannner/controller/universal_scanner_data.dart';
 
 import 'screens/purchase_order_offline/purchase_order_offline_screen.dart';
 import 'screens/scanner_offline/scanner_offline_screen.dart';
@@ -42,5 +44,6 @@ final Map<String, WidgetBuilder> routes = {
   PurchaseOrderOfflineScreen.routeName: (context) =>
       PurchaseOrderOfflineScreen(),
   ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen(),
-  ServiceOfflineScreen.routeName: (context) => ServiceOfflineScreen()
+  ServiceOfflineScreen.routeName: (context) => ServiceOfflineScreen(),
+  PindahGudangOfflineScreen.routeName: (context) => PindahGudangOfflineScreen(),
 };

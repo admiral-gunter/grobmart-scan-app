@@ -33,13 +33,9 @@ class _BodyState extends State<Body> {
     final ScannerOfflineController ctl = Get.put(ScannerOfflineController());
 
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
         child: ListView(
-          padding: const EdgeInsets.all(8),
           children: <Widget>[
-            SizedBox(
-              height: 25,
-            ),
             FutureBuilder<List<Map<String, dynamic>>>(
               future: fetchData(), // Call your asynchronous function here
               builder: (context, snapshot) {

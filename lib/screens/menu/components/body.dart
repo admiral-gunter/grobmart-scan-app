@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
+import 'package:shop_app/screens/service_offline/service_offline_screen.dart';
 
 import '../../../constants.dart';
+import '../../pindah_gudang_offline/pindah_gudang_offline_screen.dart';
 import '../../purchase_order_offline/purchase_order_offline_screen.dart';
 
 class ParentItem {
@@ -34,8 +36,8 @@ List<ParentItem> parentList = [
     "Fitur Offline",
     [
       ChildItem("Purchase Order", PurchaseOrderOfflineScreen.routeName),
-      ChildItem("Pindah Gudang", PurchaseOrderOfflineScreen.routeName),
-      ChildItem("Service", PurchaseOrderOfflineScreen.routeName),
+      ChildItem("Pindah Gudang", PindahGudangOfflineScreen.routeName),
+      ChildItem("Service", ServiceOfflineScreen.routeName),
     ],
   )
 ];

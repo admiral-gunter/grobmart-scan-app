@@ -143,7 +143,8 @@ class _BodyState extends State<Body> {
                 height: MediaQuery.of(context).size.height * 0.28,
                 child: ctl.dataPurchaseOrderDetail.length == 0
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child:
+                            Text('Tidak ada data/Data tidak dapat ditemukan'),
                       )
                     : SingleChildScrollView(
                         child: Column(

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shop_app/controllers/form_tap_screen_controller.dart';
 import 'package:shop_app/controllers/list_bt_controller.dart';
-import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
 
 import '../../../constants.dart';
+import '../../form_tap/form_tap_screen.dart';
 import '../../sign_in/sign_in_screen.dart';
 
 class Body extends StatefulWidget {
@@ -151,7 +150,9 @@ class _BodyState extends State<Body> {
               ],
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, FormTapScreen.routeName);
+              },
               child: Text('BT Bulk', style: TextStyle(color: kTextColor)),
               style: OutlinedButton.styleFrom(
                 side: BorderSide(color: kPrimaryColor),
