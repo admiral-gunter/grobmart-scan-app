@@ -13,7 +13,7 @@ import 'dart:io';
 class FormTapScreenController extends GetxController {
   RxList<dynamic> listLokasi = <dynamic>[].obs;
   RxList<String> listPo = <String>[].obs;
-  List<dynamic> dataPurchaseOrderDetail = [].obs;
+  RxList dataPurchaseOrderDetail = [].obs;
   RxString notes = ''.obs;
 
   RxInt lokasiSelect = 0.obs;
@@ -366,7 +366,6 @@ class FormTapScreenController extends GetxController {
               print('Response body: ${response.body}');
 
               return 'Request failed with status: ${response.statusCode}';
-              // return 'Response body: ${response.body}';
               // Add further error handling or notify the user accordingly
             }
           } catch (e) {
