@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
 import 'package:shop_app/screens/service_offline/service_offline_screen.dart';
 
@@ -62,10 +63,6 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Handle back button press here
-        // Return true to allow the back navigation or false to block it
-        // You can perform custom logic or show a dialog before allowing the navigation
-        // For example, you can show an alert dialog and only allow the navigation if the user confirms
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -76,14 +73,12 @@ class _BodyState extends State<Body> {
                 TextButton(
                   child: Text('Yes'),
                   onPressed: () {
-                    // Pop the current route and allow the back navigation
-                    Navigator.of(context).pop(true);
+                    SystemNavigator.pop();
                   },
                 ),
                 TextButton(
                   child: Text('No'),
                   onPressed: () {
-                    // Stay on the current route and block the back navigation
                     Navigator.of(context).pop(false);
                   },
                 ),
@@ -91,7 +86,6 @@ class _BodyState extends State<Body> {
             );
           },
         );
-        // By default, block the back navigation
         return false;
       },
       child: SafeArea(

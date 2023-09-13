@@ -98,6 +98,17 @@ class _BodyState extends State<Body> {
     }
   }
 
+  void showSnackBar(
+      BuildContext context, String message, double durationInSeconds) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(
+          seconds: (durationInSeconds * 1000)
+              .toInt()), // Convert seconds to milliseconds
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     final UniversalScannerData ctl = Get.put(UniversalScannerData());
@@ -155,12 +166,6 @@ class _BodyState extends State<Body> {
               color: Colors.black87,
               fontSize: 17,
             ),
-            // validator: (value) {
-            //   if (value == null || value.isEmpty) {
-            //     return 'Please enter some text';
-            //   }
-            //   return null;
-            // },
           ),
           SizedBox(
             height: 10,
@@ -191,8 +196,7 @@ class _BodyState extends State<Body> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UniversalScannerSCreen(
-                            goBack: () => Navigator.pushReplacementNamed(
-                                context, ServiceOfflineScreen.routeName))));
+                            goBackRouteName: ServiceOfflineScreen.routeName)));
               },
               child: Text('Scan SN dan Identifier',
                   style: TextStyle(color: kPrimaryColor)),
@@ -207,7 +211,10 @@ class _BodyState extends State<Body> {
           Container(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                showSnackBar(
+                    context, 'Data Berhasil Dimasukkan (Offline)', 4.5);
+              },
               child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(

@@ -157,36 +157,51 @@ class _ScannerScreenState extends State<ScannerScreen> {
             },
           ),
           Align(
-            alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                Text("Scan SN dan Identifier"),
-                Obx(() => Column(
-                      children: [
-                        Text("${ctl.lastStatus.value}"),
-                        Text('SN : ${ctl.detail_inv['serial_number'] ?? ''}'),
-                        Text(
-                            'Identifier : ${ctl.detail_inv['identifier'] ?? ''}'),
-                      ],
-                    )),
-                OutlinedButton(
-                  onPressed: () {
-                    // Add your button click logic here.
-                    ctl.noSN.value = '';
-                    ctl.lastStatus.value = '';
-                    ctl.detail_inv['identifier'] = null;
-                    ctl.detail_inv['serial_number'] = null;
-                  },
-                  child: Text('RESET SN DAN IDENTIFIER',
-                      style: TextStyle(color: kPrimaryColor)),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("${ctl.lastStatus.value}"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('SN  '),
+                              Text('${ctl.detail_inv['serial_number'] ?? ''}')
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Identifier '),
+                              Text('${ctl.detail_inv['identifier'] ?? ''} ')
+                            ],
+                          ),
+                        ],
+                      )),
+                  OutlinedButton(
+                    onPressed: () {
+                      // Add your button click logic here.
+                      ctl.noSN.value = '';
+                      ctl.lastStatus.value = '';
+                      ctl.detail_inv['identifier'] = null;
+                      ctl.detail_inv['serial_number'] = null;
+                    },
+                    child: Text('RESET SN DAN IDENTIFIER',
+                        style: TextStyle(color: kPrimaryColor, fontSize: 10)),
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      side: BorderSide(width: 1, color: kPrimaryColor),
                     ),
-                    side: BorderSide(width: 1, color: kPrimaryColor),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Align(
@@ -291,7 +306,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                               ctl.lastStatus.value = '';
                               ctl.detail_inv['identifier'] = null;
                               ctl.detail_inv['serial_number'] = null;
-                              Navigator.pop(context);
+                              // Navigator.pop(context);
                             },
                             child: Text('Close',
                                 style: TextStyle(color: kPrimaryColor)),

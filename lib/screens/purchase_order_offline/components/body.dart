@@ -17,6 +17,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final ScannerOfflineController ctl = Get.put(ScannerOfflineController());
+
   var noOG =
       'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}}';
 
@@ -25,13 +27,12 @@ class _BodyState extends State<Body> {
   }
 
   void initState() {
+    ctl.dataTap.clear();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final ScannerOfflineController ctl = Get.put(ScannerOfflineController());
-
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
         child: ListView(
@@ -80,29 +81,42 @@ class _BodyState extends State<Body> {
               height: 25,
             ),
             Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('SN'),
-                      Text(
-                        '''${ctl.snIdentifier['sn'] ?? ''}  ''',
-                      ),
-                    ],
+              () => SingleChildScrollView(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  child: ListView.builder(
+                    itemCount: ctl.dataTap.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final data = ctl.dataTap[index];
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.0), // Adjust as needed
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('SN'),
+                                Text(
+                                  '${data['sn'] ?? ''}  ',
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Identifier'),
+                                Text(
+                                  '${data['identifier'] ?? ''} ',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Identifier'),
-                      Text(
-                        '''${ctl.snIdentifier['identifier'] ?? ''} ''',
-                      ),
-                    ],
-                  ),
-                  // Text('${jsonEncode(ctl.credentialBasic)}')
-                ],
+                ),
               ),
             ),
             SizedBox(

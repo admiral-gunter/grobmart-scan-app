@@ -84,7 +84,38 @@ class DatabaseHelper {
         date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL
     )
+    ''');
 
+    await db.execute('''CREATE TABLE service_offline (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT,
+        sn TEXT,
+        identifier TEXT,
+        location_id INT,
+        customer_id INT,
+        creator TEXT,
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL
+    )
+    ''');
+
+    await db.execute('''CREATE TABLE pindah_gudang_offline (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT,
+        sn TEXT,
+        identifier TEXT,
+        location_id INT,
+        customer_id INT,
+        creator TEXT,
+        lokasi_dari TEXT,
+        lokasi_ke TEXT,
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
+        customer_nama TEXT,
+        customer_notelp TEXT
+    )
     ''');
   }
 
@@ -110,6 +141,28 @@ class DatabaseHelper {
         return {'result': false, 'message': 'Please Fill all avaiable field.'};
       }
       await db.insert('inventory_validasi_history', data);
+      return {'result': true, 'message': 'Data inserted successfully.'};
+    } catch (e) {
+      return {'result': false, 'message': 'Failed to insert data: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> insertServiceOffline(
+      Map<String, dynamic> data) async {
+    final db = await instance.database;
+    try {
+      await db.insert('pindah_gudang_offline', data);
+      return {'result': true, 'message': 'Data inserted successfully.'};
+    } catch (e) {
+      return {'result': false, 'message': 'Failed to insert data: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> insertPindahGudangOffline(
+      Map<String, dynamic> data) async {
+    final db = await instance.database;
+    try {
+      await db.insert('service_offline', data);
       return {'result': true, 'message': 'Data inserted successfully.'};
     } catch (e) {
       return {'result': false, 'message': 'Failed to insert data: $e'};

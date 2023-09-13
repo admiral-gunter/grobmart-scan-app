@@ -170,8 +170,7 @@ class _BodyState extends State<Body> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => UniversalScannerSCreen(
-                        goBack: () => Navigator.pushReplacementNamed(
-                            context, PindahGudangOfflineScreen.routeName)),
+                        goBackRouteName: PindahGudangOfflineScreen.routeName),
                   ),
                 );
               },

@@ -23,7 +23,7 @@ class _ScannerOfflineScreenState extends State<ScannerOfflineScreen> {
       MobileScannerController(detectionSpeed: DetectionSpeed.normal);
 
   Map<String, dynamic> dataSNIdentifier = {'sn': null, 'identifier': null};
-  var curKey = 'sn';
+  String curKey = 'sn';
   final ScannerOfflineController ctl = Get.put(ScannerOfflineController());
 
   void initState() {
@@ -49,16 +49,24 @@ class _ScannerOfflineScreenState extends State<ScannerOfflineScreen> {
               child: const Text('OK'),
               onPressed: () {
                 ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
-                if (curKey == 'identifier') {
-                  Navigator.pushReplacementNamed(
-                      context, PurchaseOrderOfflineScreen.routeName);
-                  cameraController.stop();
-                  return;
-                }
+
                 if (curKey == 'sn') {
-                  curKey = 'identifier';
+                  setState(() {
+                    curKey = 'identifier';
+                  });
+                } else {
+                  setState(() {
+                    curKey = 'sn';
+                  });
+                  ctl.insertDataOffline();
                 }
 
+                // if (curKey == 'identifier') {
+                //   setState(() {
+                //     curKey = 'sn';
+                //   });
+                //   ctl.insertDataOffline();
+                // }
                 cameraController.start();
                 Navigator.of(context).pop();
               },

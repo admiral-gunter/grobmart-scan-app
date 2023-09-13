@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../scanner_offline/controller/scanner_offline_controller.dart';
+import 'controller/universal_scanner_data.dart';
 
 class UniversalScannerSCreen extends StatefulWidget {
-  final Function goBack;
-  UniversalScannerSCreen({Key? key, required this.goBack}) : super(key: key);
+  final dynamic goBackRouteName;
+  UniversalScannerSCreen({Key? key, required this.goBackRouteName})
+      : super(key: key);
 
   @override
   State<UniversalScannerSCreen> createState() => _UniversalScannerSCreenState();
@@ -18,7 +20,7 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
 
   Map<String, dynamic> dataSNIdentifier = {'sn': null, 'identifier': null};
   var curKey = 'sn';
-  final ScannerOfflineController ctl = Get.put(ScannerOfflineController());
+  final UniversalScannerData ctl = Get.put(UniversalScannerData());
 
   void initState() {
     // To fix on start error
@@ -42,11 +44,11 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
               ),
               child: const Text('OK'),
               onPressed: () {
-                // ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
+                ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
                 if (curKey == 'identifier') {
-                  widget.goBack;
-                  // Navigator.pushReplacementNamed(
-                  //     context, PurchaseOrderOfflineScreen.routeName);
+                  // widget.goBack;
+                  Navigator.pushReplacementNamed(
+                      context, widget.goBackRouteName);
                   cameraController.stop();
                   return;
                 }
