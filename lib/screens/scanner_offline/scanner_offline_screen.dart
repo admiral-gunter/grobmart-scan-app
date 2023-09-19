@@ -3,9 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shop_app/screens/purchase_order_offline/purchase_order_offline_screen.dart';
+// import 'package:shop_app/screens/purchase_order_offline/purchase_order_offline_screen.dart';
 
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:shop_app/helper/database_helper.dart';
 
 import 'controller/scanner_offline_controller.dart';
 
@@ -47,7 +48,7 @@ class _ScannerOfflineScreenState extends State<ScannerOfflineScreen> {
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: const Text('OK'),
-              onPressed: () {
+              onPressed: () async {
                 ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
 
                 if (curKey == 'sn') {
@@ -61,6 +62,9 @@ class _ScannerOfflineScreenState extends State<ScannerOfflineScreen> {
                   ctl.insertDataOffline();
                 }
 
+                // final e = DatabaseHelper.instance
+                //     .getDataInvHistory()
+                //     .then((value) => print(value));
                 // if (curKey == 'identifier') {
                 //   setState(() {
                 //     curKey = 'sn';

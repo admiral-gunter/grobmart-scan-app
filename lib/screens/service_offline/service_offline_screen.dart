@@ -11,11 +11,15 @@ class ServiceOfflineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Container(
-        alignment: Alignment.centerLeft,
-        color: Colors.white,
-      )),
+      resizeToAvoidBottomInset: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+            title: Container(
+          alignment: Alignment.centerLeft,
+          color: Colors.white,
+        )),
+      ),
       body: Body(),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
     );

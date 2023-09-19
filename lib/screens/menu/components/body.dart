@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
+import 'package:shop_app/screens/service_offline/controller/service_offline_controller.dart';
 import 'package:shop_app/screens/service_offline/service_offline_screen.dart';
 
 import '../../../constants.dart';
 import '../../pindah_gudang_offline/pindah_gudang_offline_screen.dart';
 import '../../purchase_order_offline/purchase_order_offline_screen.dart';
+import '../../universal_scannner/controller/universal_scanner_data.dart';
 
 class ParentItem {
   final String title;
@@ -61,6 +64,11 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final UniversalScannerData ctl = Get.put(UniversalScannerData());
+    final ServiceOfflineController ctr = Get.put(ServiceOfflineController());
+
+    // ctl.snIdentifier.clear();
+    // ctl.itemScanned.clear();
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -110,6 +118,9 @@ class _BodyState extends State<Body> {
                   children: parentItem.childList
                       .map((childItem) => InkWell(
                             onTap: () {
+                              ctr.basicCredential.clear();
+                              ctl.snIdentifier.clear();
+                              ctl.itemScanned.clear();
                               Navigator.pushNamed(context, childItem.route);
                             },
                             child: ListTile(

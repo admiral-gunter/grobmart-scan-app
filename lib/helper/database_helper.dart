@@ -96,7 +96,10 @@ class DatabaseHelper {
         creator TEXT,
         date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
+        customer_nama TEXT,
+        customer_notelp TEXT,
+        tipe TEXT
     )
     ''');
 
@@ -108,8 +111,10 @@ class DatabaseHelper {
         location_id INT,
         customer_id INT,
         creator TEXT,
-        lokasi_dari TEXT,
-        lokasi_ke TEXT,
+        dari_gudang TEXT,
+        ke_gudang TEXT,
+        in_out TEXT,
+        kd_pindah_gudang TEXT,
         date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
@@ -131,15 +136,6 @@ class DatabaseHelper {
       Map<String, dynamic> data) async {
     final db = await instance.database;
     try {
-      if (data.isEmpty) {
-        return {'result': false, 'message': 'Please Fill all avaiable field.'};
-      }
-      if (!data['sn'] ||
-          !data['identifier'] ||
-          !data['location_id'] ||
-          !data['customer_id']) {
-        return {'result': false, 'message': 'Please Fill all avaiable field.'};
-      }
       await db.insert('inventory_validasi_history', data);
       return {'result': true, 'message': 'Data inserted successfully.'};
     } catch (e) {
@@ -147,26 +143,50 @@ class DatabaseHelper {
     }
   }
 
-  Future<Map<String, dynamic>> insertServiceOffline(
-      Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> insertServiceOffline(data) async {
     final db = await instance.database;
     try {
-      await db.insert('pindah_gudang_offline', data);
+      Map<String, dynamic> map = {};
+
+      data.forEach((key, value) {
+        if (key is String) {
+          map[key] = value;
+        }
+      });
+
+      await db.insert('service_offline', map);
       return {'result': true, 'message': 'Data inserted successfully.'};
     } catch (e) {
       return {'result': false, 'message': 'Failed to insert data: $e'};
     }
   }
 
-  Future<Map<String, dynamic>> insertPindahGudangOffline(
-      Map<String, dynamic> data) async {
+  Future<List<dynamic>> getDataService() async {
+    final db = await instance.database;
+    return await db.query('service_offline');
+  }
+
+  Future insertPindahGudangOffline(data) async {
     final db = await instance.database;
     try {
-      await db.insert('service_offline', data);
+      Map<String, dynamic> map = {};
+
+      data.forEach((key, value) {
+        if (key is String) {
+          map[key] = value;
+        }
+      });
+
+      await db.insert('pindah_gudang_offline', map);
       return {'result': true, 'message': 'Data inserted successfully.'};
     } catch (e) {
       return {'result': false, 'message': 'Failed to insert data: $e'};
     }
+  }
+
+  Future<List<dynamic>> getDataPindahGudang() async {
+    final db = await instance.database;
+    return await db.query('pindah_gudang_offline');
   }
 
   Future<List<Map<String, dynamic>>> getDataInvHistory() async {

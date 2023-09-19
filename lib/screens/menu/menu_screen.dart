@@ -77,19 +77,73 @@ class _MenuScreenState extends State<MenuScreen> {
     super.dispose();
   }
 
-  Future<void> syncDataOffline() async {
+  // Future<void> syncDataOffline() async {
+  //   try {
+  //     var dat = await DatabaseHelper.instance.getDataInvHistory();
+  //     var dat1 = jsonEncode(dat);
+  //     final url = Uri.parse(
+  //         '${kURL_ORIGIN}sync-insert-po-offline?table=po&data=${dat1}');
+  //     final response = await client.post(
+  //       url,
+  //       headers: {
+  //         'Content-Type':
+  //             'application/json', // Set the appropriate content type
+  //       },
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Request Sync Data successful'),
+  //         ),
+  //       );
+  //       print('Response data: ${response.body}');
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text(
+  //               'Request Sync Data failed with status code: ${response.statusCode}'),
+  //         ),
+  //       );
+  //       print('Response data: ${response.body}');
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Request Sync Data error: $e'),
+  //       ),
+  //     );
+  //     print('Request error: $e');
+  //   } finally {
+  //     client.close(); // Close the client when done
+  //   }
+  // }
+
+  Future<void> syncDataOfflineDynamic(String tipe) async {
     try {
-      var dat = await DatabaseHelper.instance.getDataInvHistory();
-      var dat1 = jsonEncode(dat);
+      var dat = null;
+      var dat1 = '';
+      if (tipe == 'po') {
+        dat = await DatabaseHelper.instance.getDataInvHistory();
+        print(dat);
+        dat1 = jsonEncode(dat);
+      } else if (tipe == 'service') {
+        dat = await DatabaseHelper.instance.getDataService();
+        dat1 = jsonEncode(dat);
+      } else if (tipe == 'pindah_gudang') {
+        dat = await DatabaseHelper.instance.getDataPindahGudang();
+        dat1 = jsonEncode(dat);
+      }
+      final body = {'data': dat1};
+
       final url =
-          Uri.parse('${kURL_ORIGIN}sync-insert-po-offline?data=${dat1}');
-      final response = await client.post(
-        url,
-        headers: {
-          'Content-Type':
-              'application/json', // Set the appropriate content type
-        },
-      );
+          Uri.parse('${kURL_ORIGIN}sync-insert-po-offline?table=${tipe}');
+      final response = await client.post(url,
+          headers: {
+            'Content-Type':
+                'application/x-www-form-urlencoded' // Set the appropriate content type
+          },
+          body: body);
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -114,9 +168,10 @@ class _MenuScreenState extends State<MenuScreen> {
         ),
       );
       print('Request error: $e');
-    } finally {
-      client.close(); // Close the client when done
     }
+    // finally {
+    //   client.close(); // Close the client when done
+    // }
   }
 
   @override
@@ -124,7 +179,11 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
     checkTokenAndNavigate();
     initData();
-    syncDataOffline();
+    syncDataOfflineDynamic('po').then((value) =>
+        syncDataOfflineDynamic('service')
+            .then((value) => syncDataOfflineDynamic('pindah_gudang')));
+    ;
+    ;
   }
 
   @override

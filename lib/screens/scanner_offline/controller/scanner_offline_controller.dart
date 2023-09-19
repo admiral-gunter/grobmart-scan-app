@@ -32,6 +32,7 @@ class ScannerOfflineController extends GetxController {
     dataTap.add(data);
     Map<String, dynamic> inserted =
         await DatabaseHelper.instance.insertInventoryValidasiHistory(data);
+    print(inserted);
     snIdentifier.clear();
     credentialBasic.clear();
 

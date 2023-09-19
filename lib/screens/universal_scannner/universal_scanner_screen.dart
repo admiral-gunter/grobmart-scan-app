@@ -24,6 +24,7 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
 
   void initState() {
     // To fix on start error
+    ctl.clearSnIdentifier();
     cameraController.stop();
     super.initState();
   }
@@ -45,15 +46,17 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
               child: const Text('OK'),
               onPressed: () {
                 ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
-                if (curKey == 'identifier') {
-                  // widget.goBack;
-                  Navigator.pushReplacementNamed(
-                      context, widget.goBackRouteName);
-                  cameraController.stop();
-                  return;
-                }
+
                 if (curKey == 'sn') {
                   curKey = 'identifier';
+                } else {
+                  curKey = 'sn';
+                  // widget.goBack;
+                  ctl.addItemScan();
+                  // Navigator.pushReplacementNamed(
+                  //     context, widget.goBackRouteName);
+                  // cameraController.stop();
+                  // return;
                 }
 
                 cameraController.start();
@@ -70,6 +73,11 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () =>
+              Navigator.pushReplacementNamed(context, widget.goBackRouteName),
+        ),
         title: const Text('Mobile Scanner'),
         actions: [
           IconButton(

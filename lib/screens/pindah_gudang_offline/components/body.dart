@@ -1,11 +1,16 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/screens/pindah_gudang_offline/pindah_gudang_offline_screen.dart';
 import 'package:shop_app/screens/universal_scannner/controller/universal_scanner_data.dart';
+import 'package:shop_app/shared_preferences/shared_token.dart';
 
 import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
+import '../../service_offline/controller/service_offline_controller.dart';
 import '../../universal_scannner/universal_scanner_screen.dart';
 
 class Body extends StatefulWidget {
@@ -18,186 +23,294 @@ class _BodyState extends State<Body> {
     return await DatabaseHelper.instance.getInventoryLocations();
   }
 
+  List<Map<String, dynamic>> listLokasi = [];
+  // final UniversalScannerData d = Get.put(UniversalScannerData());
+
   void initState() {
+    // d.itemScanned.clear();
+    // ctl.itemScanned.clear();
+    fetchData().then((value) {
+      setState(() {
+        listLokasi.addAll(value);
+      });
+    });
     super.initState();
+  }
+
+  void showSnackBar(
+      BuildContext context, String message, int durationInSeconds) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: Duration(
+          seconds: durationInSeconds), // Convert seconds to milliseconds
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
+    final ServiceOfflineController ctr = Get.put(ServiceOfflineController());
+
     final UniversalScannerData ctl = Get.put(UniversalScannerData());
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          TextFormField(
-            // initialValue: initialValue,
-            decoration: InputDecoration(
-              labelText: 'Penerima',
-              labelStyle: TextStyle(
-                color: Colors.black87,
-                fontSize: 17,
-              ),
-            ),
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 17,
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 20.0),
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetchData(), // Call your asynchronous function here
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final data = snapshot.data;
-
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Dari Gudang',
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      ),
-                      // value: ctl.credentialBasic['location'] ?? null,
-                      onChanged: (newValue) {
-                        // ctl.updateCredentialBasic('location', newValue);
-                      },
-                      items: data!.map((Map<String, dynamic> item) {
-                        return DropdownMenuItem<String>(
-                          value: item['id'].toString(),
-                          child: Text(item['text']),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                );
-              }
-            },
-          ),
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetchData(), // Call your asynchronous function here
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final data = snapshot.data;
-
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Ke Gudang',
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      ),
-                      // value: ctl.credentialBasic['location'] ?? null,
-                      onChanged: (newValue) {
-                        // ctl.updateCredentialBasic('location', newValue);
-                      },
-                      items: data!.map((Map<String, dynamic> item) {
-                        return DropdownMenuItem<String>(
-                          value: item['id'].toString(),
-                          child: Text(item['text']),
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                );
-              }
-            },
-          ),
-          TextFormField(
-            // initialValue: initialValue,
-            decoration: InputDecoration(
-              labelText: 'KD Pindah Gudang',
-              labelStyle: TextStyle(
-                color: Colors.black87,
-                fontSize: 17,
-              ),
-            ),
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 17,
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 10.0),
-          Obx(() => Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text('SN'), Text(ctl.snIdentifier['sn'] ?? '')],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Identifier'),
-                      Text(ctl.snIdentifier['identifier'] ?? '')
-                    ],
-                  )
-                ],
-              )),
-          SizedBox(height: 10.0),
-          Container(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UniversalScannerSCreen(
-                        goBackRouteName: PindahGudangOfflineScreen.routeName),
-                  ),
-                );
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextFormField(
+              onChanged: (value) {
+                ctr.basicCredential['customer'] = value;
               },
-              child: Text('Scan SN dan Identifier',
-                  style: TextStyle(color: kPrimaryColor)),
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+              initialValue: ctr.basicCredential['customer'],
+              decoration: InputDecoration(
+                labelText: 'Customer',
+                labelStyle: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 17,
                 ),
-                side: BorderSide(width: 1, color: kPrimaryColor),
+              ),
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 17,
               ),
             ),
-          ),
-          Container(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () {},
-              child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+            SizedBox(height: 20.0),
+            TextFormField(
+              initialValue: ctr.basicCredential['no_telp'],
+              onChanged: (value) {
+                ctr.basicCredential['no_telp'] = value;
+              },
+              // initialValue: initialValue,
+              decoration: InputDecoration(
+                labelText: 'No HP/Telp.',
+                labelStyle: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 17,
                 ),
-                side: BorderSide(width: 1, color: kPrimaryColor),
+              ),
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 17,
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 20.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Dari Gudang',
+                    border: OutlineInputBorder(),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  ),
+                  value: ctr.basicCredential['dari_gudang'] ?? '0',
+                  onChanged: (value) {
+                    ctr.basicCredential['dari_gudang'] = value;
+                    // ctl.updateCredentialBasic('location', newValue);
+                  },
+                  items: listLokasi.map((Map<String, dynamic> item) {
+                    return DropdownMenuItem<String>(
+                      value: item['id'].toString(),
+                      child: Text(item['text']),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 20.0),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Ke Gudang',
+                    border: OutlineInputBorder(),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  ),
+                  value: ctr.basicCredential['ke_gudang'] ?? '0',
+                  onChanged: (value) {
+                    ctr.basicCredential['ke_gudang'] = value;
+                    // ctl.updateCredentialBasic('location', newValue);
+                  },
+                  items: listLokasi.map((Map<String, dynamic> item) {
+                    return DropdownMenuItem<String>(
+                      value: item['id'].toString(),
+                      child: Text(item['text']),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 20.0),
+              ],
+            ),
+            TextFormField(
+              initialValue: ctr.basicCredential['kd_pindah_gudang'],
+              onChanged: (value) {
+                ctr.basicCredential['kd_pindah_gudang'] = value;
+              },
+              decoration: InputDecoration(
+                labelText: 'KD Pindah Gudang',
+                labelStyle: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 17,
+                ),
+              ),
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 17,
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 10.0),
+            Obx(
+              () => SingleChildScrollView(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  child: ListView.builder(
+                    itemCount: ctl.itemScanned.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final data = ctl.itemScanned[index];
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.0), // Adjust as needed
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('SN'),
+                                Text(
+                                  '${data['sn'] ?? ''}  ',
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Identifier'),
+                                Text(
+                                  '${data['identifier'] ?? ''} ',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        ctr.basicCredential['in_out'] = 'in';
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                        decoration: ctr.basicCredential['in_out'] == 'in'
+                            ? BoxDecoration(
+                                color: Colors.orangeAccent,
+                                borderRadius: BorderRadius.circular(15))
+                            : BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          'IN',
+                          style: ctr.basicCredential['in_out'] == 'in'
+                              ? TextStyle(color: Colors.white)
+                              : TextStyle(),
+                        ),
+                      )),
+                  InkWell(
+                      onTap: () {
+                        ctr.basicCredential['in_out'] = 'out';
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                        decoration: ctr.basicCredential['in_out'] == 'out'
+                            ? BoxDecoration(
+                                color: Colors.orangeAccent,
+                                borderRadius: BorderRadius.circular(15))
+                            : BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.circular(15)),
+                        child: Text(
+                          'Out',
+                          style: ctr.basicCredential['in_out'] == 'out'
+                              ? TextStyle(color: Colors.white)
+                              : TextStyle(),
+                        ),
+                      ))
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UniversalScannerSCreen(
+                          goBackRouteName: PindahGudangOfflineScreen.routeName),
+                    ),
+                  );
+                },
+                child: Text('Scan SN dan Identifier',
+                    style: TextStyle(color: kPrimaryColor)),
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  side: BorderSide(width: 1, color: kPrimaryColor),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () async {
+                  for (var i = 0; i < ctl.itemScanned.length; i++) {
+                    // await SharedToken.univSetterString('pindah_gudang_offline',
+                    //     ctr.basicCredential['identifier']);
+                    final scan = ctl.itemScanned[i];
+                    ctr.basicCredential['sn'] = scan['sn'];
+                    ctr.basicCredential['identifier'] = scan['identifier'];
+                    // print(ctr.basicCredential);
+                    final ms = await DatabaseHelper.instance
+                        .insertPindahGudangOffline(ctr.basicCredential);
+                    print(ms);
+                  }
+
+                  final e = await DatabaseHelper.instance.getDataPindahGudang();
+                  print(e);
+                  showSnackBar(context, 'Data Berhasil Dimasukkan Offline', 4);
+                },
+                child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  side: BorderSide(width: 1, color: kPrimaryColor),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
