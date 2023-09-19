@@ -172,55 +172,6 @@ class _BodyState extends State<Body> {
               ),
             ),
             SizedBox(height: 10.0),
-            Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                      onTap: () {
-                        ctr.basicCredential['in_out'] = 'in';
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                        decoration: ctr.basicCredential['in_out'] == 'in'
-                            ? BoxDecoration(
-                                color: Colors.orangeAccent,
-                                borderRadius: BorderRadius.circular(15))
-                            : BoxDecoration(
-                                color: Colors.orange,
-                                borderRadius: BorderRadius.circular(15)),
-                        child: Text(
-                          'IN',
-                          style: ctr.basicCredential['in_out'] == 'in'
-                              ? TextStyle(color: Colors.white)
-                              : TextStyle(),
-                        ),
-                      )),
-                  InkWell(
-                      onTap: () {
-                        ctr.basicCredential['in_out'] = 'out';
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
-                        decoration: ctr.basicCredential['in_out'] == 'out'
-                            ? BoxDecoration(
-                                color: Colors.orangeAccent,
-                                borderRadius: BorderRadius.circular(15))
-                            : BoxDecoration(
-                                color: Colors.orange,
-                                borderRadius: BorderRadius.circular(15)),
-                        child: Text(
-                          'Out',
-                          style: ctr.basicCredential['in_out'] == 'out'
-                              ? TextStyle(color: Colors.white)
-                              : TextStyle(),
-                        ),
-                      ))
-                ],
-              ),
-            ),
             Container(
               width: double.infinity,
               child: OutlinedButton(

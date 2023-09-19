@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -44,23 +45,26 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: const Text('OK'),
-              onPressed: () {
-                ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
+              onPressed: () async {
+                try {
+                  ctl.updateSnIdentifier(curKey, dataSNIdentifier[curKey]);
 
-                if (curKey == 'sn') {
-                  curKey = 'identifier';
-                } else {
-                  curKey = 'sn';
-                  // widget.goBack;
-                  ctl.addItemScan();
-                  // Navigator.pushReplacementNamed(
-                  //     context, widget.goBackRouteName);
-                  // cameraController.stop();
-                  // return;
+                  if (curKey == 'sn') {
+                    setState(() {
+                      curKey = 'identifier';
+                    });
+                  } else {
+                    setState(() {
+                      curKey = 'sn';
+                    });
+                    ctl.addItemScan();
+                  }
+                  print(ctl.itemScanned);
+                  cameraController.start();
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  AudioPlayer().play(AssetSource('audio/failed.mp3'));
                 }
-
-                cameraController.start();
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -125,6 +129,8 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
             dataSNIdentifier[curKey] = barcode.rawValue;
           }
           cameraController.stop();
+          AudioPlayer().play(AssetSource('audio/success.mp3'));
+
           _dialogBuilder(context).then((value) {});
         },
       ),

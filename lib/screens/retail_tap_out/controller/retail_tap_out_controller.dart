@@ -3,7 +3,7 @@ import 'package:shop_app/helper/database_helper.dart';
 
 import '../../../shared_preferences/shared_token.dart';
 
-class GrosirTapOutController extends GetxController {
+class RetailTapOutController extends GetxController {
   RxMap snIdentifier = {}.obs;
 
   RxMap credentialBasic = {}.obs;
@@ -33,8 +33,8 @@ class GrosirTapOutController extends GetxController {
     // Map<String, dynamic> inserted =
     //     await DatabaseHelper.instance.insertInventoryValidasiHistory(data);
     // print(inserted);
-    snIdentifier.clear();
-    credentialBasic.clear();
+    // snIdentifier.clear();
+    // credentialBasic.clear();
 
     // return inserted;
   }
@@ -43,6 +43,7 @@ class GrosirTapOutController extends GetxController {
     try {
       var noOG =
           'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}}}';
+      Map<String, dynamic> e = {'result': false, 'message': ''};
       // Map<String, dynamic> data = {
       //   'sn': snIdentifier['sn'],
       //   'identifier': snIdentifier['identifier'],
@@ -51,7 +52,7 @@ class GrosirTapOutController extends GetxController {
       //   'creator': await SharedToken.univGetterString('username'),
       //   'code': noOG
       // };
-      Map<String, dynamic> e = {'result': false, 'message': '.'};
+
       for (var i = 0; i < dataTap.length; i++) {
         Map<String, dynamic> data = {
           'sn': dataTap[i]['sn'],
@@ -62,14 +63,13 @@ class GrosirTapOutController extends GetxController {
           'code': noOG
         };
         // final dataInsert = dataTap[i];
-        e = await DatabaseHelper.instance.insertGrosirTapOut(data);
-        print(e);
+        var e = await DatabaseHelper.instance.insertRetailTapOut(data);
         if (!e['result']) {
           return e;
         }
-      }
 
-      return e;
+        return e;
+      }
     } catch (e) {
       return e;
     }

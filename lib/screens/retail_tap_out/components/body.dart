@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/screens/grosir_tap_out/grosir_tap_out.dart';
+import 'package:shop_app/screens/retail_tap_out/retail_tap_out_screen.dart';
+import 'package:shop_app/screens/universal_scannner/controller/universal_scanner_data.dart';
 import 'package:shop_app/screens/universal_scannner/universal_scanner_screen.dart';
 
 import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
+import '../../grosir_tap_out/controller/grosir_tap_out_controller.dart';
 import '../../purchase_order_offline/components/dropdown_search.dart';
-import '../../universal_scannner/controller/universal_scanner_data.dart';
-import '../controller/grosir_tap_out_controller.dart';
+import '../controller/retail_tap_out_controller.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -15,7 +19,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final GrosirTapOutController ctl = Get.put(GrosirTapOutController());
+  final RetailTapOutController ctl = Get.put(RetailTapOutController());
 
   var noOG =
       'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}}';
@@ -32,7 +36,6 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final UniversalScannerData ctr = Get.put(UniversalScannerData());
-
     return Container(
       padding: EdgeInsets.all(8.0),
       child: ListView(
@@ -129,7 +132,7 @@ class _BodyState extends State<Body> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => UniversalScannerSCreen(
-                      goBackRouteName: GrosirTapOut.routeName),
+                      goBackRouteName: RetailTapOutScreen.routeName),
                 ),
               );
             },
@@ -144,10 +147,8 @@ class _BodyState extends State<Body> {
           ),
           OutlinedButton(
             onPressed: () async {
-              // Map<String, dynamic> res = await ctl.insertDataOffline();
               Map<String, dynamic> res =
                   await ctl.insertDataOfflineTap(ctr.itemScanned);
-              print(res);
               String messej = '';
               var color = Colors.green;
               messej = res['message'];

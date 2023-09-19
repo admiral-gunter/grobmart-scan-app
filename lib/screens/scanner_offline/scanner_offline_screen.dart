@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:shop_app/screens/purchase_order_offline/purchase_order_offline_screen.dart';
@@ -132,6 +133,8 @@ class _ScannerOfflineScreenState extends State<ScannerOfflineScreen> {
             dataSNIdentifier[curKey] = barcode.rawValue;
           }
           cameraController.stop();
+          AudioPlayer().play(AssetSource('audio/success.mp3'));
+
           _dialogBuilder(context).then((value) {});
         },
       ),

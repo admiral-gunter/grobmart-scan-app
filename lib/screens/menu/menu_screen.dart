@@ -181,6 +181,10 @@ class _MenuScreenState extends State<MenuScreen> {
       await syncDataOfflineDynamic('service');
       await Future.delayed(Duration(seconds: 3));
       await syncDataOfflineDynamic('pindah_gudang');
+      await Future.delayed(Duration(seconds: 3));
+      await syncDataOfflineDynamic('out_grosir');
+      await Future.delayed(Duration(seconds: 3));
+      await syncDataOfflineDynamic('out_retail');
     } catch (e) {
       print("Async operation failed: $e");
     }

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:sqflite/sqflite.dart';
-// import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
@@ -119,9 +116,64 @@ class DatabaseHelper {
         date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
         customer_nama TEXT,
+        customer_notelp TEXT,
+        tipe_in TEXT 
+    )
+    ''');
+
+    await db.execute('''CREATE TABLE grosir_out_offline (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT,
+        sn TEXT,
+        identifier TEXT,
+        location_id INT,
+        customer_id INT,
+        creator TEXT,
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
+        customer_nama TEXT,
         customer_notelp TEXT
     )
     ''');
+
+    await db.execute('''CREATE TABLE retail_out_offline (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT,
+        sn TEXT,
+        identifier TEXT,
+        location_id INT,
+        customer_id INT,
+        creator TEXT,
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
+        customer_nama TEXT,
+        customer_notelp TEXT
+    )
+    ''');
+  }
+
+  Future<Map<String, dynamic>> insertGrosirTapOut(
+      Map<String, dynamic> data) async {
+    final db = await instance.database;
+    try {
+      await db.insert('grosir_out_offline', data);
+      return {'result': true, 'message': 'Data inserted successfully.'};
+    } catch (e) {
+      return {'result': false, 'message': 'Failed to insert data: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> insertRetailTapOut(
+      Map<String, dynamic> data) async {
+    final db = await instance.database;
+    try {
+      await db.insert('retail_out_offline', data);
+      return {'result': true, 'message': 'Data inserted successfully.'};
+    } catch (e) {
+      return {'result': false, 'message': 'Failed to insert data: $e'};
+    }
   }
 
   Future<void> insertDatainventoryLocation(List<dynamic> data) async {
