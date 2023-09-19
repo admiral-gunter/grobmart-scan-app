@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shop_app/screens/grosir_tap_out/grosir_tap_out.dart';
 import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
 import 'package:shop_app/screens/service_offline/controller/service_offline_controller.dart';
 import 'package:shop_app/screens/service_offline/service_offline_screen.dart';
@@ -33,14 +34,17 @@ List<ParentItem> parentList = [
   ParentItem(
     "Pembelian",
     [
-      ChildItem("Purchase Order", ListBtSCreen.routeName),
+      ChildItem("Terima Barang (PO)", ListBtSCreen.routeName),
     ],
   ),
   ParentItem(
     "Fitur Offline",
     [
-      ChildItem("Purchase Order", PurchaseOrderOfflineScreen.routeName),
-      ChildItem("Pindah Gudang", PindahGudangOfflineScreen.routeName),
+      ChildItem("Terima Barang (PO)", PurchaseOrderOfflineScreen.routeName),
+      ChildItem("Out Grosir", GrosirTapOut.routeName),
+      ChildItem("Out Retail", PurchaseOrderOfflineScreen.routeName),
+      ChildItem("Pindah Gudang (Terima)", PindahGudangOfflineScreen.routeName),
+      ChildItem("Pindah Gudang (Keluar)", PindahGudangOfflineScreen.routeName),
       ChildItem("Service", ServiceOfflineScreen.routeName),
     ],
   )

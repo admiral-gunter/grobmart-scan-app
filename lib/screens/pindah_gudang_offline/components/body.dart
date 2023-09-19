@@ -58,43 +58,6 @@ class _BodyState extends State<Body> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            TextFormField(
-              onChanged: (value) {
-                ctr.basicCredential['customer'] = value;
-              },
-              initialValue: ctr.basicCredential['customer'],
-              decoration: InputDecoration(
-                labelText: 'Customer',
-                labelStyle: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 17,
-                ),
-              ),
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 17,
-              ),
-            ),
-            SizedBox(height: 20.0),
-            TextFormField(
-              initialValue: ctr.basicCredential['no_telp'],
-              onChanged: (value) {
-                ctr.basicCredential['no_telp'] = value;
-              },
-              // initialValue: initialValue,
-              decoration: InputDecoration(
-                labelText: 'No HP/Telp.',
-                labelStyle: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 17,
-                ),
-              ),
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 17,
-              ),
-            ),
-            SizedBox(height: 20.0),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

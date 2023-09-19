@@ -4,6 +4,7 @@ import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shop_app/screens/details/details_screen.dart';
 import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
+import 'package:shop_app/screens/grosir_tap_out/grosir_tap_out.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/screens/list_barcodes/list_barcodes_screen.dart';
 import 'package:shop_app/screens/list_bt/list_bt_screen.dart';
@@ -46,4 +47,5 @@ final Map<String, WidgetBuilder> routes = {
   ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen(),
   ServiceOfflineScreen.routeName: (context) => ServiceOfflineScreen(),
   PindahGudangOfflineScreen.routeName: (context) => PindahGudangOfflineScreen(),
+  GrosirTapOut.routeName: (context) => GrosirTapOut(),
 };

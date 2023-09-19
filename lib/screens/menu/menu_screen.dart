@@ -174,16 +174,26 @@ class _MenuScreenState extends State<MenuScreen> {
     // }
   }
 
+  Future<void> syncData() async {
+    try {
+      await syncDataOfflineDynamic('po');
+      await Future.delayed(Duration(seconds: 3));
+      await syncDataOfflineDynamic('service');
+      await Future.delayed(Duration(seconds: 3));
+      await syncDataOfflineDynamic('pindah_gudang');
+    } catch (e) {
+      print("Async operation failed: $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     checkTokenAndNavigate();
     initData();
-    syncDataOfflineDynamic('po').then((value) =>
-        syncDataOfflineDynamic('service')
-            .then((value) => syncDataOfflineDynamic('pindah_gudang')));
-    ;
-    ;
+    // syncDataOfflineDynamic('po').then((value) =>
+    //     syncDataOfflineDynamic('service')
+    //         .then((value) => syncDataOfflineDynamic('pindah_gudang')));
   }
 
   @override

@@ -80,6 +80,43 @@ class _BodyState extends State<Body> {
             SizedBox(
               height: 25,
             ),
+            TextFormField(
+              onChanged: (value) {
+                // ctr.basicCredential['customer_nama'] = value;
+              },
+              // initialValue: ctr.basicCredential['customer_nama'],
+              decoration: InputDecoration(
+                labelText: 'LSO',
+                labelStyle: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 17,
+                ),
+              ),
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: 17,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            // TextFormField(
+            //   // initialValue: ctr.basicCredential['customer_notelp'],
+            //   onChanged: (value) {
+            //     // ctr.basicCredential['customer_notelp'] = value;
+            //   },
+            //   // initialValue: initialValue,
+            //   decoration: InputDecoration(
+            //     labelText: 'No HP/Telp.',
+            //     labelStyle: TextStyle(
+            //       color: Colors.black87,
+            //       fontSize: 17,
+            //     ),
+            //   ),
+            //   style: TextStyle(
+            //     color: Colors.black87,
+            //     fontSize: 17,
+            //   ),
+            // ),
+            // SizedBox(height: 20.0),
             Obx(
               () => SingleChildScrollView(
                 child: SizedBox(
