@@ -133,6 +133,12 @@ class _MenuScreenState extends State<MenuScreen> {
       } else if (tipe == 'pindah_gudang') {
         dat = await DatabaseHelper.instance.getDataPindahGudang();
         dat1 = jsonEncode(dat);
+      } else if (tipe == 'out_grosir') {
+        dat = await DatabaseHelper.instance.getGrosirOut();
+        dat1 = jsonEncode(dat);
+      } else if (tipe == 'out_retail') {
+        dat = await DatabaseHelper.instance.getRetailOut();
+        dat1 = jsonEncode(dat);
       }
       final body = {'data': dat1};
 
@@ -192,9 +198,14 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   void initState() {
+    DatabaseHelper.instance.getRetailOut().then((value) {
+      print('nanu');
+      print(value);
+    });
     super.initState();
     checkTokenAndNavigate();
     initData();
+    syncData();
     // syncDataOfflineDynamic('po').then((value) =>
     //     syncDataOfflineDynamic('service')
     //         .then((value) => syncDataOfflineDynamic('pindah_gudang')));

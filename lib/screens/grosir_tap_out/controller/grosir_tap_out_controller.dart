@@ -57,9 +57,9 @@ class GrosirTapOutController extends GetxController {
           'sn': dataTap[i]['sn'],
           'identifier': dataTap[i]['identifier'],
           'location_id': credentialBasic['location'],
-          'customer_id': credentialBasic['customer'],
+          'customer_id': await SharedToken.univGetterString('customer_id'),
           'creator': await SharedToken.univGetterString('username'),
-          'code': noOG
+          'code': noOG,
         };
         // final dataInsert = dataTap[i];
         e = await DatabaseHelper.instance.insertGrosirTapOut(data);

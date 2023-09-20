@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:shop_app/shared_preferences/shared_token.dart';
 
 import '../../../helper/database_helper.dart';
 import '../../scanner_offline/controller/scanner_offline_controller.dart';
@@ -78,7 +79,9 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
               );
             },
             onSuggestionSelected: (dynamic customer) {
-              setState(() {
+              setState(() async {
+                await SharedToken.univSetterString(
+                    'customer_id', customer['id']);
                 ctl.updateCredentialBasic('customer', customer['id']);
                 _selectedCustomer = customer;
                 _controller.text = customer['name'];

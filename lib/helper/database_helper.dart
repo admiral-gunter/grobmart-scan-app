@@ -154,6 +154,16 @@ class DatabaseHelper {
     ''');
   }
 
+  Future<List<Map<String, dynamic>>> getRetailOut() async {
+    final db = await instance.database;
+    return await db.query('retail_out_offline');
+  }
+
+  Future<List<Map<String, dynamic>>> getGrosirOut() async {
+    final db = await instance.database;
+    return await db.query('grosir_out_offline');
+  }
+
   Future<Map<String, dynamic>> insertGrosirTapOut(
       Map<String, dynamic> data) async {
     final db = await instance.database;

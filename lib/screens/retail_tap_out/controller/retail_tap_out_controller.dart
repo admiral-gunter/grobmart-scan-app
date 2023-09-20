@@ -25,7 +25,7 @@ class RetailTapOutController extends GetxController {
       'sn': snIdentifier['sn'],
       'identifier': snIdentifier['identifier'],
       'location_id': credentialBasic['location'],
-      'customer_id': credentialBasic['customer'],
+      'customer_id': await SharedToken.univGetterString('customer_id'),
       'creator': await SharedToken.univGetterString('username'),
       'code': noOG
     };
