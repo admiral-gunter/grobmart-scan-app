@@ -11,6 +11,7 @@ import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
 import '../../grosir_tap_out/controller/grosir_tap_out_controller.dart';
 import '../../purchase_order_offline/components/dropdown_search.dart';
+import '../../scanner_offline/controller/scanner_offline_controller.dart';
 import '../controller/retail_tap_out_controller.dart';
 
 class Body extends StatefulWidget {
@@ -36,6 +37,8 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final UniversalScannerData ctr = Get.put(UniversalScannerData());
+    final ScannerOfflineController ctk = Get.put(ScannerOfflineController());
+
     return Container(
       padding: EdgeInsets.all(8.0),
       child: ListView(
@@ -147,8 +150,8 @@ class _BodyState extends State<Body> {
           ),
           OutlinedButton(
             onPressed: () async {
-              Map<String, dynamic> res =
-                  await ctl.insertDataOfflineTap(ctr.itemScanned);
+              Map<String, dynamic> res = await ctl.insertDataOfflineTap(
+                  ctr.itemScanned, ctk.credentialBasic['customer']);
               String messej = '';
               var color = Colors.green;
               messej = res['message'];

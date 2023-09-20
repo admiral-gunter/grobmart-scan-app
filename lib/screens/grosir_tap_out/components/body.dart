@@ -6,6 +6,7 @@ import 'package:shop_app/screens/universal_scannner/universal_scanner_screen.dar
 import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
 import '../../purchase_order_offline/components/dropdown_search.dart';
+import '../../scanner_offline/controller/scanner_offline_controller.dart';
 import '../../universal_scannner/controller/universal_scanner_data.dart';
 import '../controller/grosir_tap_out_controller.dart';
 
@@ -32,6 +33,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final UniversalScannerData ctr = Get.put(UniversalScannerData());
+    final ScannerOfflineController ctk = Get.put(ScannerOfflineController());
 
     return Container(
       padding: EdgeInsets.all(8.0),
@@ -145,8 +147,8 @@ class _BodyState extends State<Body> {
           OutlinedButton(
             onPressed: () async {
               // Map<String, dynamic> res = await ctl.insertDataOffline();
-              Map<String, dynamic> res =
-                  await ctl.insertDataOfflineTap(ctr.itemScanned);
+              Map<String, dynamic> res = await ctl.insertDataOfflineTap(
+                  ctr.itemScanned, ctk.credentialBasic['customer']);
               print(res);
               String messej = '';
               var color = Colors.green;

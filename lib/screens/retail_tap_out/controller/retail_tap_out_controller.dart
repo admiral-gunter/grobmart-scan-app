@@ -39,10 +39,11 @@ class RetailTapOutController extends GetxController {
     // return inserted;
   }
 
-  Future<dynamic> insertDataOfflineTap(dynamic dataTap) async {
+  Future<dynamic> insertDataOfflineTap(
+      dynamic dataTap, dynamic customer) async {
     try {
       var noOG =
-          'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}}}';
+          'RTL-OFF-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
       Map<String, dynamic> e = {'result': false, 'message': ''};
       // Map<String, dynamic> data = {
       //   'sn': snIdentifier['sn'],
@@ -58,7 +59,7 @@ class RetailTapOutController extends GetxController {
           'sn': dataTap[i]['sn'],
           'identifier': dataTap[i]['identifier'],
           'location_id': credentialBasic['location'],
-          'customer_id': credentialBasic['customer'],
+          'customer_id': customer,
           'creator': await SharedToken.univGetterString('username'),
           'code': noOG
         };

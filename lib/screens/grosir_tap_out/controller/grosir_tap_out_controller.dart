@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:shop_app/helper/database_helper.dart';
 
 import '../../../shared_preferences/shared_token.dart';
+import '../../scanner_offline/controller/scanner_offline_controller.dart';
 
 class GrosirTapOutController extends GetxController {
   RxMap snIdentifier = {}.obs;
@@ -39,10 +40,11 @@ class GrosirTapOutController extends GetxController {
     // return inserted;
   }
 
-  Future<dynamic> insertDataOfflineTap(dynamic dataTap) async {
+  Future<dynamic> insertDataOfflineTap(
+      dynamic dataTap, dynamic customer) async {
     try {
       var noOG =
-          'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}}}';
+          'GRS-OFF-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
       // Map<String, dynamic> data = {
       //   'sn': snIdentifier['sn'],
       //   'identifier': snIdentifier['identifier'],
@@ -57,7 +59,7 @@ class GrosirTapOutController extends GetxController {
           'sn': dataTap[i]['sn'],
           'identifier': dataTap[i]['identifier'],
           'location_id': credentialBasic['location'],
-          'customer_id': await SharedToken.univGetterString('customer_id'),
+          'customer_id': customer,
           'creator': await SharedToken.univGetterString('username'),
           'code': noOG,
         };

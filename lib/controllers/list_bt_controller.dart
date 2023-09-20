@@ -28,6 +28,7 @@ class ListBtController extends GetxController {
     try {
       final token = await SharedToken.tokenGetter();
       final companyId = await SharedToken.companyGetter();
+      final lokasi = await SharedToken.univGetterString('lokasi');
       listBt.clear();
       // debugPrint('${token}, ${companyId}, ');
       var param =
@@ -37,7 +38,9 @@ class ListBtController extends GetxController {
           companyId +
           '/' +
           token! +
-          param);
+          param +
+          '&location_id=${lokasi}');
+      print(url);
 
       var response = await http.post(url);
 

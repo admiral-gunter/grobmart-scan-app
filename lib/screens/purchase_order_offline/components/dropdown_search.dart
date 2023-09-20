@@ -79,9 +79,7 @@ class _DropdownSearchWidgetState extends State<DropdownSearchWidget> {
               );
             },
             onSuggestionSelected: (dynamic customer) {
-              setState(() async {
-                await SharedToken.univSetterString(
-                    'customer_id', customer['id']);
+              setState(() {
                 ctl.updateCredentialBasic('customer', customer['id']);
                 _selectedCustomer = customer;
                 _controller.text = customer['name'];

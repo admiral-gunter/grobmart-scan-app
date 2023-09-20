@@ -136,8 +136,11 @@ class _BodyV2State extends State<BodyV2> {
 
                         if (val['msg'] == 'anda berhasil login') {
                           final token = val['token'];
-                          print(val);
+                          // print(val['lokasi']);
+                          // print(val);
                           // return;
+                          await SharedToken.univSetterString(
+                              'lokasi', val['lokasi']);
                           await SharedToken.univSetterString(
                               'username', val['username']);
                           await SharedToken.companySetter(val['company']);
