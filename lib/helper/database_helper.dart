@@ -32,7 +32,8 @@ class DatabaseHelper {
       date_modified DATETIME DEFAULT CURRENT_TIMESTAMP,
       date_added DATETIME DEFAULT CURRENT_TIMESTAMP,
       status TEXT,
-      creator TEXT
+      creator TEXT,
+      lso TEXT
     );
     ''');
     //db untuk lokasi;
@@ -79,7 +80,8 @@ class DatabaseHelper {
         creator TEXT,
         date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL
+        status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
+        lso TEXT
     )
     ''');
 
@@ -117,7 +119,7 @@ class DatabaseHelper {
         status TEXT CHECK(status IN ('unvalidasi', 'validasi')) DEFAULT 'unvalidasi' NOT NULL,
         customer_nama TEXT,
         customer_notelp TEXT,
-        tipe_in TEXT 
+        tipe TEXT 
     )
     ''');
 

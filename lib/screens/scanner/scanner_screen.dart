@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -111,17 +112,17 @@ class _ScannerScreenState extends State<ScannerScreen> {
             startDelay: true,
             onDetect: (capture) async {
               final List<Barcode> barcodes = capture.barcodes.toList();
-              final Uint8List? image = capture.image;
+              // final Uint8List? image = capture.image;
 
               // Set<Barcode> uniqueSet = Set<Barcode>.from(barcodes);
 
               // List<Barcode> resList = uniqueSet.toList();
               // Create a DateTime object
-              DateTime dateTime = DateTime.now();
+              // DateTime dateTime = DateTime.now();
 
               // Format the DateTime object
-              String formattedDateTime =
-                  DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
+              // String formattedDateTime =
+              // DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
               for (final barcode in barcodes) {
                 if (_tipe == 0) {
                   setState(() {
@@ -141,6 +142,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 // });
                 // await Future.delayed(Duration(milliseconds: 1));
                 final msg = await ctl.scanAct(barcode.rawValue);
+                if (ctl.errorSound.value) {
+                  AudioPlayer().play(AssetSource('audio/failed.mp3'));
+                } else {
+                  AudioPlayer().play(AssetSource('audio/success.mp3'));
+                }
                 setState(() {
                   _showMessage = true;
                   barcodeRawVal = '${barcode.rawValue}';
@@ -260,6 +266,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
           ),
           Obx(() {
             if (ctl.lastStatus.value != '') {
+              AudioPlayer().play(AssetSource('audio/success.mp3'));
+
               // Conditionally navigate back when shouldPop becomes true
               Future.delayed(Duration.zero, () {
                 // Navigator.pop(context);

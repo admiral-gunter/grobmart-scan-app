@@ -5,9 +5,9 @@ import '../../enums.dart';
 import 'components/body.dart';
 
 class PindahGudangOfflineScreen extends StatelessWidget {
-  const PindahGudangOfflineScreen({Key? key}) : super(key: key);
+  PindahGudangOfflineScreen({Key? key, required this.tipe}) : super(key: key);
   static String routeName = '/pindah-gudang-offline';
-
+  final String tipe;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +20,7 @@ class PindahGudangOfflineScreen extends StatelessWidget {
           color: Colors.white,
         )),
       ),
-      body: Body(),
+      body: Body(tipe: tipe),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
     );
   }

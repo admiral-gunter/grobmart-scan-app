@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/screens/purchase_order_offline/components/dropdown_search.dart';
+import 'package:shop_app/shared_preferences/shared_token.dart';
 
 import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
@@ -26,8 +27,15 @@ class _BodyState extends State<Body> {
     return await DatabaseHelper.instance.getInventoryLocations();
   }
 
+  var defLok = '';
+
   void initState() {
     ctl.dataTap.clear();
+    SharedToken.univGetterString('lokasi').then((value) {
+      setState(() {
+        defLok = value;
+      });
+    });
     super.initState();
   }
 
@@ -58,7 +66,7 @@ class _BodyState extends State<Body> {
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 20),
                           ),
-                          value: ctl.credentialBasic['location'] ?? null,
+                          value: ctl.credentialBasic['location'] ?? defLok,
                           onChanged: (newValue) {
                             ctl.updateCredentialBasic('location', newValue);
                           },
@@ -82,7 +90,7 @@ class _BodyState extends State<Body> {
             ),
             TextFormField(
               onChanged: (value) {
-                // ctr.basicCredential['customer_nama'] = value;
+                ctl.updateCredentialBasic('lso', value);
               },
               // initialValue: ctr.basicCredential['customer_nama'],
               decoration: InputDecoration(

@@ -20,12 +20,13 @@ class ScannerOfflineController extends GetxController {
 
   Future<Map<String, dynamic>> insertDataOffline() async {
     var noOG =
-        'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}-${DateTime.now().millisecondsSinceEpoch}}';
+        'OGOF-SM-${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
     Map<String, dynamic> data = {
       'sn': snIdentifier['sn'],
       'identifier': snIdentifier['identifier'],
       'location_id': credentialBasic['location'],
       'customer_id': credentialBasic['customer'],
+      'lso': credentialBasic['lso'],
       'creator': await SharedToken.univGetterString('username'),
       'code': noOG
     };

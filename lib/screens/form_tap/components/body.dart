@@ -27,12 +27,18 @@ class _BodyState extends State<Body> {
   final _formKey = GlobalKey<FormState>();
   final e = Get.put(ListBtController());
   final FormTapScreenController ctl = Get.put(FormTapScreenController());
-
+  var defLok = '';
   @override
   void initState() {
     super.initState();
     ctl.getlistLokasi();
     ctl.myFunction();
+    SharedToken.univGetterString('lokasi').then((value) {
+      setState(() {
+        defLok = value;
+        print(defLok);
+      });
+    });
     debugPrint('oke run');
   }
 
@@ -61,6 +67,7 @@ class _BodyState extends State<Body> {
                   // Future completed successfully, use the value as the initialValue
                   final String initialValue = snapshot.data ?? '';
                   return TextFormField(
+                    readOnly: true,
                     initialValue: initialValue,
                     decoration: InputDecoration(
                       labelText: 'Penerima',
@@ -97,6 +104,7 @@ class _BodyState extends State<Body> {
                 onChanged: (newValue) async {
                   await SharedToken.univSetterString('lokasi', newValue!);
                 },
+                value: defLok,
                 items: controller.listLokasi.map((item) {
                   final objectLokasi =
                       ObjectLokasi(item['id'].toString(), item['text']);

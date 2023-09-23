@@ -70,13 +70,14 @@ class FormTapScreenController extends GetxController {
 
   Future<void> myFunction() async {
     dataPurchaseOrderDetail.clear();
+    print('wahwa');
     var listbChecked = Get.find<ListBtController>()
         .listBt
-        .where((item) => item[16] == "1")
+        .where((item) => item[6] == 1)
         .toList();
     List<String>? po;
     po = listbChecked.map((item) => item[0]).cast<String>().toList();
-    // print('${po} EIN PO');
+    print('${po} EIN PO');
 
     // Web API endpoint URLs
     final apiHost = kURL_ORIGIN; // Replace with your actual API host URL
@@ -154,7 +155,9 @@ class FormTapScreenController extends GetxController {
     final url4 = '${apiHost}purchase-order-detail/get-by-po-id-bulk/$token?';
     // print('${pores}');
     // return;
-    final response = await http.post(Uri.parse('${url4}${pores}'));
+    final lokasi = await SharedToken.univGetterString('lokasi');
+    final response =
+        await http.post(Uri.parse('${url4}${pores}&location_id=${lokasi}'));
     var dataPo = {};
     // print('${response.body}');
     dataPo['bt_group'] = btgroup;
@@ -204,6 +207,8 @@ class FormTapScreenController extends GetxController {
 
   RxString tipe = 'SN'.obs;
 
+  var errorSound = false.obs;
+
   Map<String, dynamic> detail_inv = {};
   RxString noSN = ''.obs;
   RxString lastStatus = ''.obs;
@@ -239,6 +244,7 @@ class FormTapScreenController extends GetxController {
         bool hasMissingDigitPenanda =
             matchingItems.any((item) => item['digit_penanda'] == null);
         if (hasMissingDigitPenanda) {
+          errorSound.value = true;
           return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
         }
       }
@@ -259,10 +265,12 @@ class FormTapScreenController extends GetxController {
       }
 
       if (digitPenandaArray.length == 0 && penanda) {
+        errorSound.value = true;
         return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
       }
 
       if (digitPenandaArray.length == 0) {
+        errorSound.value = true;
         return 'Salah Nomor Product Identifier';
       }
       print('${jsonEncode(digitPenandaArray)}');
@@ -279,12 +287,14 @@ class FormTapScreenController extends GetxController {
         if (detail_inv['serial_number'] != null) {
           print('hier i am');
           if (result['qty_total'] == result['qty_receive']) {
+            errorSound.value = true;
             return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
           }
           var qtyTot = int.parse(result['qty_total']);
           var qtyRec = int.parse(result['qty_receive']);
           // return '${qtyTot} und ${qtyRec}';
           if (qtyRec > qtyTot) {
+            errorSound.value = true;
             return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
           }
           print('dimana');
@@ -305,6 +315,8 @@ class FormTapScreenController extends GetxController {
             String serialNum = detail_inv['serial_number'].toString();
 
             if (!serialNum.contains(digitPenandaAsString)) {
+              errorSound.value = true;
+
               print('kamu');
               return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
             }
@@ -361,6 +373,8 @@ class FormTapScreenController extends GetxController {
               return res['msg'];
               // Do something with the 'res' data
             } else {
+              errorSound.value = true;
+
               // Handle unsuccessful response (e.g., 404, 500, etc.)
               print('Request failed with status: ${response.statusCode}');
               print('Response body: ${response.body}');
@@ -369,6 +383,8 @@ class FormTapScreenController extends GetxController {
               // Add further error handling or notify the user accordingly
             }
           } catch (e) {
+            errorSound.value = true;
+
             // Handle exceptions that might occur during the request
             print('Error during HTTP request: $e');
             return 'Error during HTTP request: $e';

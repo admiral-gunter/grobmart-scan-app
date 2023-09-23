@@ -14,6 +14,8 @@ import '../../service_offline/controller/service_offline_controller.dart';
 import '../../universal_scannner/universal_scanner_screen.dart';
 
 class Body extends StatefulWidget {
+  final String tipe;
+  Body({Key? key, required this.tipe}) : super(key: key);
   @override
   State<Body> createState() => _BodyState();
 }
@@ -24,9 +26,11 @@ class _BodyState extends State<Body> {
   }
 
   List<Map<String, dynamic>> listLokasi = [];
+  String tipePG = '';
   // final UniversalScannerData d = Get.put(UniversalScannerData());
 
   void initState() {
+    tipePG = widget.tipe;
     // d.itemScanned.clear();
     // ctl.itemScanned.clear();
     fetchData().then((value) {
@@ -63,7 +67,7 @@ class _BodyState extends State<Body> {
               children: [
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Dari Gudang',
+                    labelText: 'Pilih Gudang',
                     border: OutlineInputBorder(),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -88,7 +92,7 @@ class _BodyState extends State<Body> {
               children: [
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: 'Ke Gudang',
+                    labelText: 'Pilih Gudang',
                     border: OutlineInputBorder(),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -176,13 +180,23 @@ class _BodyState extends State<Body> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UniversalScannerSCreen(
-                          goBackRouteName: PindahGudangOfflineScreen.routeName),
-                    ),
-                  );
+                  widget.tipe == 'terima'
+                      ? Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UniversalScannerSCreen(
+                                goBackRouteName:
+                                    '/pindah-gudang-offline-terima'),
+                          ),
+                        )
+                      : Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UniversalScannerSCreen(
+                                goBackRouteName:
+                                    '/pindah-gudang-offline-keluar'),
+                          ),
+                        );
                 },
                 child: Text('Scan SN dan Identifier',
                     style: TextStyle(color: kPrimaryColor)),
@@ -204,6 +218,7 @@ class _BodyState extends State<Body> {
                     final scan = ctl.itemScanned[i];
                     ctr.basicCredential['sn'] = scan['sn'];
                     ctr.basicCredential['identifier'] = scan['identifier'];
+                    ctr.basicCredential['tipe'] = widget.tipe;
                     // print(ctr.basicCredential);
                     final ms = await DatabaseHelper.instance
                         .insertPindahGudangOffline(ctr.basicCredential);

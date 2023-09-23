@@ -40,7 +40,6 @@ class ListBtController extends GetxController {
           token! +
           param +
           '&location_id=${lokasi}');
-      print(url);
 
       var response = await http.post(url);
 
@@ -48,6 +47,11 @@ class ListBtController extends GetxController {
 
       // debugPrint('${res['data']}');
       listBt.addAll(res['data']);
+      for (var i = 0; i < listBt.length; i++) {
+        // listBt[i][6] = '0';
+        listBt[i].add(0);
+        // print(listBt[i].add);
+      }
       update();
     } catch (e) {
       await SharedToken.tokenRemover();

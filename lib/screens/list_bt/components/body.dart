@@ -54,13 +54,13 @@ class _BodyState extends State<Body> {
                       },
                       child: ListTile(
                         leading: Checkbox(
-                          value: ctl.listBt[index][16] != "0",
+                          value: ctl.listBt[index][6] != 0,
                           onChanged: (value) {
                             setState(() {
-                              ctl.listBt[index][16] = value! ? "1" : "0";
+                              ctl.listBt[index][6] = value! ? 1 : 0;
 
                               ctl.listBt.map((e) {
-                                if (e[16] != "0") {
+                                if (e[6] != 0) {
                                   displayBulkBtn = true;
                                 } else {
                                   displayBulkBtn = false;
@@ -72,17 +72,17 @@ class _BodyState extends State<Body> {
                         trailing: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            ctl.listBt[index][4] == 'enable'
-                                ? Text('Enable',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.green))
-                                : ctl.listBt[index][4] == 'disable'
-                                    ? Text('Disable',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.amber))
-                                    : Text('Incomplete',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.red)),
+                            // ctl.listBt[index][4] == 'enable'
+                            //     ? Text('Enable',
+                            //         style: TextStyle(
+                            //             fontSize: 14, color: Colors.green))
+                            //     : ctl.listBt[index][4] == 'disable'
+                            //         ? Text('Disable',
+                            //             style: TextStyle(
+                            //                 fontSize: 14, color: Colors.amber))
+                            //         : Text('Incomplete',
+                            //             style: TextStyle(
+                            //                 fontSize: 14, color: Colors.red)),
                             //                    if (data['5'] == 'completed') {
                             //   return '<div style="text-align: center"><label class="label label-success">Completed</label></div>';
                             // }
@@ -92,17 +92,17 @@ class _BodyState extends State<Body> {
                             // else {
                             //   return '<div style="text-align: center"><label class="label label-warning">Incomplete</label></div>';
                             // }
-                            ctl.listBt[index][5] == 'completed'
-                                ? Text('Completed',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.green))
-                                : ctl.listBt[index][5] == 'close'
-                                    ? Text('Closed',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.red))
-                                    : Text('Incomplete',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.amber))
+                            // ctl.listBt[index][5] == 'completed'
+                            //     ? Text('Completed',
+                            //         style: TextStyle(
+                            //             fontSize: 14, color: Colors.green))
+                            //     : ctl.listBt[index][5] == 'close'
+                            //         ? Text('Closed',
+                            //             style: TextStyle(
+                            //                 fontSize: 14, color: Colors.red))
+                            //         : Text('Incomplete',
+                            //             style: TextStyle(
+                            //                 fontSize: 14, color: Colors.amber))
                           ],
                         ),
                         title: Column(
@@ -110,10 +110,13 @@ class _BodyState extends State<Body> {
                           children: [
                             Text("${ctl.listBt[index][0]}"),
                             Text(
-                              "${ctl.listBt[index][14]}",
+                              "${ctl.listBt[index][1]}",
                               style: TextStyle(color: kTextColor, fontSize: 14),
                             ),
-                            Text("${ctl.listBt[index][15]}",
+                            Text("${ctl.listBt[index][2]}",
+                                style:
+                                    TextStyle(color: kTextColor, fontSize: 14)),
+                            Text("${ctl.listBt[index][3]}",
                                 style:
                                     TextStyle(color: kTextColor, fontSize: 14)),
                           ],

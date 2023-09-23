@@ -44,8 +44,8 @@ List<ParentItem> parentList = [
       ChildItem("Terima Barang (PO)", PurchaseOrderOfflineScreen.routeName),
       ChildItem("Out Grosir", GrosirTapOut.routeName),
       ChildItem("Out Retail", RetailTapOutScreen.routeName),
-      ChildItem("Pindah Gudang (Terima)", PindahGudangOfflineScreen.routeName),
-      ChildItem("Pindah Gudang (Keluar)", PindahGudangOfflineScreen.routeName),
+      ChildItem("Pindah Gudang (Terima)", '/pindah-gudang-offline-terima'),
+      ChildItem("Pindah Gudang (Keluar)", '/pindah-gudang-offline-keluar'),
       ChildItem("Service", ServiceOfflineScreen.routeName),
     ],
   )

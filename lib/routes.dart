@@ -47,7 +47,10 @@ final Map<String, WidgetBuilder> routes = {
       PurchaseOrderOfflineScreen(),
   ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen(),
   ServiceOfflineScreen.routeName: (context) => ServiceOfflineScreen(),
-  PindahGudangOfflineScreen.routeName: (context) => PindahGudangOfflineScreen(),
+  '/pindah-gudang-offline-terima': (context) =>
+      PindahGudangOfflineScreen(tipe: 'terima'),
+  '/pindah-gudang-offline-keluar': (context) =>
+      PindahGudangOfflineScreen(tipe: 'keluar'),
   GrosirTapOut.routeName: (context) => GrosirTapOut(),
   RetailTapOutScreen.routeName: (context) => RetailTapOutScreen()
 };
