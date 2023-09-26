@@ -15,6 +15,7 @@ class FormTapScreenController extends GetxController {
   RxList<String> listPo = <String>[].obs;
   RxList dataPurchaseOrderDetail = [].obs;
   RxString notes = ''.obs;
+  RxString kodeBT = ''.obs;
 
   RxInt lokasiSelect = 0.obs;
   // @override
@@ -131,6 +132,9 @@ class FormTapScreenController extends GetxController {
     //   // Render kode BT
     final kodeBT =
         'BT$companyCode${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${i.toString().padLeft(4, '0')}';
+
+    // print(kodeBT);
+    // return;
     /*
       ==================
       INVENTORY LOCATION

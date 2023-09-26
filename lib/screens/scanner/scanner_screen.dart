@@ -62,9 +62,43 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   bool _tr = true;
 
-  final FormTapScreenController ctl = Get.put(FormTapScreenController());
+  // final FormTapScreenController ctl = Get.put(FormTapScreenController());
+
+  Future<void> _dialogBuilder(BuildContext context, String prop) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('DATA TERDETEKSI',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          content: Column(
+            children: [
+              Text('TIPE : ${_tipe}\n'
+                  'VALUE : ${prop}\n'),
+              Text(mesage!)
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('OK'),
+              onPressed: () async {
+                cameraController.start();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final FormTapScreenController ctl = Get.put(FormTapScreenController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mobile Scanner'),
@@ -111,18 +145,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
             fit: BoxFit.contain,
             startDelay: true,
             onDetect: (capture) async {
+              cameraController.stop();
+
               final List<Barcode> barcodes = capture.barcodes.toList();
-              // final Uint8List? image = capture.image;
 
-              // Set<Barcode> uniqueSet = Set<Barcode>.from(barcodes);
-
-              // List<Barcode> resList = uniqueSet.toList();
-              // Create a DateTime object
-              // DateTime dateTime = DateTime.now();
-
-              // Format the DateTime object
-              // String formattedDateTime =
-              // DateFormat('dd/MM/yyyy HH:mm:ss').format(dateTime);
               for (final barcode in barcodes) {
                 if (_tipe == 0) {
                   setState(() {
@@ -134,32 +160,26 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   });
                 }
 
-                // Database db = await DatabaseHelper.instance.database;
-                // await db.insert('scanned_data', {
-                //   'id': barcode.rawValue,
-                //   'creator': await SharedToken.univGetterString('username'),
-                //   'created_date': formattedDateTime
-                // });
-                // await Future.delayed(Duration(milliseconds: 1));
                 final msg = await ctl.scanAct(barcode.rawValue);
                 if (ctl.errorSound.value) {
                   AudioPlayer().play(AssetSource('audio/failed.mp3'));
                 } else {
                   AudioPlayer().play(AssetSource('audio/success.mp3'));
                 }
+
+                ctl.errorSound.value = false;
                 setState(() {
-                  _showMessage = true;
+                  print(barcode);
                   barcodeRawVal = '${barcode.rawValue}';
                   mesage = msg;
                 });
 
-                // Delay again before hiding the message
-                await Future.delayed(Duration(seconds: 5));
-
                 setState(() {
-                  _showMessage = false;
+                  // _showMessage = false;
                 });
+                // AudioPlayer().play(AssetSource('audio/success.mp3'));
               }
+              _dialogBuilder(context, barcodeRawVal!).then((value) {});
             },
           ),
           Align(
@@ -192,10 +212,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   OutlinedButton(
                     onPressed: () {
                       // Add your button click logic here.
-                      ctl.noSN.value = '';
-                      ctl.lastStatus.value = '';
-                      ctl.detail_inv['identifier'] = null;
-                      ctl.detail_inv['serial_number'] = null;
+                      setState(() {
+                        ctl.noSN.value = '';
+                        ctl.lastStatus.value = '';
+                        ctl.detail_inv['identifier'] = null;
+                        ctl.detail_inv['serial_number'] = null;
+                        cameraController.start();
+                      });
                     },
                     child: Text('RESET SN DAN IDENTIFIER',
                         style: TextStyle(color: kPrimaryColor, fontSize: 10)),
@@ -266,7 +289,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
           ),
           Obx(() {
             if (ctl.lastStatus.value != '') {
-              AudioPlayer().play(AssetSource('audio/success.mp3'));
+              // AudioPlayer().play(AssetSource('audio/success.mp3'));
 
               // Conditionally navigate back when shouldPop becomes true
               Future.delayed(Duration.zero, () {

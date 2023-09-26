@@ -219,7 +219,10 @@ class _BodyState extends State<Body> {
                     ctr.basicCredential['sn'] = scan['sn'];
                     ctr.basicCredential['identifier'] = scan['identifier'];
                     ctr.basicCredential['tipe'] = widget.tipe;
-                    // print(ctr.basicCredential);
+                    ctr.basicCredential['creator'] =
+                        await SharedToken.univGetterString('username');
+
+                    print(ctr.basicCredential);
                     final ms = await DatabaseHelper.instance
                         .insertPindahGudangOffline(ctr.basicCredential);
                     print(ms);
