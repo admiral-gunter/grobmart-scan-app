@@ -67,11 +67,10 @@ class FormTapScreenController extends GetxController {
     }
   }
 
-  String queryStringPo = '';
+  RxString queryStringPo = ''.obs;
 
   Future<void> myFunction() async {
     dataPurchaseOrderDetail.clear();
-    print('wahwa');
     var listbChecked = Get.find<ListBtController>()
         .listBt
         .where((item) => item[6] == 1)
@@ -115,10 +114,15 @@ class FormTapScreenController extends GetxController {
     if (dataCompany != null && dataCompany.isNotEmpty) {
       companyCode = dataCompany[0]['company_code'];
     }
-
+    var btgroup = '';
     // Grouping Purchase Order
-    final btgroup =
-        'BT$companyCode${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}';
+    if (DateTime.now().month < 10) {
+      btgroup =
+          'BT$companyCode${DateTime.now().year}0${DateTime.now().month}${DateTime.now().day}';
+    } else {
+      btgroup =
+          'BT$companyCode${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}';
+    }
 
     // Get list purchase order by pogroup
     final url2 =
@@ -129,9 +133,18 @@ class FormTapScreenController extends GetxController {
 
     i = i + 1;
 
+    var kdeBT = '';
+
+    if (DateTime.now().month < 10) {
+      kdeBT =
+          'BT$companyCode${DateTime.now().year}0${DateTime.now().month}${DateTime.now().day}${i.toString().padLeft(4, '0')}';
+    } else {
+      kdeBT =
+          'BT$companyCode${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${i.toString().padLeft(4, '0')}';
+    }
     //   // Render kode BT
-    final kodeBT =
-        'BT$companyCode${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${i.toString().padLeft(4, '0')}';
+
+    kodeBT.value = kdeBT;
 
     // print(kodeBT);
     // return;
@@ -176,7 +189,7 @@ class FormTapScreenController extends GetxController {
     String queryString = createQueryString(dataPo: dataPo);
     // print(queryString);
     print('${url4}${pores}');
-    queryStringPo = queryString;
+    queryStringPo.value = queryString;
 
     var re2 = jsonDecode(response.body);
     dataPurchaseOrderDetail.addAll(re2['content']);
@@ -217,11 +230,13 @@ class FormTapScreenController extends GetxController {
   RxString noSN = ''.obs;
   RxString lastStatus = ''.obs;
   Future<String> scanAct(dynamic prop) async {
+    print('${queryStringPo} WADOh');
     if (noSN.value == '') {
       noSN.value = prop;
       detail_inv['serial_number'] = prop;
       print('${noSN.value} WOI');
     } else {
+      await myFunction();
       // List<dynamic> items = dataPurchaseOrderDetail
       //     .where((item) => item['product_identifier'] == prop)
       //     .toList();
@@ -243,7 +258,7 @@ class FormTapScreenController extends GetxController {
       List<dynamic> matchingItems = dataPurchaseOrderDetail
           .where((item) => item['product_identifier'] == prop)
           .toList();
-
+      // return jsonEncode(matchingItems);
       if (matchingItems.length > 1) {
         bool hasMissingDigitPenanda =
             matchingItems.any((item) => item['digit_penanda'] == null);
@@ -257,15 +272,17 @@ class FormTapScreenController extends GetxController {
       bool penanda = false;
 
       for (var result in matchingItems) {
+        print('${matchingItems} waaa');
         if (result['digit_penanda'] != null && result['digit_penanda'] != '') {
           penanda = true;
           if (detail_inv['serial_number'].contains(result['digit_penanda'])) {
-            digitPenandaArray.add(result);
+            // digitPenandaArray.add(result);
           }
         } else {
           penanda = false;
-          digitPenandaArray.add(result);
+          // digitPenandaArray.add(result);
         }
+        digitPenandaArray.add(result);
       }
 
       if (digitPenandaArray.length == 0 && penanda) {
@@ -332,8 +349,6 @@ class FormTapScreenController extends GetxController {
           detail_inv['product_id'] = result['product_id'];
           detail_inv['po'] = result['purchase_order_id'];
           detail_inv['tipe'] = result['tipe'];
-          detail_inv['btm'] = null;
-          detail_inv['detail_btm'] = null;
 
           final companyId = await SharedToken.companyGetter();
           final token = await SharedToken.tokenGetter();
@@ -343,17 +358,6 @@ class FormTapScreenController extends GetxController {
           final url =
               '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}&${queryStringInv}';
           print('${url} here');
-
-          try {
-            final result = await InternetAddress.lookup('example.com');
-            if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-              // var dataPO = {
-              //   'serial_number':
-              // };
-            }
-          } on SocketException catch (_) {
-            print('not connected');
-          }
 
           try {
             var response = await http.post(Uri.parse(url));
@@ -373,6 +377,14 @@ class FormTapScreenController extends GetxController {
               detail_inv = {};
               myFunction();
               noSN.value = '';
+
+              if (res['msg'] == 'format serial number salah') {
+                errorSound.value = true;
+              }
+
+              if (res['msg'] == 'Serial Sudah Pernah ada didata base') {
+                errorSound.value = true;
+              }
 
               return res['msg'];
               // Do something with the 'res' data
@@ -398,5 +410,16 @@ class FormTapScreenController extends GetxController {
       }
     }
     return noSN.value;
+  }
+
+  Future updateStatusPo() async {
+    try {
+      final companyId = await SharedToken.companyGetter();
+      final token = await SharedToken.tokenGetter();
+
+      await http.post(
+          Uri.parse('inventory-receipt/save-live-bulk/${companyId}/${token}'),
+          body: {});
+    } catch (e) {}
   }
 }

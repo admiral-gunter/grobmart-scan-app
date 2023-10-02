@@ -13,6 +13,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../components/coustom_bottom_nav_bar.dart';
 import '../../constants.dart';
 import '../../controllers/form_tap_screen_controller.dart';
+import '../../controllers/list_bt_controller.dart';
 import '../../enums.dart';
 import 'components/body.dart';
 
@@ -31,28 +32,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
   String? mesage = '';
   int _tipe = 0;
 
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Dialog Title'),
-          content: Text('This is the content of the dialog.'),
-          actions: [
-            TextButton(
-              child: Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   MobileScannerController cameraController =
       MobileScannerController(detectionSpeed: DetectionSpeed.normal);
+
+  ListBtController ctk = ListBtController();
 
   void initState() {
     // To fix on start error
@@ -71,12 +54,15 @@ class _ScannerScreenState extends State<ScannerScreen> {
         return AlertDialog(
           title: Text('DATA TERDETEKSI',
               style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Column(
-            children: [
-              Text('TIPE : ${_tipe}\n'
-                  'VALUE : ${prop}\n'),
-              Text(mesage!)
-            ],
+          content: Container(
+            height: 200,
+            child: Column(
+              children: [
+                Text('\n'
+                    'HASIL : ${prop}\n'),
+                Text(mesage!)
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(
@@ -86,6 +72,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               child: const Text('OK'),
               onPressed: () async {
                 cameraController.start();
+                await ctk.getListBt();
                 Navigator.of(context).pop();
               },
             ),
@@ -100,42 +87,45 @@ class _ScannerScreenState extends State<ScannerScreen> {
     final FormTapScreenController ctl = Get.put(FormTapScreenController());
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mobile Scanner'),
-        actions: [
-          IconButton(
-            color: Colors.white,
-            icon: ValueListenableBuilder(
-              valueListenable: cameraController.torchState,
-              builder: (context, state, child) {
-                switch (state as TorchState) {
-                  case TorchState.off:
-                    return const Icon(Icons.flash_off, color: Colors.grey);
-                  case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.yellow);
-                }
-              },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(28.0),
+        child: AppBar(
+          title: const Text('Mobile Scanner'),
+          actions: [
+            IconButton(
+              color: Colors.white,
+              icon: ValueListenableBuilder(
+                valueListenable: cameraController.torchState,
+                builder: (context, state, child) {
+                  switch (state as TorchState) {
+                    case TorchState.off:
+                      return const Icon(Icons.flash_off, color: Colors.grey);
+                    case TorchState.on:
+                      return const Icon(Icons.flash_on, color: Colors.yellow);
+                  }
+                },
+              ),
+              iconSize: 32.0,
+              onPressed: () => cameraController.toggleTorch(),
             ),
-            iconSize: 32.0,
-            onPressed: () => cameraController.toggleTorch(),
-          ),
-          IconButton(
-            color: Colors.white,
-            icon: ValueListenableBuilder(
-              valueListenable: cameraController.cameraFacingState,
-              builder: (context, state, child) {
-                switch (state as CameraFacing) {
-                  case CameraFacing.front:
-                    return const Icon(Icons.camera_front);
-                  case CameraFacing.back:
-                    return const Icon(Icons.camera_rear);
-                }
-              },
+            IconButton(
+              color: Colors.white,
+              icon: ValueListenableBuilder(
+                valueListenable: cameraController.cameraFacingState,
+                builder: (context, state, child) {
+                  switch (state as CameraFacing) {
+                    case CameraFacing.front:
+                      return const Icon(Icons.camera_front);
+                    case CameraFacing.back:
+                      return const Icon(Icons.camera_rear);
+                  }
+                },
+              ),
+              iconSize: 32.0,
+              onPressed: () => cameraController.switchCamera(),
             ),
-            iconSize: 32.0,
-            onPressed: () => cameraController.switchCamera(),
-          ),
-        ],
+          ],
+        ),
       ),
       body: Stack(
         alignment: FractionalOffset.center,
@@ -299,61 +289,61 @@ class _ScannerScreenState extends State<ScannerScreen> {
             }
             return Text('');
           }),
-          Obx(
-            () => Align(
-              alignment: Alignment.center,
-              child: ctl.lastStatus.value != ''
-                  ? Container(
-                      width: 400,
-                      height: 150,
-                      padding: EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            '${ctl.lastStatus.value}',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 10.0),
-                          // ElevatedButton(
-                          //   onPressed: () {
-                          //     ctl.noSN.value = '';
-                          //     ctl.lastStatus.value = '';
-                          //   },
-                          //   child: Text('Close'),
-                          // ),
-                          OutlinedButton(
-                            onPressed: () {
-                              // Add your button click logic here.
-                              ctl.noSN.value = '';
-                              ctl.lastStatus.value = '';
-                              ctl.detail_inv['identifier'] = null;
-                              ctl.detail_inv['serial_number'] = null;
-                              // Navigator.pop(context);
-                            },
-                            child: Text('Close',
-                                style: TextStyle(color: kPrimaryColor)),
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              side: BorderSide(width: 1, color: kPrimaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : null,
-            ),
-          )
+          // Obx(
+          //   () => Align(
+          //     alignment: Alignment.center,
+          //     child: ctl.lastStatus.value != ''
+          //         ? Container(
+          //             width: 400,
+          //             height: 150,
+          //             padding: EdgeInsets.all(20.0),
+          //             decoration: BoxDecoration(
+          //               color: Colors.white,
+          //               borderRadius: BorderRadius.circular(10.0),
+          //             ),
+          //             child: Column(
+          //               crossAxisAlignment: CrossAxisAlignment.stretch,
+          //               children: [
+          //                 Text(
+          //                   '${ctl.lastStatus.value}',
+          //                   style: TextStyle(
+          //                     fontSize: 16.0,
+          //                     fontWeight: FontWeight.bold,
+          //                     color: Colors.black,
+          //                   ),
+          //                 ),
+          //                 SizedBox(height: 10.0),
+          //                 // ElevatedButton(
+          //                 //   onPressed: () {
+          //                 //     ctl.noSN.value = '';
+          //                 //     ctl.lastStatus.value = '';
+          //                 //   },
+          //                 //   child: Text('Close'),
+          //                 // ),
+          //                 OutlinedButton(
+          //                   onPressed: () {
+          //                     // Add your button click logic here.
+          //                     ctl.noSN.value = '';
+          //                     ctl.lastStatus.value = '';
+          //                     ctl.detail_inv['identifier'] = null;
+          //                     ctl.detail_inv['serial_number'] = null;
+          //                     // Navigator.pop(context);
+          //                   },
+          //                   child: Text('Close',
+          //                       style: TextStyle(color: kPrimaryColor)),
+          //                   style: OutlinedButton.styleFrom(
+          //                     shape: RoundedRectangleBorder(
+          //                       borderRadius: BorderRadius.circular(18.0),
+          //                     ),
+          //                     side: BorderSide(width: 1, color: kPrimaryColor),
+          //                   ),
+          //                 ),
+          //               ],
+          //             ),
+          //           )
+          //         : null,
+          //   ),
+          // )
         ],
       ),
     );

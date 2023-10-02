@@ -124,9 +124,8 @@ class _BodyState extends State<Body> {
             TextFormField(
               onChanged: (value) async {
                 await SharedToken.univSetterString('notes', value);
-                final e = await SharedToken.univGetterString('notes');
-
-                print(e);
+                // final e = await SharedToken.univGetterString('notes');
+                // print(e);
               },
               maxLines: 3,
               decoration: InputDecoration(
