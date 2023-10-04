@@ -36,6 +36,8 @@ class _BodyState extends State<Body> {
     fetchData().then((value) {
       setState(() {
         listLokasi.addAll(value);
+        // listLokasi[0]['id'] = '0';
+        // listLokasi[0]['text'] = 'Pilih Gudang';
       });
     });
     super.initState();
@@ -72,7 +74,7 @@ class _BodyState extends State<Body> {
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   ),
-                  value: ctr.basicCredential['dari_gudang'] ?? '0',
+                  value: ctr.basicCredential['dari_gudang'] ?? null,
                   onChanged: (value) {
                     ctr.basicCredential['dari_gudang'] = value;
                     // ctl.updateCredentialBasic('location', newValue);
@@ -97,7 +99,7 @@ class _BodyState extends State<Body> {
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   ),
-                  value: ctr.basicCredential['ke_gudang'] ?? '0',
+                  value: ctr.basicCredential['ke_gudang'] ?? null,
                   onChanged: (value) {
                     ctr.basicCredential['ke_gudang'] = value;
                     // ctl.updateCredentialBasic('location', newValue);

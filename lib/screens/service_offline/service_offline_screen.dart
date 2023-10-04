@@ -15,9 +15,12 @@ class ServiceOfflineScreen extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
-            title: Container(
-          alignment: Alignment.centerLeft,
-          color: Colors.white,
+            title: Text(
+          "Service (Offline)",
+          style: TextStyle(
+            color: Colors
+                .black, // Change this color to match your AppBar's background color.
+          ),
         )),
       ),
       body: Body(),

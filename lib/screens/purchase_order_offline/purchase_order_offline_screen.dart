@@ -14,10 +14,14 @@ class PurchaseOrderOfflineScreen extends StatelessWidget {
     // return Container();
     return Scaffold(
       appBar: AppBar(
-          title: Container(
-        alignment: Alignment.centerLeft,
-        color: Colors.white,
-      )),
+        title: Text(
+          "Terima Barang (Offline)",
+          style: TextStyle(
+            color: Colors
+                .black, // Change this color to match your AppBar's background color.
+          ),
+        ),
+      ),
       body: Body(),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),
     );

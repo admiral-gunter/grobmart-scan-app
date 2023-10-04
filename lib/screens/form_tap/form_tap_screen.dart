@@ -12,7 +12,13 @@ class FormTapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Menu"),
+        title: Text(
+          "Terima Barang (Online)",
+          style: TextStyle(
+            color: Colors
+                .black, // Change this color to match your AppBar's background color.
+          ),
+        ),
       ),
       body: Body(),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),

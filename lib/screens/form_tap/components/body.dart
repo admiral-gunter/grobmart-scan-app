@@ -193,24 +193,18 @@ class _BodyState extends State<Body> {
                       ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    // Add your button click logic here.
-                    Navigator.pushNamed(context, ScannerScreen.routeName);
-                  },
-                  child: Text('Scan SN dan Identifier',
-                      style: TextStyle(color: kPrimaryColor)),
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    side: BorderSide(width: 1, color: kPrimaryColor),
-                  ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, ScannerScreen.routeName);
+              },
+              child: Text('Scan SN dan Identifier',
+                  style: TextStyle(color: kPrimaryColor)),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
-              ],
+                side: BorderSide(width: 1, color: kPrimaryColor),
+              ),
             ),
           ],
         ),

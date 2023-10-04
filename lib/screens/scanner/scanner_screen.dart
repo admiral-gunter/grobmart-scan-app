@@ -38,8 +38,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
   ListBtController ctk = ListBtController();
 
   void initState() {
+    final FormTapScreenController ctr = Get.put(FormTapScreenController());
+
     // To fix on start error
     cameraController.stop();
+    ctr.kodeBT.value = '';
     super.initState();
   }
 

@@ -144,7 +144,9 @@ class FormTapScreenController extends GetxController {
     }
     //   // Render kode BT
 
-    kodeBT.value = kdeBT;
+    if (kodeBT.value != '' || kodeBT.value.isNotEmpty) {
+      kodeBT.value = kdeBT;
+    }
 
     // print(kodeBT);
     // return;
@@ -177,6 +179,49 @@ class FormTapScreenController extends GetxController {
         await http.post(Uri.parse('${url4}${pores}&location_id=${lokasi}'));
     var dataPo = {};
     // print('${response.body}');
+
+    List<String> list_po = [];
+    Map<int, Map<String, dynamic>> list_btm = {};
+    Map<int, Map<int, String>> list_detail_btm = {};
+
+    List<int> list_product_id = [];
+    List<String> list_identifier_kodeunik = [];
+    List<String> list_identifier_kodeunik2 = [];
+    int qty_total = 0;
+    List<int> digit_penanda_message = [];
+    bool is_same_digit_penanda = false;
+    List list_identifier_po = [];
+
+    if (dataPurchaseOrderDetail.isNotEmpty) {
+      for (var row in dataPurchaseOrderDetail) {
+        list_po[row.purchase_order_id] = 'done';
+        list_btm[row.purchase_order_id] = {
+          'btm': '',
+          'po_id': row.purchase_order_id
+        };
+        if (list_detail_btm[row.purchase_order_id] == null) {
+          list_detail_btm[row.purchase_order_id] = {};
+        }
+        list_detail_btm[row.purchase_order_id]![row.product_id] = '';
+        list_identifier_po.add({
+          'identifier': row.product_identifier,
+          'po': row.purchase_order_id,
+          'qty_total': row.qty_req - row.qty_receive,
+          'qty_terima': 0,
+          'product_id': row.product_id,
+          'po_detail_id': row.id,
+          'tipe': row.tipe,
+          'product_name': row.product_name,
+          'penanda': row.digit_penanda,
+          'syarat_penanda': row.digit_penanda2
+        });
+        list_identifier_kodeunik.add(row.digit_penanda);
+        list_identifier_kodeunik2.add(row.digit_penanda2);
+        list_product_id.add(row.product_id);
+        qty_total += int.parse(row.qty_req);
+      }
+    }
+
     dataPo['bt_group'] = btgroup;
     dataPo['creator'] = await SharedToken.univGetterString('username');
     dataPo['note'] = await SharedToken.univGetterString('notes');
@@ -365,6 +410,15 @@ class FormTapScreenController extends GetxController {
             if (response.statusCode == 200) {
               // Successful response
               var res = jsonDecode(response.body);
+
+              final companyId = await SharedToken.companyGetter();
+              final token = await SharedToken.tokenGetter();
+
+              await http.post(
+                  Uri.parse(
+                      '${kURL_ORIGIN}inventory-receipt/check-po-live-bulk/${companyId}/${token}?po_id=${detail_inv['po']}'),
+                  body: {});
+
               print(res['msg']);
               print(res['content']);
               print(res['success']);
@@ -418,7 +472,8 @@ class FormTapScreenController extends GetxController {
       final token = await SharedToken.tokenGetter();
 
       await http.post(
-          Uri.parse('inventory-receipt/save-live-bulk/${companyId}/${token}'),
+          Uri.parse(
+              'inventory-receipt/check-po-live-bulk/${companyId}/${token}?po_id='),
           body: {});
     } catch (e) {}
   }
