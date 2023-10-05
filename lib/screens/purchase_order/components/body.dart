@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shop_app/controllers/list_bt_controller.dart';
+import 'package:shop_app/controllers/list_po_controller.dart';
 
 import '../../../constants.dart';
 import '../../form_tap/form_tap_screen.dart';
@@ -15,7 +15,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool displayBulkBtn = false;
-  final ListBtController ctl = Get.put(ListBtController());
+  final ListPoController ctl = Get.put(ListPoController());
   // final FormTapScreenController ctl2 = Get.put(FormTapScreenController());
 
   @override

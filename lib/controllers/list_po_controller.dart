@@ -6,7 +6,7 @@ import 'package:shop_app/shared_preferences/shared_token.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';
 
-class ListBtController extends GetxController {
+class ListPoController extends GetxController {
   RxList<dynamic> listBt = <dynamic>[].obs;
   RxInt page = 0.obs;
   RxInt start = 0.obs;

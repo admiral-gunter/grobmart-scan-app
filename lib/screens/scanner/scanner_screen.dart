@@ -13,7 +13,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../components/coustom_bottom_nav_bar.dart';
 import '../../constants.dart';
 import '../../controllers/form_tap_screen_controller.dart';
-import '../../controllers/list_bt_controller.dart';
+import '../../controllers/list_po_controller.dart';
 import '../../enums.dart';
 import 'components/body.dart';
 
@@ -35,7 +35,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
   MobileScannerController cameraController =
       MobileScannerController(detectionSpeed: DetectionSpeed.normal);
 
-  ListBtController ctk = ListBtController();
+  ListPoController ctk = ListPoController();
 
   void initState() {
     final FormTapScreenController ctr = Get.put(FormTapScreenController());
@@ -202,26 +202,26 @@ class _ScannerScreenState extends State<ScannerScreen> {
                           ),
                         ],
                       )),
-                  OutlinedButton(
-                    onPressed: () {
-                      // Add your button click logic here.
-                      setState(() {
-                        ctl.noSN.value = '';
-                        ctl.lastStatus.value = '';
-                        ctl.detail_inv['identifier'] = null;
-                        ctl.detail_inv['serial_number'] = null;
-                        cameraController.start();
-                      });
-                    },
-                    child: Text('RESET SN DAN IDENTIFIER',
-                        style: TextStyle(color: kPrimaryColor, fontSize: 10)),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      side: BorderSide(width: 1, color: kPrimaryColor),
-                    ),
-                  ),
+                  // OutlinedButton(
+                  //   onPressed: () {
+                  //     // Add your button click logic here.
+                  //     setState(() {
+                  //       ctl.noSN.value = '';
+                  //       ctl.lastStatus.value = '';
+                  //       ctl.detail_inv['identifier'] = null;
+                  //       ctl.detail_inv['serial_number'] = null;
+                  //       cameraController.start();
+                  //     });
+                  //   },
+                  //   child: Text('RESET SN DAN IDENTIFIER',
+                  //       style: TextStyle(color: kPrimaryColor, fontSize: 10)),
+                  //   style: OutlinedButton.styleFrom(
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(18.0),
+                  //     ),
+                  //     side: BorderSide(width: 1, color: kPrimaryColor),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -279,6 +279,37 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     ),
                   )
                 : null,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 40,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Add your button click logic here.
+                    setState(() {
+                      ctl.noSN.value = '';
+                      ctl.lastStatus.value = '';
+                      ctl.detail_inv['identifier'] = null;
+                      ctl.detail_inv['serial_number'] = null;
+                      cameraController.start();
+                    });
+                  },
+                  child: Text('RESET SN DAN IDENTIFIER',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    side: BorderSide(width: 1, color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
           ),
           Obx(() {
             if (ctl.lastStatus.value != '') {

@@ -42,7 +42,7 @@ final Map<String, WidgetBuilder> routes = {
   MenuScreen.routeName: (context) => MenuScreen(),
   ListBarcodesScreen.routeName: (context) => ListBarcodesScreen(),
   FormTapScreen.routeName: (context) => FormTapScreen(),
-  ListBtSCreen.routeName: (context) => ListBtSCreen(),
+  ListPoScreen.routeName: (context) => ListPoScreen(),
   PurchaseOrderOfflineScreen.routeName: (context) =>
       PurchaseOrderOfflineScreen(),
   ScannerOfflineScreen.routeName: (context) => ScannerOfflineScreen(),

@@ -32,6 +32,7 @@ class _UniversalScannerSCreenState extends State<UniversalScannerSCreen> {
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

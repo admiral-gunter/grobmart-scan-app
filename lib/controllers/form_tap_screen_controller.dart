@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:shop_app/controllers/list_bt_controller.dart';
+import 'package:shop_app/controllers/list_po_controller.dart';
 import '../constants.dart';
 import '../shared_preferences/shared_token.dart';
 
@@ -71,7 +71,7 @@ class FormTapScreenController extends GetxController {
 
   Future<void> myFunction() async {
     dataPurchaseOrderDetail.clear();
-    var listbChecked = Get.find<ListBtController>()
+    var listbChecked = Get.find<ListPoController>()
         .listBt
         .where((item) => item[6] == 1)
         .toList();

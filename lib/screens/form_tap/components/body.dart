@@ -7,7 +7,7 @@ import 'package:shop_app/controllers/form_tap_screen_controller.dart';
 import 'package:shop_app/screens/scanner/scanner_screen.dart';
 import 'package:shop_app/shared_preferences/shared_token.dart';
 
-import '../../../controllers/list_bt_controller.dart';
+import '../../../controllers/list_po_controller.dart';
 
 class ObjectLokasi {
   final String id;
@@ -25,7 +25,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final _formKey = GlobalKey<FormState>();
-  final e = Get.put(ListBtController());
+  final e = Get.put(ListPoController());
   final FormTapScreenController ctl = Get.put(FormTapScreenController());
   var defLok = '';
   @override
@@ -201,7 +201,7 @@ class _BodyState extends State<Body> {
                   style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),

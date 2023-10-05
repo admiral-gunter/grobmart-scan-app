@@ -35,7 +35,7 @@ List<ParentItem> parentList = [
   ParentItem(
     "Pembelian",
     [
-      ChildItem("Terima Barang (PO)", ListBtSCreen.routeName),
+      ChildItem("Terima Barang (PO)", ListPoScreen.routeName),
     ],
   ),
   ParentItem(
@@ -77,6 +77,7 @@ class _BodyState extends State<Body> {
     return WillPopScope(
       onWillPop: () async {
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(

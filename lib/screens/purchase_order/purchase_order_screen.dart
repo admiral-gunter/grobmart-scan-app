@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../components/coustom_bottom_nav_bar.dart';
-import '../../controllers/list_bt_controller.dart';
+import '../../controllers/list_po_controller.dart';
 import '../../enums.dart';
 import './components/body.dart';
 
-class ListBtSCreen extends StatelessWidget {
+class ListPoScreen extends StatelessWidget {
   static var routeName = '/listBt';
-  ListBtSCreen({Key? key}) : super(key: key);
+  ListPoScreen({Key? key}) : super(key: key);
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -20,7 +20,7 @@ class ListBtSCreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ListBtController ctl = Get.put(ListBtController());
+    final ListPoController ctl = Get.put(ListPoController());
     return Scaffold(
       appBar: AppBar(
           title: Container(

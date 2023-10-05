@@ -36,6 +36,7 @@ class _ScannerOfflineScreenState extends State<ScannerOfflineScreen> {
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

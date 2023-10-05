@@ -79,48 +79,41 @@ class _BodyState extends State<Body> {
             },
           ),
           DropdownSearchWidget(),
-          Expanded(child: SizedBox()),
           Obx(
-            () => SingleChildScrollView(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.25,
-                child: ListView.builder(
-                  itemCount: ctr.itemScanned.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final data = ctr.itemScanned[index];
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 8.0), // Adjust as needed
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('SN'),
-                              Text(
-                                '${data['sn'] ?? ''}  ',
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Identifier'),
-                              Text(
-                                '${data['identifier'] ?? ''} ',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+            () => Expanded(
+              child: ListView.builder(
+                itemCount: ctr.itemScanned.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final data = ctr.itemScanned[index];
+                  return Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.0), // Adjust as needed
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('SN'),
+                            Text(
+                              '${data['sn'] ?? ''}  ',
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Identifier'),
+                            Text(
+                              '${data['identifier'] ?? ''} ',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
-          ),
-          SizedBox(
-            height: 25,
           ),
           SizedBox(
             width: double.infinity,
@@ -139,7 +132,7 @@ class _BodyState extends State<Body> {
                   style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),
@@ -181,7 +174,7 @@ class _BodyState extends State<Body> {
               child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),

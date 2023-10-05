@@ -44,11 +44,13 @@ final otpInputDecoration = InputDecoration(
 
 OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(getProportionateScreenWidth(15)),
+    // borderRadius: BorderRadius.circular(getProportionateScreenWidth(15)),
     borderSide: BorderSide(color: kTextColor),
   );
 }
 
+const pfixRnded18 = 5.0;
+
 // const kURL_ORIGIN = 'https://grobx.sinarmaju.co.id/api/';
-// const kURL_ORIGIN = 'http://192.168.236.236/grobx2023/api/';
+// const kURL_ORIGIN = 'http://192.168.43.236/grobx2023/api/';
 const kURL_ORIGIN = 'https://devgrobx.sinarmaju.co.id/api/';

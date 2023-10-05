@@ -145,14 +145,16 @@ class _BodyState extends State<Body> {
               });
               // ctl.updateCredentialBasic('location', newValue);
             },
-            items: dataDropdown!.map((Map<String, dynamic> item) {
+            items: dataDropdown.map((Map<String, dynamic> item) {
               return DropdownMenuItem<String>(
                 value: item['value'].toString(),
                 child: Text(item['text'].toString()),
               );
             }).toList(),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(
+            height: 10,
+          ),
           TextFormField(
             initialValue: ctr.basicCredential['customer_nama'],
             onChanged: (value) {
@@ -194,41 +196,38 @@ class _BodyState extends State<Body> {
             height: 10,
           ),
           Obx(
-            () => SingleChildScrollView(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.10,
-                child: ListView.builder(
-                  itemCount: ctl.itemScanned.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final data = ctl.itemScanned[index];
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 8.0), // Adjust as needed
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('SN'),
-                              Text(
-                                '${data['sn'] ?? ''}  ',
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Identifier'),
-                              Text(
-                                '${data['identifier'] ?? ''} ',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+            () => Expanded(
+              child: ListView.builder(
+                itemCount: ctl.itemScanned.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final data = ctl.itemScanned[index];
+                  return Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.0), // Adjust as needed
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('SN'),
+                            Text(
+                              '${data['sn'] ?? ''}  ',
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Identifier'),
+                            Text(
+                              '${data['identifier'] ?? ''} ',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -249,7 +248,7 @@ class _BodyState extends State<Body> {
                   style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),
@@ -274,7 +273,7 @@ class _BodyState extends State<Body> {
               child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),

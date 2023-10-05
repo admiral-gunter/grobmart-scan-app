@@ -18,6 +18,7 @@ class Body extends StatelessWidget {
 
         // For example, you can show an alert dialog and only allow the navigation if the user confirms
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(

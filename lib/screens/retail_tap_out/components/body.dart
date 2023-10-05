@@ -143,7 +143,7 @@ class _BodyState extends State<Body> {
                   style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),
@@ -183,7 +183,7 @@ class _BodyState extends State<Body> {
               child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(pfixRnded18),
                 ),
                 side: BorderSide(width: 1, color: kPrimaryColor),
               ),
