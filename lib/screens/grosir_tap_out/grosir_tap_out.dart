@@ -12,7 +12,13 @@ class GrosirTapOut extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Menu"),
+        title: Text(
+          "Tap Out Grosir (Offline)",
+          style: TextStyle(
+            color: Colors
+                .black, // Change this color to match your AppBar's background color.
+          ),
+        ),
       ),
       body: Body(),
       bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.home),

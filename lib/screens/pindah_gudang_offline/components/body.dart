@@ -61,190 +61,186 @@ class _BodyState extends State<Body> {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Pilih Gudang',
-                    border: OutlineInputBorder(),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  ),
-                  value: ctr.basicCredential['dari_gudang'] ?? null,
-                  onChanged: (value) {
-                    ctr.basicCredential['dari_gudang'] = value;
-                    // ctl.updateCredentialBasic('location', newValue);
-                  },
-                  items: listLokasi.map((Map<String, dynamic> item) {
-                    return DropdownMenuItem<String>(
-                      value: item['id'].toString(),
-                      child: Text(item['text']),
-                    );
-                  }).toList(),
+      child: Column(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Pilih Gudang',
+                  border: OutlineInputBorder(),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 ),
-                SizedBox(height: 20.0),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Pilih Gudang',
-                    border: OutlineInputBorder(),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  ),
-                  value: ctr.basicCredential['ke_gudang'] ?? null,
-                  onChanged: (value) {
-                    ctr.basicCredential['ke_gudang'] = value;
-                    // ctl.updateCredentialBasic('location', newValue);
-                  },
-                  items: listLokasi.map((Map<String, dynamic> item) {
-                    return DropdownMenuItem<String>(
-                      value: item['id'].toString(),
-                      child: Text(item['text']),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 20.0),
-              ],
-            ),
-            TextFormField(
-              initialValue: ctr.basicCredential['kd_pindah_gudang'],
-              onChanged: (value) {
-                ctr.basicCredential['kd_pindah_gudang'] = value;
-              },
-              decoration: InputDecoration(
-                labelText: 'KD Pindah Gudang',
-                labelStyle: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 17,
-                ),
+                value: ctr.basicCredential['dari_gudang'] ?? null,
+                onChanged: (value) {
+                  ctr.basicCredential['dari_gudang'] = value;
+                  // ctl.updateCredentialBasic('location', newValue);
+                },
+                items: listLokasi.map((Map<String, dynamic> item) {
+                  return DropdownMenuItem<String>(
+                    value: item['id'].toString(),
+                    child: Text(item['text']),
+                  );
+                }).toList(),
               ),
-              style: TextStyle(
+              SizedBox(height: 20.0),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  labelText: 'Pilih Gudang',
+                  border: OutlineInputBorder(),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                ),
+                value: ctr.basicCredential['ke_gudang'] ?? null,
+                onChanged: (value) {
+                  ctr.basicCredential['ke_gudang'] = value;
+                  // ctl.updateCredentialBasic('location', newValue);
+                },
+                items: listLokasi.map((Map<String, dynamic> item) {
+                  return DropdownMenuItem<String>(
+                    value: item['id'].toString(),
+                    child: Text(item['text']),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20.0),
+            ],
+          ),
+          TextFormField(
+            initialValue: ctr.basicCredential['kd_pindah_gudang'],
+            onChanged: (value) {
+              ctr.basicCredential['kd_pindah_gudang'] = value;
+            },
+            decoration: InputDecoration(
+              labelText: 'KD Pindah Gudang',
+              labelStyle: TextStyle(
                 color: Colors.black87,
                 fontSize: 17,
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
             ),
-            SizedBox(height: 10.0),
-            Obx(
-              () => SingleChildScrollView(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.10,
-                  child: ListView.builder(
-                    itemCount: ctl.itemScanned.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final data = ctl.itemScanned[index];
-                      return Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8.0), // Adjust as needed
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('SN'),
-                                Text(
-                                  '${data['sn'] ?? ''}  ',
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Identifier'),
-                                Text(
-                                  '${data['identifier'] ?? ''} ',
-                                ),
-                              ],
-                            ),
-                          ],
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 17,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 25),
+          Obx(
+            () => SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.10,
+                child: ListView.builder(
+                  itemCount: ctl.itemScanned.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final data = ctl.itemScanned[index];
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.0), // Adjust as needed
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('SN'),
+                              Text(
+                                '${data['sn'] ?? ''}  ',
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Identifier'),
+                              Text(
+                                '${data['identifier'] ?? ''} ',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          Expanded(child: SizedBox()),
+          Container(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                widget.tipe == 'terima'
+                    ? Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UniversalScannerSCreen(
+                              goBackRouteName: '/pindah-gudang-offline-terima'),
+                        ),
+                      )
+                    : Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UniversalScannerSCreen(
+                              goBackRouteName: '/pindah-gudang-offline-keluar'),
                         ),
                       );
-                    },
-                  ),
+              },
+              child: Text('Scan SN dan Identifier',
+                  style: TextStyle(color: kPrimaryColor)),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
+                side: BorderSide(width: 1, color: kPrimaryColor),
               ),
             ),
-            SizedBox(height: 10.0),
-            Container(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () {
-                  widget.tipe == 'terima'
-                      ? Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UniversalScannerSCreen(
-                                goBackRouteName:
-                                    '/pindah-gudang-offline-terima'),
-                          ),
-                        )
-                      : Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UniversalScannerSCreen(
-                                goBackRouteName:
-                                    '/pindah-gudang-offline-keluar'),
-                          ),
-                        );
-                },
-                child: Text('Scan SN dan Identifier',
-                    style: TextStyle(color: kPrimaryColor)),
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  side: BorderSide(width: 1, color: kPrimaryColor),
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () async {
-                  for (var i = 0; i < ctl.itemScanned.length; i++) {
-                    // await SharedToken.univSetterString('pindah_gudang_offline',
-                    //     ctr.basicCredential['identifier']);
-                    final scan = ctl.itemScanned[i];
-                    ctr.basicCredential['sn'] = scan['sn'];
-                    ctr.basicCredential['identifier'] = scan['identifier'];
-                    ctr.basicCredential['tipe'] = widget.tipe;
-                    ctr.basicCredential['creator'] =
-                        await SharedToken.univGetterString('username');
+          ),
+          Container(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () async {
+                for (var i = 0; i < ctl.itemScanned.length; i++) {
+                  // await SharedToken.univSetterString('pindah_gudang_offline',
+                  //     ctr.basicCredential['identifier']);
+                  final scan = ctl.itemScanned[i];
+                  ctr.basicCredential['sn'] = scan['sn'];
+                  ctr.basicCredential['identifier'] = scan['identifier'];
+                  ctr.basicCredential['tipe'] = widget.tipe;
+                  ctr.basicCredential['creator'] =
+                      await SharedToken.univGetterString('username');
 
-                    print(ctr.basicCredential);
-                    final ms = await DatabaseHelper.instance
-                        .insertPindahGudangOffline(ctr.basicCredential);
-                    print(ms);
-                  }
+                  print(ctr.basicCredential);
+                  final ms = await DatabaseHelper.instance
+                      .insertPindahGudangOffline(ctr.basicCredential);
+                  print(ms);
+                }
 
-                  final e = await DatabaseHelper.instance.getDataPindahGudang();
-                  print(e);
-                  showSnackBar(context, 'Data Berhasil Dimasukkan Offline', 4);
-                },
-                child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  side: BorderSide(width: 1, color: kPrimaryColor),
+                final e = await DatabaseHelper.instance.getDataPindahGudang();
+                print(e);
+                showSnackBar(context, 'Data Berhasil Dimasukkan Offline', 4);
+              },
+              child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
+                side: BorderSide(width: 1, color: kPrimaryColor),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

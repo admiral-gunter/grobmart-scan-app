@@ -37,7 +37,7 @@ class _BodyState extends State<Body> {
 
     return Container(
       padding: EdgeInsets.all(8.0),
-      child: ListView(
+      child: Column(
         children: <Widget>[
           FutureBuilder<List<Map<String, dynamic>>>(
             future: fetchData(), // Call your asynchronous function here
@@ -79,9 +79,7 @@ class _BodyState extends State<Body> {
             },
           ),
           DropdownSearchWidget(),
-          SizedBox(
-            height: 25,
-          ),
+          Expanded(child: SizedBox()),
           Obx(
             () => SingleChildScrollView(
               child: SizedBox(
@@ -124,62 +122,69 @@ class _BodyState extends State<Body> {
           SizedBox(
             height: 25,
           ),
-          OutlinedButton(
-            onPressed: () {
-              // Add your button click logic here.
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UniversalScannerSCreen(
-                      goBackRouteName: GrosirTapOut.routeName),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                // Add your button click logic here.
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UniversalScannerSCreen(
+                        goBackRouteName: GrosirTapOut.routeName),
+                  ),
+                );
+              },
+              child: Text('Scan SN dan Identifier',
+                  style: TextStyle(color: kPrimaryColor)),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
-              );
-            },
-            child: Text('Scan SN dan Identifier',
-                style: TextStyle(color: kPrimaryColor)),
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(width: 1, color: kPrimaryColor),
               ),
-              side: BorderSide(width: 1, color: kPrimaryColor),
             ),
           ),
-          OutlinedButton(
-            onPressed: () async {
-              // Map<String, dynamic> res = await ctl.insertDataOffline();
-              Map<String, dynamic> res = await ctl.insertDataOfflineTap(
-                  ctr.itemScanned, ctk.credentialBasic['customer']);
-              print(res);
-              String messej = '';
-              var color = Colors.green;
-              messej = res['message'];
-              if (!res['result']) {
-                color = Colors.red;
-              }
-              final snackBar = SnackBar(
-                content: Text(
-                  messej,
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: color,
-                action: SnackBarAction(
-                  label: 'OK',
-                  onPressed: () {
-                    // Perform an action when the user clicks the "OK" button.
-                  },
-                ),
-                duration: Duration(milliseconds: 2500), // Set the duration here
-              );
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () async {
+                // Map<String, dynamic> res = await ctl.insertDataOffline();
+                Map<String, dynamic> res = await ctl.insertDataOfflineTap(
+                    ctr.itemScanned, ctk.credentialBasic['customer']);
+                print(res);
+                String messej = '';
+                var color = Colors.green;
+                messej = res['message'];
+                if (!res['result']) {
+                  color = Colors.red;
+                }
+                final snackBar = SnackBar(
+                  content: Text(
+                    messej,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: color,
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {
+                      // Perform an action when the user clicks the "OK" button.
+                    },
+                  ),
+                  duration:
+                      Duration(milliseconds: 2500), // Set the duration here
+                );
 
-              // Show the SnackBar
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+                // Show the SnackBar
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: Text('Submit', style: TextStyle(color: kPrimaryColor)),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                side: BorderSide(width: 1, color: kPrimaryColor),
               ),
-              side: BorderSide(width: 1, color: kPrimaryColor),
             ),
           ),
         ],

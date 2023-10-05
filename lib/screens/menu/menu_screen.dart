@@ -39,6 +39,7 @@ class _MenuScreenState extends State<MenuScreen> {
       // Token exists, redirect to another page
       Navigator.pushReplacementNamed(context, MenuScreen.routeName);
     } else if (token == null && currentRoute != SignInScreen.routeName) {
+      await SharedToken.tokenRemover();
       // Token does not exist, stay on the current page or redirect to a login page
       Navigator.pushReplacementNamed(context, SignInScreen.routeName);
     }
@@ -66,6 +67,7 @@ class _MenuScreenState extends State<MenuScreen> {
       // print(res);
       await DatabaseHelper.instance.insertDataCustomer(res['data']);
     } catch (e) {
+      await SharedToken.tokenRemover();
       Navigator.pushReplacementNamed(context, SignInScreen.routeName);
       print('ERROR following: $e');
     }
