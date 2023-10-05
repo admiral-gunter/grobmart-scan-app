@@ -303,7 +303,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                     side: BorderSide(width: 1, color: Colors.red),
                   ),

@@ -9,6 +9,7 @@ import '../../../constants.dart';
 import '../../../helper/database_helper.dart';
 import '../../scanner_offline/controller/scanner_offline_controller.dart';
 import '../../scanner_offline/scanner_offline_screen.dart';
+import 'dropdown_seach_supplier.dart';
 
 class Body extends StatefulWidget {
   Body({Key? key}) : super(key: key);
@@ -84,7 +85,7 @@ class _BodyState extends State<Body> {
                 }
               },
             ),
-            DropdownSearchWidget(),
+            DropdownSearchSupplierWidget(),
             SizedBox(
               height: 25,
             ),

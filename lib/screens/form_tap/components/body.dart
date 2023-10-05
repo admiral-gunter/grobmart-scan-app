@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/controllers/form_tap_screen_controller.dart';
 import 'package:shop_app/screens/scanner/scanner_screen.dart';
@@ -28,8 +29,18 @@ class _BodyState extends State<Body> {
   final e = Get.put(ListPoController());
   final FormTapScreenController ctl = Get.put(FormTapScreenController());
   var defLok = '';
+
+  void resetSubmit() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setBool("submitted", false);
+  }
+
   @override
   void initState() {
+    resetSubmit();
+    ctl.btm.value = {};
+    ctl.kodeBT.value = '';
     super.initState();
     ctl.getlistLokasi();
     ctl.myFunction();

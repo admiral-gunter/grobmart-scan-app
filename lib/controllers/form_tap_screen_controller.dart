@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_app/controllers/list_po_controller.dart';
 import '../constants.dart';
 import '../shared_preferences/shared_token.dart';
@@ -16,6 +17,7 @@ class FormTapScreenController extends GetxController {
   RxList dataPurchaseOrderDetail = [].obs;
   RxString notes = ''.obs;
   RxString kodeBT = ''.obs;
+  var btm = {}.obs;
 
   RxInt lokasiSelect = 0.obs;
   // @override
@@ -69,7 +71,7 @@ class FormTapScreenController extends GetxController {
 
   RxString queryStringPo = ''.obs;
 
-  Future<void> myFunction() async {
+  Future<dynamic> myFunction() async {
     dataPurchaseOrderDetail.clear();
     var listbChecked = Get.find<ListPoController>()
         .listBt
@@ -131,7 +133,7 @@ class FormTapScreenController extends GetxController {
     final req2 = await postRequest(url2);
     int i = req2['content']?.length ?? 0;
 
-    i = i + 1;
+    i = i + 3;
 
     var kdeBT = '';
 
@@ -142,13 +144,11 @@ class FormTapScreenController extends GetxController {
       kdeBT =
           'BT$companyCode${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${i.toString().padLeft(4, '0')}';
     }
-    //   // Render kode BT
 
-    if (kodeBT.value != '' || kodeBT.value.isNotEmpty) {
+    if (kodeBT.value == '' || kodeBT.value.isEmpty) {
       kodeBT.value = kdeBT;
     }
 
-    // print(kodeBT);
     // return;
     /*
       ==================
@@ -222,10 +222,17 @@ class FormTapScreenController extends GetxController {
       }
     }
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     dataPo['bt_group'] = btgroup;
     dataPo['creator'] = await SharedToken.univGetterString('username');
     dataPo['note'] = await SharedToken.univGetterString('notes');
-    dataPo['tanggal'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    if (prefs.getBool('submitted') != null ||
+        prefs.getBool('submitted') == true) {}
+    if (btm['btm_id'] == null || btm['btm_detail_id'] == null) {
+      print('BTM HAS NULL OR EMPTY');
+      dataPo['tanggal'] = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    }
     dataPo['penerima'] = await SharedToken.univGetterString('username');
     dataPo['company_id'] = await SharedToken.companyGetter();
     dataPo['inventory_location_id'] =
@@ -238,6 +245,8 @@ class FormTapScreenController extends GetxController {
 
     var re2 = jsonDecode(response.body);
     dataPurchaseOrderDetail.addAll(re2['content']);
+
+    return kdeBT;
   }
 
   Future<void> addTapBarang() async {
@@ -281,24 +290,28 @@ class FormTapScreenController extends GetxController {
       detail_inv['serial_number'] = prop;
       print('${noSN.value} WOI');
     } else {
-      await myFunction();
-      // List<dynamic> items = dataPurchaseOrderDetail
-      //     .where((item) => item['product_identifier'] == prop)
-      //     .toList();
+      // DONT UNCOMMENT COMMENT FOR DEBUG ONLY
 
-      // bool hasDuplicates = items.length != items.toSet().length;
+      final kdeBT = await myFunction();
+      List<dynamic> items = dataPurchaseOrderDetail
+          .where((item) => item['product_identifier'] == prop)
+          .toList();
 
-      // bool hasMissingDigitPenanda =
-      //     items.any((item) => item['digit_penanda'] == null);
+      bool hasDuplicates = items.length != items.toSet().length;
 
-      // if (hasDuplicates) {
-      //   print('Duplicate items found.');
-      //   if (hasMissingDigitPenanda) {
-      //     print('Some items have missing digit_penanda.');
+      bool hasMissingDigitPenanda =
+          items.any((item) => item['digit_penanda'] == null);
 
-      //     return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
-      //   }
-      // }
+      if (hasDuplicates) {
+        print('Duplicate items found.');
+        if (hasMissingDigitPenanda) {
+          print('Some items have missing digit_penanda.');
+
+          return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
+        }
+      }
+
+      // DONT UNCOMMENT COMMENT FOR DEBUG ONLY
 
       List<dynamic> matchingItems = dataPurchaseOrderDetail
           .where((item) => item['product_identifier'] == prop)
@@ -394,6 +407,13 @@ class FormTapScreenController extends GetxController {
           detail_inv['product_id'] = result['product_id'];
           detail_inv['po'] = result['purchase_order_id'];
           detail_inv['tipe'] = result['tipe'];
+          detail_inv['kode_bt_mb'] = kdeBT;
+
+          if (btm['btm_id'] != null || btm['btm_detail_id'] != null) {
+            print('BTM HAS VALUE');
+            detail_inv['btm'] = btm['btm_id'];
+            detail_inv['detail_btm'] = btm['btm_detail_id'];
+          }
 
           final companyId = await SharedToken.companyGetter();
           final token = await SharedToken.tokenGetter();
@@ -419,18 +439,15 @@ class FormTapScreenController extends GetxController {
                       '${kURL_ORIGIN}inventory-receipt/check-po-live-bulk/${companyId}/${token}?po_id=${detail_inv['po']}'),
                   body: {});
 
-              print(res['msg']);
-              print(res['content']);
-              print(res['success']);
-              print(res['token_status']);
-
               // lastStatus.value = detail_inv['serial_number'];
               lastStatus.value = res['msg'];
               tipe.value = 'SN';
-              print('ehe');
               detail_inv = {};
-              myFunction();
               noSN.value = '';
+
+              btm.value = res['content'];
+              print('${btm['btm_id']} BTM ID');
+              print('${btm['btm_detail_id']} BTM DETAIL ID');
 
               if (res['msg'] == 'format serial number salah') {
                 errorSound.value = true;
@@ -439,6 +456,10 @@ class FormTapScreenController extends GetxController {
               if (res['msg'] == 'Serial Sudah Pernah ada didata base') {
                 errorSound.value = true;
               }
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              prefs.setBool("submitted", true);
+              await myFunction();
 
               return res['msg'];
               // Do something with the 'res' data
