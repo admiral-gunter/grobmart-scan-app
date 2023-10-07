@@ -445,9 +445,12 @@ class FormTapScreenController extends GetxController {
               detail_inv = {};
               noSN.value = '';
 
-              btm.value = res['content'];
-              print('${btm['btm_id']} BTM ID');
-              print('${btm['btm_detail_id']} BTM DETAIL ID');
+              if (res['content'] != '' || res['content'] != null) {
+                if (res['content'] is String) {
+                } else {
+                  btm.value = res['content'];
+                }
+              }
 
               if (res['msg'] == 'format serial number salah') {
                 errorSound.value = true;
