@@ -13,12 +13,6 @@ class ListPoController extends GetxController {
   RxString search = ''.obs;
 
   @override
-  Future onInit() async {
-    // await getListBt();
-    // super.onInit();
-  }
-
-  @override
   void onReady() {
     super.onReady();
     print('Widget ready for interaction');

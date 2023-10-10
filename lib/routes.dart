@@ -1,11 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:shop_app/screens/cart/cart_screen.dart';
 import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
-import 'package:shop_app/screens/details/details_screen.dart';
 import 'package:shop_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:shop_app/screens/form_tap/form_tap_screen.dart';
 import 'package:shop_app/screens/grosir_tap_out/grosir_tap_out.dart';
-import 'package:shop_app/screens/home/home_screen.dart';
 import 'package:shop_app/screens/list_barcodes/list_barcodes_screen.dart';
 import 'package:shop_app/screens/purchase_order/purchase_order_screen.dart';
 import 'package:shop_app/screens/login_success/login_success_screen.dart';
@@ -34,8 +32,6 @@ final Map<String, WidgetBuilder> routes = {
   SignUpScreen.routeName: (context) => SignUpScreen(),
   CompleteProfileScreen.routeName: (context) => CompleteProfileScreen(),
   OtpScreen.routeName: (context) => OtpScreen(),
-  HomeScreen.routeName: (context) => HomeScreen(),
-  DetailsScreen.routeName: (context) => DetailsScreen(),
   CartScreen.routeName: (context) => CartScreen(),
   ProfileScreen.routeName: (context) => ProfileScreen(),
   ScannerScreen.routeName: (context) => ScannerScreen(),

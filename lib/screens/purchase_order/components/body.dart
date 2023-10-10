@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/controllers/list_po_controller.dart';
@@ -41,90 +43,65 @@ class _BodyState extends State<Body> {
         Expanded(
           flex: 1,
           child: Obx(
-            () => ListView.builder(
-                itemCount: ctl.listBt.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: InkWell(
-                      onTap: () {
-                        // print('${ctl.listBt[index]}');
-                        // ctl2.listPo.add(ctl.listBt[index][0]);
-                        // Navigator.pushNamed(context, FormTapScreen.routeName);
-                      },
-                      child: ListTile(
-                        leading: Checkbox(
-                          value: ctl.listBt[index][6] != 0,
-                          onChanged: (value) {
-                            setState(() {
-                              ctl.listBt[index][6] = value! ? 1 : 0;
-
-                              ctl.listBt.map((e) {
-                                if (e[6] != 0) {
-                                  displayBulkBtn = true;
-                                } else {
-                                  displayBulkBtn = false;
-                                }
-                              });
-                            });
+            () => ctl.listBt.length > 1
+                ? ListView.builder(
+                    itemCount: ctl.listBt.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            // print('${ctl.listBt[index]}');
+                            // ctl2.listPo.add(ctl.listBt[index][0]);
+                            // Navigator.pushNamed(context, FormTapScreen.routeName);
                           },
-                        ),
-                        trailing: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            // ctl.listBt[index][4] == 'enable'
-                            //     ? Text('Enable',
-                            //         style: TextStyle(
-                            //             fontSize: 14, color: Colors.green))
-                            //     : ctl.listBt[index][4] == 'disable'
-                            //         ? Text('Disable',
-                            //             style: TextStyle(
-                            //                 fontSize: 14, color: Colors.amber))
-                            //         : Text('Incomplete',
-                            //             style: TextStyle(
-                            //                 fontSize: 14, color: Colors.red)),
-                            //                    if (data['5'] == 'completed') {
-                            //   return '<div style="text-align: center"><label class="label label-success">Completed</label></div>';
-                            // }
-                            // else if(data['5'] == 'close'){
-                            //   return '<div style="text-align: center"><label class="label label-danger">Closed</label></div>';
-                            // }
-                            // else {
-                            //   return '<div style="text-align: center"><label class="label label-warning">Incomplete</label></div>';
-                            // }
-                            // ctl.listBt[index][5] == 'completed'
-                            //     ? Text('Completed',
-                            //         style: TextStyle(
-                            //             fontSize: 14, color: Colors.green))
-                            //     : ctl.listBt[index][5] == 'close'
-                            //         ? Text('Closed',
-                            //             style: TextStyle(
-                            //                 fontSize: 14, color: Colors.red))
-                            //         : Text('Incomplete',
-                            //             style: TextStyle(
-                            //                 fontSize: 14, color: Colors.amber))
-                          ],
-                        ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("${ctl.listBt[index][0]}"),
-                            Text(
-                              "${ctl.listBt[index][1]}",
-                              style: TextStyle(color: kTextColor, fontSize: 14),
+                          child: ListTile(
+                            leading: Checkbox(
+                              value: ctl.listBt[index][6] != 0,
+                              onChanged: (value) {
+                                setState(() {
+                                  ctl.listBt[index][6] = value! ? 1 : 0;
+
+                                  ctl.listBt.map((e) {
+                                    if (e[6] != 0) {
+                                      displayBulkBtn = true;
+                                    } else {
+                                      displayBulkBtn = false;
+                                    }
+                                  });
+                                });
+                              },
                             ),
-                            Text("${ctl.listBt[index][2]}",
-                                style:
-                                    TextStyle(color: kTextColor, fontSize: 14)),
-                            Text("${ctl.listBt[index][3]}",
-                                style:
-                                    TextStyle(color: kTextColor, fontSize: 14)),
-                          ],
+                            trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [],
+                            ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${ctl.listBt[index][0]}"),
+                                Text(
+                                  "${ctl.listBt[index][1]}",
+                                  style: TextStyle(
+                                      color: kTextColor, fontSize: 14),
+                                ),
+                                Text("${ctl.listBt[index][2]}",
+                                    style: TextStyle(
+                                        color: kTextColor, fontSize: 14)),
+                                Text("${ctl.listBt[index][3]}",
+                                    style: TextStyle(
+                                        color: kTextColor, fontSize: 14)),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                }),
+                      );
+                    })
+                : Center(
+                    child: Text(
+                    'Tidak Ada Data',
+                    style: TextStyle(fontSize: 30),
+                  )),
           ),
         ),
         Row(

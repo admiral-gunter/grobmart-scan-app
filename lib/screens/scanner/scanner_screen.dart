@@ -63,7 +63,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
               children: [
                 Text('\n'
                     'HASIL : ${prop}\n'),
-                Text(mesage!)
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(mesage!),
+                    ],
+                  ),
+                )
               ],
             ),
           ),

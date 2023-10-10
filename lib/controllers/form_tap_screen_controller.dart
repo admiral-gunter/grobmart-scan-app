@@ -175,6 +175,7 @@ class FormTapScreenController extends GetxController {
     // print('${pores}');
     // return;
     final lokasi = await SharedToken.univGetterString('lokasi');
+    print('${url4}${pores}&location_id=${lokasi} rill');
     final response =
         await http.post(Uri.parse('${url4}${pores}&location_id=${lokasi}'));
     var dataPo = {};
@@ -244,6 +245,7 @@ class FormTapScreenController extends GetxController {
     queryStringPo.value = queryString;
 
     var re2 = jsonDecode(response.body);
+    print('${re2} data ordfer');
     dataPurchaseOrderDetail.addAll(re2['content']);
 
     return kdeBT;
@@ -283,7 +285,16 @@ class FormTapScreenController extends GetxController {
   Map<String, dynamic> detail_inv = {};
   RxString noSN = ''.obs;
   RxString lastStatus = ''.obs;
+
   Future<String> scanAct(dynamic prop) async {
+    List<dynamic> matchingItems = dataPurchaseOrderDetail
+        .where((item) => item['product_identifier'] == prop)
+        .toList();
+    if (matchingItems.length > 0) {
+      return 'Identifier';
+    } else {
+      return 'SN';
+    }
     print('${queryStringPo} WADOh');
     if (noSN.value == '') {
       noSN.value = prop;
@@ -408,6 +419,7 @@ class FormTapScreenController extends GetxController {
           detail_inv['po'] = result['purchase_order_id'];
           detail_inv['tipe'] = result['tipe'];
           detail_inv['kode_bt_mb'] = kdeBT;
+          detail_inv['mobile'] = 'yes';
 
           if (btm['btm_id'] != null || btm['btm_detail_id'] != null) {
             print('BTM HAS VALUE');
