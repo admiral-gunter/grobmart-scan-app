@@ -206,7 +206,9 @@ class _BodyState extends State<Body> {
             ),
             OutlinedButton(
               onPressed: () {
-                Navigator.pushNamed(context, ScannerScreen.routeName);
+                if (ctl.dataPurchaseOrderDetail.length > 0) {
+                  Navigator.pushNamed(context, ScannerScreen.routeName);
+                }
               },
               child: Text('Scan SN dan Identifier',
                   style: TextStyle(color: kPrimaryColor)),

@@ -502,6 +502,223 @@ class FormTapScreenController extends GetxController {
     return noSN.value;
   }
 
+  Future<String> scanActV2(dynamic prop) async {
+    List<dynamic> matchingItems = dataPurchaseOrderDetail
+        .where((item) => item['product_identifier'] == prop)
+        .toList();
+    if (matchingItems.length > 0) {
+      detail_inv['identifier'] = prop;
+    } else {
+      detail_inv['serial_number'] = prop;
+      // return 'SN';
+    }
+
+    if (detail_inv['serial_number'] != null &&
+        detail_inv['identifier'] != null) {
+      // return 'LAKUIN HAL YANG GUWA SUKA';
+
+      // DONT UNCOMMENT COMMENT FOR DEBUG ONLY
+
+      final kdeBT = await myFunction();
+      List<dynamic> items = dataPurchaseOrderDetail
+          .where((item) => item['product_identifier'] == prop)
+          .toList();
+
+      bool hasDuplicates = items.length != items.toSet().length;
+
+      bool hasMissingDigitPenanda =
+          items.any((item) => item['digit_penanda'] == null);
+
+      if (hasDuplicates) {
+        print('Duplicate items found.');
+        if (hasMissingDigitPenanda) {
+          print('Some items have missing digit_penanda.');
+
+          return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
+        }
+      }
+
+      // DONT UNCOMMENT COMMENT FOR DEBUG ONLY
+
+      List<dynamic> matchingItems = dataPurchaseOrderDetail
+          .where((item) => item['product_identifier'] == prop)
+          .toList();
+      // return jsonEncode(matchingItems);
+      if (matchingItems.length > 0) {
+        bool hasMissingDigitPenanda =
+            matchingItems.any((item) => item['digit_penanda'] == null);
+        if (hasMissingDigitPenanda) {
+          errorSound.value = true;
+          return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
+        }
+      }
+
+      List<dynamic> digitPenandaArray = [];
+      bool penanda = false;
+
+      for (var result in matchingItems) {
+        print('${matchingItems} waaa');
+        if (result['digit_penanda'] != null && result['digit_penanda'] != '') {
+          penanda = true;
+          if (detail_inv['serial_number'].contains(result['digit_penanda'])) {
+            // digitPenandaArray.add(result);
+          }
+        } else {
+          penanda = false;
+          // digitPenandaArray.add(result);
+        }
+        digitPenandaArray.add(result);
+      }
+
+      if (digitPenandaArray.length == 0 && penanda) {
+        errorSound.value = true;
+        return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+      }
+
+      if (digitPenandaArray.length == 0) {
+        errorSound.value = true;
+        return 'Salah Nomor Product Identifier ${jsonEncode(matchingItems)}';
+      }
+      print('${jsonEncode(digitPenandaArray)}');
+      // Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
+      //   (item) => item['product_identifier'] == prop,
+      //   orElse: () => null, // Return null if no matching item is found
+      // );
+      // var result = null;
+      // print(result);
+      // return 'null';
+      Map<String, dynamic>? result = digitPenandaArray[0];
+
+      if (result != null) {
+        if (detail_inv['serial_number'] != null) {
+          print('hier i am');
+          if (result['qty_total'] == result['qty_receive']) {
+            errorSound.value = true;
+            return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          }
+          var qtyTot = int.parse(result['qty_total']);
+          var qtyRec = int.parse(result['qty_receive']);
+          // return '${qtyTot} und ${qtyRec}';
+          if (qtyRec > qtyTot) {
+            errorSound.value = true;
+            return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          }
+          print('dimana');
+
+          // if (qtyReceive > qtyTotal) {
+          //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
+          // }
+
+          tipe.value = 'Identifier';
+          // update();
+          String digitPenandaAsString = result['digit_penanda'].toString();
+          print(digitPenandaAsString);
+          // return digitPenandaAsString;
+          if (digitPenandaAsString.isNotEmpty &&
+              digitPenandaAsString != 'null') {
+            print('sayang ${digitPenandaAsString}');
+
+            String serialNum = detail_inv['serial_number'].toString();
+
+            if (!serialNum.contains(digitPenandaAsString)) {
+              errorSound.value = true;
+
+              print('kamu');
+              return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
+            }
+          }
+          print('saya');
+
+          // detail_inv['serial_number'] = noSN.value;
+          detail_inv['identifier'] = prop;
+          detail_inv['product_id'] = result['product_id'];
+          detail_inv['po'] = result['purchase_order_id'];
+          detail_inv['tipe'] = result['tipe'];
+          detail_inv['kode_bt_mb'] = kdeBT;
+          detail_inv['mobile'] = 'yes';
+
+          if (btm['btm_id'] != null || btm['btm_detail_id'] != null) {
+            print('BTM HAS VALUE');
+            detail_inv['btm'] = btm['btm_id'];
+            detail_inv['detail_btm'] = btm['btm_detail_id'];
+          }
+
+          final companyId = await SharedToken.companyGetter();
+          final token = await SharedToken.tokenGetter();
+
+          String queryStringInv = createQueryString(detailInv: detail_inv);
+
+          final url =
+              '${kURL_ORIGIN}inventory-receipt/save-live-bulk/${companyId}/${token}?${queryStringPo}&${queryStringInv}';
+          print('${url} here');
+
+          try {
+            var response = await http.post(Uri.parse(url));
+
+            if (response.statusCode == 200) {
+              // Successful response
+              var res = jsonDecode(response.body);
+
+              final companyId = await SharedToken.companyGetter();
+              final token = await SharedToken.tokenGetter();
+
+              await http.post(
+                  Uri.parse(
+                      '${kURL_ORIGIN}inventory-receipt/check-po-live-bulk/${companyId}/${token}?po_id=${detail_inv['po']}'),
+                  body: {});
+
+              // lastStatus.value = detail_inv['serial_number'];
+              lastStatus.value = res['msg'];
+              tipe.value = 'SN';
+              detail_inv = {};
+              noSN.value = '';
+
+              if (res['content'] != '' || res['content'] != null) {
+                if (res['content'] is String) {
+                } else {
+                  btm.value = res['content'];
+                }
+              }
+
+              if (res['msg'] == 'format serial number salah') {
+                errorSound.value = true;
+              }
+
+              if (res['msg'] == 'Serial Sudah Pernah ada didata base') {
+                errorSound.value = true;
+              }
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              prefs.setBool("submitted", true);
+              await myFunction();
+
+              return res['msg'];
+              // Do something with the 'res' data
+            } else {
+              errorSound.value = true;
+
+              // Handle unsuccessful response (e.g., 404, 500, etc.)
+              print('Request failed with status: ${response.statusCode}');
+              print('Response body: ${response.body}');
+
+              return 'Request failed with status: ${response.statusCode}';
+              // Add further error handling or notify the user accordingly
+            }
+          } catch (e) {
+            errorSound.value = true;
+
+            // Handle exceptions that might occur during the request
+            print('Error during HTTP request: $e');
+            return 'Error during HTTP request: $e';
+            // Add further error handling or notify the user accordingly
+          }
+        }
+      }
+    }
+
+    return prop.toString();
+  }
+
   Future updateStatusPo() async {
     try {
       final companyId = await SharedToken.companyGetter();

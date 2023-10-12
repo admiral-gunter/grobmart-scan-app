@@ -51,6 +51,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
   // final FormTapScreenController ctl = Get.put(FormTapScreenController());
 
   Future<void> _dialogBuilder(BuildContext context, String prop) {
+    final FormTapScreenController ctr = Get.put(FormTapScreenController());
+
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -159,7 +161,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   });
                 }
 
-                final msg = await ctl.scanAct(barcode.rawValue);
+                final msg = await ctl.scanActV2(barcode.rawValue);
                 if (ctl.errorSound.value) {
                   AudioPlayer().play(AssetSource('audio/failed.mp3'));
                 } else {
