@@ -61,18 +61,14 @@ class _ScannerScreenState extends State<ScannerScreen> {
               style: TextStyle(fontWeight: FontWeight.bold)),
           content: Container(
             height: 200,
-            child: Column(
-              children: [
-                Text('\n'
-                    'HASIL : ${prop}\n'),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text(mesage!),
-                    ],
-                  ),
-                )
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text('\n'
+                      'HASIL : ${prop}\n'),
+                  Text(mesage!)
+                ],
+              ),
             ),
           ),
           actions: <Widget>[

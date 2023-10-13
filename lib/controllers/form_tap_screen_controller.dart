@@ -510,28 +510,33 @@ class FormTapScreenController extends GetxController {
       detail_inv['identifier'] = prop;
     } else {
       detail_inv['serial_number'] = prop;
-      // return 'SN';
     }
 
     if (detail_inv['serial_number'] != null &&
         detail_inv['identifier'] != null) {
-      // return 'LAKUIN HAL YANG GUWA SUKA';
-
+      matchingItems = dataPurchaseOrderDetail
+          .where(
+              (item) => item['product_identifier'] == detail_inv['identifier'])
+          .toList();
       // DONT UNCOMMENT COMMENT FOR DEBUG ONLY
 
       final kdeBT = await myFunction();
       List<dynamic> items = dataPurchaseOrderDetail
-          .where((item) => item['product_identifier'] == prop)
+          .where(
+              (item) => item['product_identifier'] == detail_inv['identifier'])
           .toList();
+      // return '${jsonEncode(items.length)} list item';
 
-      bool hasDuplicates = items.length != items.toSet().length;
+      // bool hasDuplicates = items.length != items.toSet().length;
 
       bool hasMissingDigitPenanda =
           items.any((item) => item['digit_penanda'] == null);
 
-      if (hasDuplicates) {
+      if (items.length > 1) {
         print('Duplicate items found.');
         if (hasMissingDigitPenanda) {
+          errorSound.value = true;
+
           print('Some items have missing digit_penanda.');
 
           return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
@@ -540,18 +545,14 @@ class FormTapScreenController extends GetxController {
 
       // DONT UNCOMMENT COMMENT FOR DEBUG ONLY
 
-      List<dynamic> matchingItems = dataPurchaseOrderDetail
-          .where((item) => item['product_identifier'] == prop)
-          .toList();
-      // return jsonEncode(matchingItems);
-      if (matchingItems.length > 0) {
-        bool hasMissingDigitPenanda =
-            matchingItems.any((item) => item['digit_penanda'] == null);
-        if (hasMissingDigitPenanda) {
-          errorSound.value = true;
-          return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
-        }
-      }
+      // if (matchingItems.length > 0) {
+      //   bool hasMissingDigitPenanda =
+      //       matchingItems.any((item) => item['digit_penanda'] == null);
+      //   if (hasMissingDigitPenanda) {
+      //     errorSound.value = true;
+      //     return 'Ada identifier yang tidak mempunyai digit penanda, silahkan pergi ke product master';
+      //   }
+      // }
 
       List<dynamic> digitPenandaArray = [];
       bool penanda = false;
@@ -561,13 +562,14 @@ class FormTapScreenController extends GetxController {
         if (result['digit_penanda'] != null && result['digit_penanda'] != '') {
           penanda = true;
           if (detail_inv['serial_number'].contains(result['digit_penanda'])) {
-            // digitPenandaArray.add(result);
+            digitPenandaArray.add(result);
           }
         } else {
+          digitPenandaArray.add(result);
+
           penanda = false;
-          // digitPenandaArray.add(result);
         }
-        digitPenandaArray.add(result);
+        // digitPenandaArray.add(result);
       }
 
       if (digitPenandaArray.length == 0 && penanda) {
@@ -575,18 +577,12 @@ class FormTapScreenController extends GetxController {
         return 'SN TIDAK COCOK DENGAN DIGIT PENANDA';
       }
 
+      print('${jsonEncode(digitPenandaArray)} DIGITPENANDAARRAY');
       if (digitPenandaArray.length == 0) {
         errorSound.value = true;
-        return 'Salah Nomor Product Identifier ${jsonEncode(matchingItems)}';
+        return 'Salah Nomor Product Identifier ';
       }
-      print('${jsonEncode(digitPenandaArray)}');
-      // Map<String, dynamic>? result = dataPurchaseOrderDetail.firstWhere(
-      //   (item) => item['product_identifier'] == prop,
-      //   orElse: () => null, // Return null if no matching item is found
-      // );
-      // var result = null;
-      // print(result);
-      // return 'null';
+
       Map<String, dynamic>? result = digitPenandaArray[0];
 
       if (result != null) {
@@ -605,15 +601,9 @@ class FormTapScreenController extends GetxController {
           }
           print('dimana');
 
-          // if (qtyReceive > qtyTotal) {
-          //   return 'Barang Tidak Dapat Disimpan, Quantity Barang Sudah Melebihin Quantity Po';
-          // }
-
           tipe.value = 'Identifier';
-          // update();
           String digitPenandaAsString = result['digit_penanda'].toString();
           print(digitPenandaAsString);
-          // return digitPenandaAsString;
           if (digitPenandaAsString.isNotEmpty &&
               digitPenandaAsString != 'null') {
             print('sayang ${digitPenandaAsString}');
@@ -630,7 +620,6 @@ class FormTapScreenController extends GetxController {
           print('saya');
 
           // detail_inv['serial_number'] = noSN.value;
-          detail_inv['identifier'] = prop;
           detail_inv['product_id'] = result['product_id'];
           detail_inv['po'] = result['purchase_order_id'];
           detail_inv['tipe'] = result['tipe'];
